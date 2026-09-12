@@ -279,7 +279,7 @@ export const Header: React.FC = () => {
   const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({});
 
   const headerRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const location = useLocation();
   const { favorites } = useFavorites();
