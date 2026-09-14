@@ -55,7 +55,6 @@ export const HomePage: React.FC = () => {
             <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
             <span className="text-[11px] uppercase tracking-[0.25em] text-[#C5A880] font-medium">
               Private Property Advisory & Luxury Estates
-              hello we are doing testing
             </span>
           </div>
 
