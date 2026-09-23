@@ -6,9 +6,15 @@ import {
   Menu,
   X,
   ChevronDown,
-  ArrowUpRight
+  ArrowUpRight,
+  User as UserIcon,
+  LogOut,
+  ShieldCheck,
+  Bell
 } from 'lucide-react';
 import { useFavorites } from '../../context/FavoritesContext';
+import { useAuth } from '../../context/AuthContext';
+import { useNotifications } from '../../context/NotificationContext';
 
 interface NavLinkItem {
   label: string;
@@ -277,12 +283,18 @@ export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({});
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
 
   const headerRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const notificationMenuRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const location = useLocation();
   const { favorites } = useFavorites();
+  const { user, isAuthenticated, logout, openAuthModal } = useAuth();
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
   const isHome = location.pathname === '/';
   const isSolid = isScrolled || !isHome || activeMenu !== null || isMobileMenuOpen;
@@ -300,13 +312,21 @@ export const Header: React.FC = () => {
   useEffect(() => {
     setActiveMenu(null);
     setIsMobileMenuOpen(false);
+    setIsUserMenuOpen(false);
+    setIsNotificationMenuOpen(false);
   }, [location.pathname]);
 
-  // Click outside to close active mega menu
+  // Click outside to close active mega menu or user dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setActiveMenu(null);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+      if (notificationMenuRef.current && !notificationMenuRef.current.contains(event.target as Node)) {
+        setIsNotificationMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -430,7 +450,7 @@ export const Header: React.FC = () => {
         </nav>
 
         {/* Right-Side Action Controls */}
-        <div className="hidden lg:flex items-center space-x-5 shrink-0">
+        <div className="hidden lg:flex items-center space-x-4 shrink-0">
           {/* Favorites Link */}
           <Link
             to="/account/favorites"
@@ -449,25 +469,213 @@ export const Header: React.FC = () => {
             )}
           </Link>
 
+          {/* Notification Bell */}
+          {isAuthenticated && (
+            <div className="relative" ref={notificationMenuRef}>
+              <button
+                type="button"
+                onClick={() => setIsNotificationMenuOpen(!isNotificationMenuOpen)}
+                className={`relative p-1.5 rounded transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C5A880] ${
+                  isSolid ? 'text-[#18181A] hover:text-[#C5A880]' : 'text-[#F7F5F0] hover:text-[#C5A880]'
+                }`}
+                title="Property Notifications"
+                aria-label={`Property Notifications (${unreadCount} unread)`}
+              >
+                <Bell className="w-4 h-4 text-[#C5A880]" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-mono font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center shadow-sm">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown Panel */}
+              {isNotificationMenuOpen && (
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#18181A] border border-[#2A2A2E] text-white rounded-xs shadow-2xl py-3 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="px-4 pb-2.5 border-b border-[#2A2A2E] flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Bell className="w-3.5 h-3.5 text-[#C5A880]" />
+                      <span className="font-serif text-sm text-white font-medium">
+                        Property Alerts
+                      </span>
+                      {unreadCount > 0 && (
+                        <span className="text-[10px] font-mono bg-[#C5A880] text-[#18181A] px-1.5 py-0.5 rounded-full font-bold">
+                          {unreadCount} new
+                        </span>
+                      )}
+                    </div>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={() => markAllAsRead()}
+                        className="text-[10px] font-mono uppercase tracking-wider text-[#C5A880] hover:underline"
+                      >
+                        Mark all read
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="max-h-72 overflow-y-auto divide-y divide-[#2A2A2E]/60 text-xs">
+                    {notifications.length === 0 ? (
+                      <div className="p-6 text-center text-[#71717A] space-y-1">
+                        <Bell className="w-8 h-8 mx-auto text-[#2A2A2E] mb-2" />
+                        <p className="text-xs text-[#A1A1AA]">No property notifications</p>
+                        <p className="text-[10px] text-[#71717A]">Updates from your assigned broker will appear here.</p>
+                      </div>
+                    ) : (
+                      notifications.slice(0, 8).map((notif) => (
+                        <div
+                          key={notif._id}
+                          onClick={() => {
+                            if (!notif.isRead) markAsRead(notif._id);
+                          }}
+                          className={`p-3.5 hover:bg-[#212124] transition-colors cursor-pointer flex gap-3 ${
+                            !notif.isRead ? 'bg-[#212124]/50 border-l-2 border-[#C5A880]' : ''
+                          }`}
+                        >
+                          <div className="w-7 h-7 rounded-full bg-[#18181A] border border-[#C5A880]/40 flex items-center justify-center shrink-0 text-[#C5A880] mt-0.5">
+                            <Compass className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-1 mb-0.5">
+                              <span className={`text-xs truncate ${!notif.isRead ? 'font-semibold text-white' : 'text-[#E5E0D8]'}`}>
+                                {notif.title}
+                              </span>
+                              <span className="text-[9px] font-mono text-[#71717A] shrink-0">
+                                {new Date(notif.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-[#A1A1AA] leading-relaxed line-clamp-2">
+                              {notif.message}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <div className="pt-2 px-4 border-t border-[#2A2A2E] flex justify-between items-center text-[10px] font-mono">
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsNotificationMenuOpen(false)}
+                      className="text-[#C5A880] hover:underline"
+                    >
+                      Open Client Profile & Inquiries →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* User Auth Control */}
+          {isAuthenticated && user ? (
+            <div className="relative" ref={userMenuRef}>
+              <button
+                type="button"
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-sm border transition-all text-xs font-mono ${
+                  isSolid
+                    ? 'border-[#E5E0D8] bg-white text-[#18181A] hover:border-[#C5A880]'
+                    : 'border-[#C5A880]/40 bg-[#18181A]/80 text-[#FDFCF9] hover:border-[#C5A880]'
+                }`}
+              >
+                <div className="w-5 h-5 rounded-full bg-[#C5A880] text-[#18181A] font-bold flex items-center justify-center text-[10px] uppercase font-serif">
+                  {user.name.charAt(0)}
+                </div>
+                <span className="max-w-[85px] truncate text-xs font-medium font-sans">
+                  {user.name.split(' ')[0]}
+                </span>
+                <ChevronDown className="w-3 h-3 opacity-60" />
+              </button>
+
+              {/* User Dropdown Menu */}
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-[#18181A] border border-[#2A2A2E] text-white rounded-xs shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="px-4 py-2.5 border-b border-[#2A2A2E]">
+                    <span className="font-serif text-sm text-white block font-medium truncate">
+                      {user.name}
+                    </span>
+                    <span className="text-[10px] font-mono text-[#A1A1AA] truncate block">
+                      {user.email}
+                    </span>
+                    <span className="inline-block mt-1 text-[9px] uppercase font-mono text-[#C5A880] bg-[#212124] px-1.5 py-0.5 rounded-xs">
+                      {user.role === 'ADMIN' ? 'Administrator' : user.role === 'BROKER' ? 'Broker' : 'Private Client'}
+                    </span>
+                  </div>
+
+                  <Link
+                    to="/profile"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-2.5 text-xs text-[#E5E0D8] hover:text-[#C5A880] hover:bg-[#212124] transition-colors"
+                  >
+                    <UserIcon className="w-3.5 h-3.5 text-[#C5A880]" />
+                    <span>My Profile & Vault</span>
+                  </Link>
+
+                  <Link
+                    to="/account/favorites"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center justify-between px-4 py-2 text-xs text-[#E5E0D8] hover:text-[#C5A880] hover:bg-[#212124] transition-colors"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Heart className="w-3.5 h-3.5 text-[#C5A880]" />
+                      <span>Saved Residences</span>
+                    </div>
+                    <span className="text-[10px] font-mono bg-[#212124] text-[#C5A880] px-1.5 py-0.5 rounded-full">
+                      {favorites.length}
+                    </span>
+                  </Link>
+
+                  <div className="border-t border-[#2A2A2E] mt-1 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        logout();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-4 py-2 text-xs text-red-300 hover:bg-red-950/30 hover:text-red-200 transition-colors text-left"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openAuthModal('login')}
+              className={`flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider transition-colors px-3 py-1.5 rounded-sm border ${
+                isSolid
+                  ? 'border-[#18181A] text-[#18181A] hover:bg-[#18181A] hover:text-[#C5A880]'
+                  : 'border-[#F7F5F0]/60 text-[#F7F5F0] hover:bg-[#F7F5F0] hover:text-[#18181A]'
+              }`}
+            >
+              <UserIcon className="w-3.5 h-3.5 text-[#C5A880]" />
+              <span>Sign In</span>
+            </button>
+          )}
+
           {/* Ecosystem Portals */}
-          <div className="flex items-center space-x-2 border-l border-[#C5A880]/30 pl-4">
+          <div className="flex items-center space-x-2 border-l border-[#C5A880]/30 pl-3">
             <a
               href="http://localhost:5174"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[10px] uppercase tracking-wider px-2.5 py-1 rounded border border-[#C5A880]/40 text-[#C5A880] hover:bg-[#C5A880] hover:text-[#18181A] transition-all"
+              className="text-[10px] uppercase tracking-wider px-2 py-1 rounded border border-[#C5A880]/40 text-[#C5A880] hover:bg-[#C5A880] hover:text-[#18181A] transition-all"
               title="Open Broker Workspace"
             >
-              Broker Portal
+              Broker
             </a>
             <a
               href="http://localhost:5175"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[10px] uppercase tracking-wider px-2.5 py-1 rounded border border-[#C5A880]/40 text-[#C5A880] hover:bg-[#C5A880] hover:text-[#18181A] transition-all"
+              className="text-[10px] uppercase tracking-wider px-2 py-1 rounded border border-[#C5A880]/40 text-[#C5A880] hover:bg-[#C5A880] hover:text-[#18181A] transition-all"
               title="Open Admin Control Center"
             >
-              Admin Panel
+              Admin
             </a>
           </div>
 
@@ -475,7 +683,7 @@ export const Header: React.FC = () => {
           <Link
             to="/consultation"
             onClick={() => setActiveMenu(null)}
-            className="bg-[#C5A880] hover:bg-[#B8976C] text-[#18181A] px-4 lg:px-5 py-2 rounded text-[11px] lg:text-xs font-semibold uppercase tracking-[0.14em] transition-all shadow-sm flex items-center gap-2"
+            className="bg-[#C5A880] hover:bg-[#B8976C] text-[#18181A] px-4 py-2 rounded text-[11px] font-semibold uppercase tracking-[0.14em] transition-all shadow-sm flex items-center gap-1.5"
           >
             <Compass className="w-3.5 h-3.5" />
             <span>Private Advisory</span>
@@ -673,8 +881,60 @@ export const Header: React.FC = () => {
             })}
           </div>
 
-          {/* Saved Residences Link */}
+          {/* User Account / Sign In */}
           <div className="pt-2 border-t border-[#E5E0D8]">
+            {isAuthenticated && user ? (
+              <div className="bg-[#F7F5F0] p-3 rounded-xs border border-[#E5E0D8] space-y-2 mb-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-[#18181A] text-[#C5A880] flex items-center justify-center font-serif text-xs font-bold">
+                      {user.name.charAt(0)}
+                    </div>
+                    <div>
+                      <span className="font-serif text-xs text-[#18181A] font-medium block truncate max-w-[170px]">
+                        {user.name}
+                      </span>
+                      <span className="text-[10px] font-mono text-[#71717A] block truncate max-w-[170px]">
+                        {user.email}
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="text-[10px] font-mono uppercase text-red-600 hover:underline"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+                <Link
+                  to="/profile"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block w-full text-center bg-[#18181A] text-[#C5A880] py-2 text-xs font-mono uppercase tracking-wider font-semibold rounded-xs"
+                >
+                  My Portfolio & Profile
+                </Link>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  openAuthModal('login');
+                }}
+                className="w-full mb-2 bg-[#18181A] text-[#C5A880] py-2.5 rounded-xs text-xs font-mono uppercase tracking-wider font-bold flex items-center justify-center gap-2"
+              >
+                <UserIcon className="w-3.5 h-3.5" />
+                <span>Sign In to Account</span>
+              </button>
+            )}
+          </div>
+
+          {/* Saved Residences Link */}
+          <div>
             <Link
               to="/account/favorites"
               onClick={() => setIsMobileMenuOpen(false)}

@@ -49,5 +49,43 @@ export const api = {
     fetchApi<{ success: boolean; message: string; leadReference: string }>('/leads', {
       method: 'POST',
       body: JSON.stringify(leadData)
+    }),
+  // Auth endpoints
+  login: (credentials: { email: string; password: string }) =>
+    fetchApi<{ success: boolean; token: string; user: any; message?: string }>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials)
+    }),
+  register: (data: { name: string; email: string; password: string; phone?: string; role?: string }) =>
+    fetchApi<{ success: boolean; token: string; user: any; message?: string }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+  getMe: () =>
+    fetchApi<{ success: boolean; user: any }>('/auth/me'),
+  updateProfile: (data: { name?: string; phone?: string; avatar?: string }) =>
+    fetchApi<{ success: boolean; message: string; user: any }>('/auth/profile', {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    }),
+  changePassword: (passwords: { currentPassword: string; newPassword: string }) =>
+    fetchApi<{ success: boolean; message: string }>('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify(passwords)
+    }),
+  // Client Inquiries & Leads
+  getMyLeads: () =>
+    fetchApi<{ success: boolean; count: number; leads: any[] }>('/leads/my'),
+  // Notifications
+  getNotifications: () =>
+    fetchApi<{ success: boolean; count: number; unreadCount: number; notifications: any[] }>('/notifications'),
+  markNotificationAsRead: (id: string) =>
+    fetchApi<{ success: boolean; notification: any }>(`/notifications/${id}/read`, {
+      method: 'PATCH'
+    }),
+  markAllNotificationsAsRead: () =>
+    fetchApi<{ success: boolean; message: string }>('/notifications/read-all', {
+      method: 'PATCH'
     })
 };
+

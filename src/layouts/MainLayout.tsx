@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
+import { AuthModal } from '../components/auth/AuthModal';
 
 export const MainLayout: React.FC = () => {
   const { pathname } = useLocation();
@@ -17,6 +18,7 @@ export const MainLayout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
+      <AuthModal />
     </div>
   );
 };

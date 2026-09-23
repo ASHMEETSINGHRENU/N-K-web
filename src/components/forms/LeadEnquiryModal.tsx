@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { api } from '../../services/api';
-import { CheckCircle2, Shield, Phone, MessageSquare, Mail, Calendar } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { useNotifications } from '../../context/NotificationContext';
+import { CheckCircle2, Shield, Phone, MessageSquare, Mail, Calendar, UserCheck } from 'lucide-react';
 
 interface LeadEnquiryModalProps {
   isOpen: boolean;
@@ -22,16 +24,29 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
   property,
   leadType = 'INQUIRY'
 }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
+  const { user } = useAuth();
+  const { fetchNotifications } = useNotifications();
+
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [mobile, setMobile] = useState(user?.phone || '');
   const [preferredMethod, setPreferredMethod] = useState<'WHATSAPP' | 'PHONE' | 'EMAIL'>('WHATSAPP');
   const [message, setMessage] = useState('');
   const [type, setType] = useState(leadType);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [leadRef, setLeadRef] = useState('');
+  const [assignedBroker, setAssignedBroker] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Auto-fill or sync when user changes or modal opens
+  useEffect(() => {
+    if (user && isOpen) {
+      if (!name) setName(user.name || '');
+      if (!email) setEmail(user.email || '');
+      if (!mobile) setMobile(user.phone || '');
+    }
+  }, [user, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +61,7 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
     try {
       const payload = {
         name,
-        email,
+        email: email.trim().toLowerCase(),
         mobile,
         preferredContactMethod: preferredMethod,
         leadType: type,
@@ -55,9 +70,14 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
         source: 'WEBSITE'
       };
 
-      const response = await api.submitLead(payload);
+      const response: any = await api.submitLead(payload);
       setLeadRef(response.leadReference);
+      if (response.assignedBroker) {
+        setAssignedBroker(response.assignedBroker);
+      }
       setIsSuccess(true);
+      // Immediately refresh client's notifications
+      fetchNotifications();
     } catch (err: any) {
       setErrorMsg(err.message || 'Unable to submit inquiry. Please try again or contact our private desk.');
     } finally {
@@ -66,11 +86,14 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
   };
 
   const resetForm = () => {
-    setName('');
-    setEmail('');
-    setMobile('');
+    if (!user) {
+      setName('');
+      setEmail('');
+      setMobile('');
+    }
     setMessage('');
     setIsSuccess(false);
+    setAssignedBroker(null);
     setErrorMsg('');
     onClose();
   };
@@ -87,16 +110,37 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
           <div className="w-14 h-14 rounded-full bg-[#C5A880]/20 text-[#C5A880] mx-auto flex items-center justify-center">
             <CheckCircle2 className="w-8 h-8" />
           </div>
-          <h4 className="font-serif text-2xl font-light text-[#18181A]">Enquiry Received</h4>
+          <h4 className="font-serif text-2xl font-light text-[#18181A]">Enquiry Transmitted</h4>
           <p className="text-xs text-[#71717A] max-w-sm mx-auto leading-relaxed">
-            Your inquiry has been registered under reference <span className="font-mono font-bold text-[#18181A]">{leadRef}</span>. A licensed Nestandkey Private Client Director will contact you via your preferred channel shortly.
+            Your inquiry has been registered under reference <span className="font-mono font-bold text-[#18181A]">{leadRef}</span>.
+          </p>
+          {assignedBroker && (
+            <div className="p-3 bg-[#F7F5F0] border border-[#C5A880]/40 max-w-sm mx-auto rounded-xs text-left flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#18181A] border border-[#C5A880] flex items-center justify-center text-[#C5A880] font-serif text-sm">
+                {assignedBroker.name?.charAt(0) || 'B'}
+              </div>
+              <div className="text-xs">
+                <span className="text-[10px] uppercase tracking-wider font-mono text-[#C5A880] block font-semibold">
+                  Assigned Private Advisor
+                </span>
+                <span className="font-serif text-sm font-medium text-[#18181A] block">
+                  {assignedBroker.name}
+                </span>
+                <span className="text-[11px] text-[#71717A] block">
+                  {assignedBroker.title || 'Private Client Specialist'}
+                </span>
+              </div>
+            </div>
+          )}
+          <p className="text-xs text-[#71717A] max-w-sm mx-auto">
+            You will receive live status notifications and updates in your client profile and notification bell.
           </p>
           <div className="pt-4">
             <button
               onClick={resetForm}
               className="bg-[#18181A] text-[#F7F5F0] hover:text-[#C5A880] px-6 py-2.5 text-xs uppercase tracking-widest font-semibold"
             >
-              Close
+              Done
             </button>
           </div>
         </div>

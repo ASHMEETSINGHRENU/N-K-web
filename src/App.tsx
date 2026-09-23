@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { FavoritesProvider } from './context/FavoritesContext';
+import { NotificationProvider } from './context/NotificationContext';
 import { MainLayout } from './layouts/MainLayout';
 import { HomePage } from './pages/Home/HomePage';
 import { PropertiesPage } from './pages/Properties/PropertiesPage';
@@ -16,12 +17,16 @@ import { AboutPage } from './pages/About/AboutPage';
 import { ContactPage } from './pages/Contact/ContactPage';
 import { ConsultationPage } from './pages/Consultation/ConsultationPage';
 import { FavoritesPage } from './pages/Account/FavoritesPage';
+import { ProfilePage } from './pages/Account/ProfilePage';
+import { LoginPage } from './pages/Auth/LoginPage';
+import { RegisterPage } from './pages/Auth/RegisterPage';
 
 export const App: React.FC = () => {
   return (
     <AuthProvider>
       <FavoritesProvider>
-        <BrowserRouter>
+        <NotificationProvider>
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<HomePage />} />
@@ -44,10 +49,15 @@ export const App: React.FC = () => {
               <Route path="contact" element={<ContactPage />} />
               <Route path="consultation" element={<ConsultationPage />} />
               <Route path="account/favorites" element={<FavoritesPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="account/profile" element={<ProfilePage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
         </BrowserRouter>
+        </NotificationProvider>
       </FavoritesProvider>
     </AuthProvider>
   );

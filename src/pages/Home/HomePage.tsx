@@ -5,6 +5,7 @@ import { api } from '../../services/api';
 import { PropertyCard } from '../../components/property/PropertyCard';
 import { SearchHero } from '../../components/search/SearchHero';
 import { LeadEnquiryModal } from '../../components/forms/LeadEnquiryModal';
+import { MasterDevelopersSection } from '../../components/home/MasterDevelopersSection';
 import { DUBAI_COMMUNITIES, LUXURY_COLLECTIONS } from '@nestandkey/constants';
 
 export const HomePage: React.FC = () => {
@@ -112,6 +113,9 @@ export const HomePage: React.FC = () => {
           )}
         </div>
       </section>
+
+      {/* 2.5 DUBAI MAJOR MASTER-DEVELOPERS & QUALITY PIONEERS */}
+      <MasterDevelopersSection />
 
       {/* 3. DUBAI COMMUNITIES SHOWCASE */}
       <section className="py-24 bg-[#F7F5F0] border-t border-b border-[#E5E0D8]">
