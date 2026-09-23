@@ -22,6 +22,21 @@ import { LoginPage } from './pages/Auth/LoginPage';
 import { RegisterPage } from './pages/Auth/RegisterPage';
 
 export const App: React.FC = () => {
+  React.useEffect(() => {
+    // If opened in popup by Google OAuth redirect, send token back to opener
+    if (window.opener && window.location.hash.includes('id_token=')) {
+      const params = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      const idToken = params.get('id_token');
+      if (idToken) {
+        window.opener.postMessage(
+          { type: 'GOOGLE_AUTH_TOKEN', credential: idToken },
+          window.location.origin
+        );
+        window.close();
+      }
+    }
+  }, []);
+
   return (
     <AuthProvider>
       <FavoritesProvider>

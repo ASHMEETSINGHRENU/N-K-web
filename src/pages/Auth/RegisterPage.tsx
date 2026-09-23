@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Compass, Mail, Lock, Eye, EyeOff, User, Phone, ShieldCheck, ArrowRight } from 'lucide-react';
+import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
 
 export const RegisterPage: React.FC = () => {
   const { register, isAuthenticated } = useAuth();
@@ -192,6 +193,24 @@ export const RegisterPage: React.FC = () => {
             )}
           </button>
         </form>
+
+        {/* Divider */}
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-[#2A2A2E]" />
+          </div>
+          <div className="relative flex justify-center text-[10px] uppercase font-mono tracking-widest">
+            <span className="bg-[#18181A] px-3 text-[#71717A]">Or Register With</span>
+          </div>
+        </div>
+
+        {/* Google Authentication */}
+        <GoogleAuthButton
+          mode="signup"
+          onSuccess={() => {
+            navigate('/profile', { replace: true });
+          }}
+        />
 
         {/* Footer Navigation Switch */}
         <div className="mt-8 pt-6 border-t border-[#2A2A2E] text-center text-xs">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Compass, Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
+import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
 
 export const LoginPage: React.FC = () => {
   const { login, isAuthenticated } = useAuth();
@@ -161,6 +162,25 @@ export const LoginPage: React.FC = () => {
             )}
           </button>
         </form>
+
+        {/* Divider */}
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-[#2A2A2E]" />
+          </div>
+          <div className="relative flex justify-center text-[10px] uppercase font-mono tracking-widest">
+            <span className="bg-[#18181A] px-3 text-[#71717A]">Or Continue With</span>
+          </div>
+        </div>
+
+        {/* Google Authentication */}
+        <GoogleAuthButton
+          mode="signin"
+          onSuccess={() => {
+            const from = (location.state as any)?.from?.pathname || '/profile';
+            navigate(from, { replace: true });
+          }}
+        />
 
         {/* Footer Navigation Switch */}
         <div className="mt-8 pt-6 border-t border-[#2A2A2E] text-center text-xs">

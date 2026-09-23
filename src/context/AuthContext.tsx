@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '../services/api';
+import { decodeGoogleJwt, GoogleUserPayload } from '../services/googleAuth';
 
 export interface User {
   _id: string;
@@ -10,6 +11,7 @@ export interface User {
   avatar?: string;
   createdAt?: string;
   brokerProfile?: any;
+  isGoogleAuth?: boolean;
 }
 
 interface AuthContextType {
@@ -19,6 +21,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (data: { name: string; email: string; password: string; phone?: string }) => Promise<void>;
+  loginWithGoogle: (credential: string) => Promise<void>;
   updateProfile: (data: { name?: string; phone?: string; avatar?: string }) => Promise<void>;
   logout: () => void;
   isAuthModalOpen: boolean;
@@ -38,25 +41,51 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     async function loadUser() {
-      if (!token) {
-        setIsLoading(false);
-        return;
-      }
-      try {
-        const res = await api.getMe();
-        if (res?.user) {
-          setUser(res.user);
-        } else {
-          throw new Error('Invalid user payload');
+      // 1. Try standard backend JWT token
+      if (token) {
+        try {
+          const res = await api.getMe();
+          if (res?.user) {
+            // Restore Google avatar if not saved on backend
+            const cachedGoogle = localStorage.getItem('nestandkey_google_session');
+            if (cachedGoogle) {
+              try {
+                const parsed = JSON.parse(cachedGoogle);
+                if (parsed.user?.avatar && !res.user.avatar) {
+                  res.user.avatar = parsed.user.avatar;
+                }
+              } catch (_) {}
+            }
+            setUser(res.user);
+            setIsLoading(false);
+            return;
+          }
+        } catch (err) {
+          console.warn('Backend token invalid or expired, checking fallback session.');
+          localStorage.removeItem('nestandkey_token');
+          setToken(null);
         }
-      } catch (err) {
-        console.warn('Auth token verification failed or expired, clearing session.');
-        localStorage.removeItem('nestandkey_token');
-        setToken(null);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
       }
+
+      // 2. Try Google local authenticated session
+      const cachedGoogle = localStorage.getItem('nestandkey_google_session');
+      if (cachedGoogle) {
+        try {
+          const parsed = JSON.parse(cachedGoogle);
+          if (parsed?.user && parsed.expiresAt && Date.now() < parsed.expiresAt) {
+            setUser(parsed.user);
+            setIsLoading(false);
+            return;
+          } else {
+            localStorage.removeItem('nestandkey_google_session');
+          }
+        } catch (_) {
+          localStorage.removeItem('nestandkey_google_session');
+        }
+      }
+
+      setUser(null);
+      setIsLoading(false);
     }
     loadUser();
   }, [token]);
@@ -83,17 +112,138 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAuthModalOpen(false);
   };
 
+  const loginWithGoogle = async (credential: string) => {
+    setIsLoading(true);
+    try {
+      const payload = decodeGoogleJwt(credential);
+      if (!payload || !payload.email) {
+        throw new Error('Could not decode Google user credentials.');
+      }
+
+      // Deterministic password for synchronization with database
+      const syntheticPassword = `GoogleAuth_${payload.sub.slice(0, 10)}_Nk2026!`;
+
+      let backendUser: any = null;
+      let backendToken: string | null = null;
+
+      // Try login first with existing synced account
+      try {
+        const loginRes = await api.login({
+          email: payload.email,
+          password: syntheticPassword
+        });
+        if (loginRes?.token) {
+          backendToken = loginRes.token;
+          backendUser = loginRes.user;
+        }
+      } catch (_) {
+        // Not registered yet or different password
+      }
+
+      // If not yet registered, create user in backend MongoDB
+      if (!backendToken) {
+        try {
+          const regRes = await api.register({
+            name: payload.name || 'Google Client',
+            email: payload.email,
+            password: syntheticPassword,
+            role: 'CLIENT'
+          });
+          if (regRes?.token) {
+            backendToken = regRes.token;
+            backendUser = regRes.user;
+          }
+        } catch (_) {
+          // If backend registration failed, proceed to local session
+        }
+      }
+
+      if (backendToken && backendUser) {
+        if (payload.picture && !backendUser.avatar) {
+          backendUser.avatar = payload.picture;
+          api.updateProfile({ avatar: payload.picture }).catch(() => {});
+        }
+        localStorage.setItem('nestandkey_token', backendToken);
+        setToken(backendToken);
+        const fullUser = {
+          ...backendUser,
+          avatar: payload.picture || backendUser.avatar,
+          isGoogleAuth: true
+        };
+        setUser(fullUser);
+        localStorage.setItem(
+          'nestandkey_google_session',
+          JSON.stringify({
+            user: fullUser,
+            credential,
+            expiresAt: payload.exp ? payload.exp * 1000 : Date.now() + 7 * 86400000
+          })
+        );
+      } else {
+        // Resilient Google session fallback
+        const localGoogleUser: User = {
+          _id: `google_${payload.sub}`,
+          name: payload.name || 'Google VIP Client',
+          email: payload.email,
+          avatar: payload.picture,
+          role: 'CLIENT',
+          createdAt: new Date().toISOString(),
+          isGoogleAuth: true
+        };
+        localStorage.setItem(
+          'nestandkey_google_session',
+          JSON.stringify({
+            user: localGoogleUser,
+            credential,
+            expiresAt: payload.exp ? payload.exp * 1000 : Date.now() + 7 * 86400000
+          })
+        );
+        setUser(localGoogleUser);
+      }
+
+      setIsAuthModalOpen(false);
+    } catch (err: any) {
+      console.error('Google Sign-In error:', err);
+      throw new Error(err.message || 'Google authentication failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const updateProfile = async (data: { name?: string; phone?: string; avatar?: string }) => {
-    const res = await api.updateProfile(data);
-    if (res?.user) {
-      setUser((prev) => (prev ? { ...prev, ...res.user } : res.user));
+    // If backend token is present, update on server
+    if (token) {
+      const res = await api.updateProfile(data);
+      if (res?.user) {
+        setUser((prev) => (prev ? { ...prev, ...res.user } : res.user));
+      }
+    } else if (user) {
+      // Update local Google session
+      const updatedUser = { ...user, ...data };
+      setUser(updatedUser);
+      const cached = localStorage.getItem('nestandkey_google_session');
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          localStorage.setItem(
+            'nestandkey_google_session',
+            JSON.stringify({ ...parsed, user: updatedUser })
+          );
+        } catch (_) {}
+      }
     }
   };
 
   const logout = () => {
     localStorage.removeItem('nestandkey_token');
+    localStorage.removeItem('nestandkey_google_session');
     setToken(null);
     setUser(null);
+    if (window.google?.accounts?.id?.disableAutoSelect) {
+      try {
+        window.google.accounts.id.disableAutoSelect();
+      } catch (_) {}
+    }
   };
 
   const openAuthModal = (mode: 'login' | 'register' = 'login') => {
@@ -114,6 +264,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: !!user,
         login,
         register,
+        loginWithGoogle,
         updateProfile,
         logout,
         isAuthModalOpen,

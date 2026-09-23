@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { X, Eye, EyeOff, Lock, Mail, User, Phone, Check, ShieldCheck, Compass, Sparkles } from 'lucide-react';
+import { GoogleAuthButton } from './GoogleAuthButton';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, closeAuthModal, authModalMode, openAuthModal, login, register } = useAuth();
@@ -360,6 +361,24 @@ export const AuthModal: React.FC = () => {
               </button>
             </form>
           )}
+
+          {/* Luxury Divider */}
+          <div className="relative my-5">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#2A2A2E]" />
+            </div>
+            <div className="relative flex justify-center text-[10px] uppercase font-mono tracking-widest">
+              <span className="bg-[#18181A] px-3 text-[#71717A]">
+                {mode === 'login' ? 'Or Continue With' : 'Or Register With'}
+              </span>
+            </div>
+          </div>
+
+          {/* Google Authentication */}
+          <GoogleAuthButton
+            mode={mode === 'login' ? 'signin' : 'signup'}
+            onSuccess={() => closeAuthModal()}
+          />
         </div>
 
         {/* Footer info */}
