@@ -51,7 +51,7 @@ export const MortgagePage: React.FC = () => {
             <ShieldCheck className="w-5 h-5 text-[#B08D57] mb-3" />
             <h4 className="font-display text-lg text-[#102A43] mb-2 font-normal">UAE Central Bank Caps</h4>
             <p className="leading-relaxed text-[#6B7280]">
-              Under UAE central bank rules, non-residents and expatriates can finance up to 80% for properties under AED 5M, and up to 70% for properties exceeding AED 5M.
+              Under UAE central bank rules, non-residents and expatriates can finance up to 80% for properties, and up to 70% for properties exceeding AED 5M.
             </p>
           </div>
 

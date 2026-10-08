@@ -81,7 +81,7 @@ export const MortgageCalculatorWidget: React.FC<MortgageCalculatorWidgetProps> =
               className="w-full accent-[#B08D57] cursor-pointer"
             />
             <span className="text-[10px] text-[#6B7280] mt-1 block">
-              * Minimum 20% down payment required by UAE Central Bank for properties under AED 5M.
+              * Minimum 20% down payment required by UAE Central Bank for properties.
             </span>
           </div>
 
@@ -117,6 +117,8 @@ export const MortgageCalculatorWidget: React.FC<MortgageCalculatorWidgetProps> =
                 onChange={(e) => setLoanTermYears(Number(e.target.value))}
                 className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#102A43] focus:outline-none focus:border-[#B08D57]"
               >
+                <option value={5}>5 Years</option>
+                <option value={10}>10 Years</option>
                 <option value={10}>10 Years</option>
                 <option value={15}>15 Years</option>
                 <option value={20}>20 Years</option>
