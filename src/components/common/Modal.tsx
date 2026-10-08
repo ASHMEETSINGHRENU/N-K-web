@@ -32,35 +32,35 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto font-ui">
       {/* Light dismiss backdrop */}
       <div
-        className="fixed inset-0 bg-[#0B0B0C]/80 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-[#0B2135]/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
       <div
-        className={`relative bg-[#FDFCF9] text-[#18181A] border border-[#E5E0D8] rounded-none shadow-2xl w-full ${maxWidth} z-10 overflow-hidden my-8`}
+        className={`relative bg-[#FFFDF8] text-[#3E4852] border border-[#E9E1D4] rounded-none shadow-2xl w-full ${maxWidth} z-10 overflow-hidden my-8`}
         role="dialog"
         aria-modal="true"
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-6 sm:p-8 border-b border-[#E5E0D8] bg-[#F7F5F0]">
+        <div className="flex items-start justify-between p-6 sm:p-8 border-b border-[#E9E1D4] bg-[#F7F3EA]">
           <div>
             {title && (
-              <h3 className="font-serif text-2xl font-light tracking-wide text-[#18181A]">
+              <h3 className="font-display text-2xl font-normal tracking-wide text-[#102A43]">
                 {title}
               </h3>
             )}
             {subtitle && (
-              <p className="text-xs uppercase tracking-[0.14em] text-[#C5A880] mt-1 font-medium">
+              <p className="text-xs uppercase tracking-[0.14em] text-[#B08D57] mt-1 font-medium">
                 {subtitle}
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-[#3E3E42] hover:text-[#18181A] hover:bg-[#E5E0D8]/50 transition-colors rounded"
+            className="p-1.5 text-[#6B7280] hover:text-[#102A43] hover:bg-[#E9E1D4]/50 transition-colors rounded-sm"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />

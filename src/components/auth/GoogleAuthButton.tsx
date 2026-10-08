@@ -143,18 +143,18 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
           }`}
         />
 
-        {/* Custom Luxury Dark Google Button (visible while loading or as fallback) */}
+        {/* Custom Luxury Google Button (visible while loading or as fallback) */}
         {(!isReady || isAuthenticating) && (
           <button
             type="button"
             onClick={handleFallbackClick}
             disabled={isAuthenticating}
-            className="w-full h-11 px-4 bg-[#1F1F23] hover:bg-[#27272B] active:bg-[#18181A] border border-[#2A2A2E] hover:border-[#C5A880]/60 rounded-xs text-white transition-all flex items-center justify-center gap-3 text-xs font-mono font-medium shadow-sm"
+            className="w-full h-11 px-4 bg-[#FFFDF8] hover:bg-[#F7F3EA] active:bg-[#E9E1D4] border border-[#E9E1D4] hover:border-[#B08D57]/60 rounded-xs text-[#102A43] transition-all flex items-center justify-center gap-3 text-xs font-medium shadow-sm"
           >
             {isAuthenticating ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-[#C5A880]" />
-                <span className="text-[#C5A880]">Authenticating with Google...</span>
+                <Loader2 className="w-4 h-4 animate-spin text-[#B08D57]" />
+                <span className="text-[#B08D57]">Authenticating with Google...</span>
               </>
             ) : (
               <>

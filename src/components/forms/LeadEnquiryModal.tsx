@@ -106,52 +106,52 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
       subtitle={property ? `${property.community}, Dubai` : 'Bespoke Dubai Real Estate Advisory'}
     >
       {isSuccess ? (
-        <div className="text-center py-8 space-y-4">
-          <div className="w-14 h-14 rounded-full bg-[#C5A880]/20 text-[#C5A880] mx-auto flex items-center justify-center">
+        <div className="text-center py-8 space-y-4 font-ui">
+          <div className="w-14 h-14 rounded-full bg-[#B08D57]/20 text-[#B08D57] mx-auto flex items-center justify-center">
             <CheckCircle2 className="w-8 h-8" />
           </div>
-          <h4 className="font-serif text-2xl font-light text-[#18181A]">Enquiry Transmitted</h4>
-          <p className="text-xs text-[#71717A] max-w-sm mx-auto leading-relaxed">
-            Your inquiry has been registered under reference <span className="font-mono font-bold text-[#18181A]">{leadRef}</span>.
+          <h4 className="font-display text-2xl font-normal text-[#102A43]">Enquiry Transmitted</h4>
+          <p className="text-xs text-[#6B7280] max-w-sm mx-auto leading-relaxed">
+            Your inquiry has been registered under reference <span className="font-mono font-bold text-[#102A43]">{leadRef}</span>.
           </p>
           {assignedBroker && (
-            <div className="p-3 bg-[#F7F5F0] border border-[#C5A880]/40 max-w-sm mx-auto rounded-xs text-left flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#18181A] border border-[#C5A880] flex items-center justify-center text-[#C5A880] font-serif text-sm">
+            <div className="p-3 bg-[#F7F3EA] border border-[#E9E1D4] max-w-sm mx-auto rounded-xs text-left flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#102A43] border border-[#B08D57] flex items-center justify-center text-[#D8C3A5] font-display text-sm font-semibold">
                 {assignedBroker.name?.charAt(0) || 'B'}
               </div>
               <div className="text-xs">
-                <span className="text-[10px] uppercase tracking-wider font-mono text-[#C5A880] block font-semibold">
+                <span className="text-[10px] uppercase tracking-wider text-[#B08D57] block font-semibold">
                   Assigned Private Advisor
                 </span>
-                <span className="font-serif text-sm font-medium text-[#18181A] block">
+                <span className="font-display text-sm font-medium text-[#102A43] block">
                   {assignedBroker.name}
                 </span>
-                <span className="text-[11px] text-[#71717A] block">
+                <span className="text-[11px] text-[#6B7280] block">
                   {assignedBroker.title || 'Private Client Specialist'}
                 </span>
               </div>
             </div>
           )}
-          <p className="text-xs text-[#71717A] max-w-sm mx-auto">
+          <p className="text-xs text-[#6B7280] max-w-sm mx-auto">
             You will receive live status notifications and updates in your client profile and notification bell.
           </p>
           <div className="pt-4">
             <button
               onClick={resetForm}
-              className="bg-[#18181A] text-[#F7F5F0] hover:text-[#C5A880] px-6 py-2.5 text-xs uppercase tracking-widest font-semibold"
+              className="bg-[#102A43] text-[#FFFDF8] hover:text-[#D8C3A5] hover:bg-[#0B2135] px-6 py-2.5 text-xs uppercase tracking-widest font-semibold transition-colors"
             >
               Done
             </button>
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs font-ui">
           {property && (
-            <div className="p-3 bg-[#F7F5F0] border border-[#E5E0D8] mb-4">
-              <span className="text-[10px] uppercase tracking-wider text-[#C5A880] font-semibold block">
+            <div className="p-3 bg-[#F7F3EA] border border-[#E9E1D4] mb-4">
+              <span className="text-[10px] uppercase tracking-wider text-[#B08D57] font-semibold block">
                 Selected Residence
               </span>
-              <span className="font-serif text-sm font-medium text-[#18181A] line-clamp-1">
+              <span className="font-display text-base font-normal text-[#102A43] line-clamp-1 mt-0.5">
                 {property.title}
               </span>
             </div>
@@ -165,7 +165,7 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
 
           {/* Lead Type Buttons */}
           <div>
-            <label className="block text-[11px] uppercase tracking-[0.14em] text-[#71717A] mb-1.5 font-medium">
+            <label className="block text-[11px] uppercase tracking-[0.14em] text-[#102A43] mb-1.5 font-semibold">
               Purpose of Request
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -174,8 +174,8 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
                 onClick={() => setType('INQUIRY')}
                 className={`py-2 px-3 border text-center transition-all ${
                   type === 'INQUIRY'
-                    ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-semibold'
-                    : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A]'
+                    ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                    : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:text-[#102A43] hover:border-[#B08D57]'
                 }`}
               >
                 Request Details & Brochure
@@ -185,8 +185,8 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
                 onClick={() => setType('VIEWING_REQUEST')}
                 className={`py-2 px-3 border text-center transition-all ${
                   type === 'VIEWING_REQUEST'
-                    ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-semibold'
-                    : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A]'
+                    ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                    : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:text-[#102A43] hover:border-[#B08D57]'
                 }`}
               >
                 Schedule Private Viewing
@@ -196,7 +196,7 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
 
           {/* Full Name */}
           <div>
-            <label className="block text-[11px] uppercase tracking-[0.14em] text-[#71717A] mb-1 font-medium">
+            <label className="block text-[11px] uppercase tracking-[0.14em] text-[#102A43] mb-1 font-semibold">
               Full Name *
             </label>
             <input
@@ -205,14 +205,14 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
               placeholder="e.g. Lord Marcus Kensington"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3.5 py-2.5 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880]"
+              className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3.5 py-2.5 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           {/* Email & Mobile */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.14em] text-[#71717A] mb-1 font-medium">
+              <label className="block text-[11px] uppercase tracking-[0.14em] text-[#102A43] mb-1 font-semibold">
                 Email Address *
               </label>
               <input
@@ -221,11 +221,11 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
                 placeholder="private@client.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3.5 py-2.5 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880]"
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3.5 py-2.5 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
               />
             </div>
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.14em] text-[#71717A] mb-1 font-medium">
+              <label className="block text-[11px] uppercase tracking-[0.14em] text-[#102A43] mb-1 font-semibold">
                 Mobile Number *
               </label>
               <input
@@ -234,14 +234,14 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
                 placeholder="+971 50 123 4567"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
-                className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3.5 py-2.5 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880]"
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3.5 py-2.5 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
               />
             </div>
           </div>
 
           {/* Preferred Contact Method */}
           <div>
-            <label className="block text-[11px] uppercase tracking-[0.14em] text-[#71717A] mb-1.5 font-medium">
+            <label className="block text-[11px] uppercase tracking-[0.14em] text-[#102A43] mb-1.5 font-semibold">
               Preferred Contact Channel
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -250,8 +250,8 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
                 onClick={() => setPreferredMethod('WHATSAPP')}
                 className={`py-2 px-2 border flex items-center justify-center gap-1.5 transition-all ${
                   preferredMethod === 'WHATSAPP'
-                    ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-semibold'
-                    : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A]'
+                    ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                    : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:text-[#102A43] hover:border-[#B08D57]'
                 }`}
               >
                 <MessageSquare className="w-3.5 h-3.5" />
@@ -262,8 +262,8 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
                 onClick={() => setPreferredMethod('PHONE')}
                 className={`py-2 px-2 border flex items-center justify-center gap-1.5 transition-all ${
                   preferredMethod === 'PHONE'
-                    ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-semibold'
-                    : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A]'
+                    ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                    : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:text-[#102A43] hover:border-[#B08D57]'
                 }`}
               >
                 <Phone className="w-3.5 h-3.5" />
@@ -274,8 +274,8 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
                 onClick={() => setPreferredMethod('EMAIL')}
                 className={`py-2 px-2 border flex items-center justify-center gap-1.5 transition-all ${
                   preferredMethod === 'EMAIL'
-                    ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-semibold'
-                    : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A]'
+                    ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                    : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:text-[#102A43] hover:border-[#B08D57]'
                 }`}
               >
                 <Mail className="w-3.5 h-3.5" />
@@ -286,7 +286,7 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
 
           {/* Message / Requirements */}
           <div>
-            <label className="block text-[11px] uppercase tracking-[0.14em] text-[#71717A] mb-1 font-medium">
+            <label className="block text-[11px] uppercase tracking-[0.14em] text-[#102A43] mb-1 font-semibold">
               Special Inquiries or Confidential Requirements
             </label>
             <textarea
@@ -294,13 +294,13 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
               placeholder="e.g. Inquiring regarding private viewing availability, off-market comparable units, or payment plans..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3.5 py-2.5 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880]"
+              className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3.5 py-2.5 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           {/* Privacy Notice */}
-          <div className="flex items-center gap-2 text-[10px] text-[#71717A] pt-1">
-            <Shield className="w-3.5 h-3.5 text-[#C5A880] shrink-0" />
+          <div className="flex items-center gap-2 text-[10px] text-[#6B7280] pt-1">
+            <Shield className="w-3.5 h-3.5 text-[#B08D57] shrink-0" />
             <span>
               Client confidentiality guaranteed. Personal contact information is strictly protected and never shared or made public.
             </span>
@@ -311,7 +311,7 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#18181A] hover:bg-[#0B0B0C] text-[#F7F5F0] hover:text-[#C5A880] py-3 text-xs uppercase tracking-[0.18em] font-semibold transition-all disabled:opacity-50"
+              className="w-full bg-[#102A43] hover:bg-[#0B2135] text-[#FFFDF8] hover:text-[#D8C3A5] py-3 text-xs uppercase tracking-[0.18em] font-semibold transition-all disabled:opacity-50 shadow-sm"
             >
               {isSubmitting ? 'Submitting Confidential Request...' : 'Transmit Private Inquiry'}
             </button>
@@ -321,3 +321,4 @@ export const LeadEnquiryModal: React.FC<LeadEnquiryModalProps> = ({
     </Modal>
   );
 };
+export default LeadEnquiryModal;

@@ -90,28 +90,28 @@ export const AuthModal: React.FC = () => {
   };
 
   const handleFillDemoClient = () => {
-    setLoginEmail('client@nestandkey.com');
+    setLoginEmail('client@crestshore.com');
     setLoginPassword('Client@123456');
     setErrorMessage(null);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto font-ui">
       {/* Dimmed Backdrop */}
       <div
-        className="fixed inset-0 bg-[#0A0A0B]/85 backdrop-blur-sm transition-opacity duration-300"
+        className="fixed inset-0 bg-[#0B2135]/60 backdrop-blur-sm transition-opacity duration-300"
         onClick={closeAuthModal}
       />
 
       {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-lg bg-[#18181A] border border-[#2A2A2E] rounded-sm text-white shadow-2xl overflow-hidden z-10 my-8 transition-all">
+      <div className="relative w-full max-w-lg bg-[#FFFDF8] border border-[#E9E1D4] rounded-sm text-[#3E4852] shadow-2xl overflow-hidden z-10 my-8 transition-all">
         {/* Top Gold Accent Bar */}
-        <div className="h-1 bg-gradient-to-r from-[#8F7453] via-[#C5A880] to-[#E5D2B8]" />
+        <div className="h-1 bg-gradient-to-r from-[#B08D57] via-[#D8C3A5] to-[#B08D57]" />
 
         {/* Close Button */}
         <button
           onClick={closeAuthModal}
-          className="absolute top-4 right-4 p-2 text-[#71717A] hover:text-[#C5A880] transition-colors rounded-sm"
+          className="absolute top-4 right-4 p-2 text-[#6B7280] hover:text-[#102A43] hover:bg-[#E9E1D4]/50 transition-colors rounded-sm"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
@@ -119,22 +119,22 @@ export const AuthModal: React.FC = () => {
 
         {/* Modal Header */}
         <div className="p-8 pb-4 text-center">
-          <div className="inline-flex items-center gap-2 text-[#C5A880] text-[10px] font-mono uppercase tracking-[0.25em] font-semibold mb-2">
+          <div className="inline-flex items-center gap-2 text-[#B08D57] text-[10px] uppercase tracking-[0.25em] font-semibold mb-2">
             <Compass className="w-3.5 h-3.5" />
-            <span>Nestandkey Private Client Portal</span>
+            <span>Crestshore Private Client Portal</span>
           </div>
-          <h2 className="font-serif text-2xl sm:text-3xl font-light tracking-tight text-[#FDFCF9]">
+          <h2 className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-[#102A43]">
             {mode === 'login' ? 'Access Your Portfolio' : 'Create Private Account'}
           </h2>
-          <p className="text-xs text-[#A1A1AA] font-light mt-1.5 max-w-sm mx-auto">
+          <p className="text-xs text-[#6B7280] font-normal mt-1.5 max-w-sm mx-auto">
             {mode === 'login'
               ? 'Sign in to access saved residences, private viewings, and off-market intelligence.'
-              : 'Join Nestandkey to unlock off-market listings, direct broker advisory, and market research.'}
+              : 'Join Crestshore to unlock off-market listings, direct broker advisory, and market research.'}
           </p>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-[#2A2A2E] mx-8 font-mono text-xs">
+        <div className="flex border-b border-[#E9E1D4] mx-8 text-xs">
           <button
             type="button"
             onClick={() => {
@@ -143,8 +143,8 @@ export const AuthModal: React.FC = () => {
             }}
             className={`flex-1 py-3 text-center transition-all uppercase tracking-wider ${
               mode === 'login'
-                ? 'border-b-2 border-[#C5A880] text-[#C5A880] font-bold'
-                : 'text-[#71717A] hover:text-white'
+                ? 'border-b-2 border-[#B08D57] text-[#102A43] font-bold'
+                : 'text-[#6B7280] hover:text-[#102A43]'
             }`}
           >
             Sign In
@@ -157,8 +157,8 @@ export const AuthModal: React.FC = () => {
             }}
             className={`flex-1 py-3 text-center transition-all uppercase tracking-wider ${
               mode === 'register'
-                ? 'border-b-2 border-[#C5A880] text-[#C5A880] font-bold'
-                : 'text-[#71717A] hover:text-white'
+                ? 'border-b-2 border-[#B08D57] text-[#102A43] font-bold'
+                : 'text-[#6B7280] hover:text-[#102A43]'
             }`}
           >
             Create Account
@@ -168,7 +168,7 @@ export const AuthModal: React.FC = () => {
         {/* Form Body */}
         <div className="p-8 pt-6">
           {errorMessage && (
-            <div className="mb-5 p-3.5 bg-red-950/40 border border-red-800/60 rounded-xs text-red-200 text-xs font-mono">
+            <div className="mb-5 p-3.5 bg-red-50 border border-red-200 rounded-xs text-red-800 text-xs font-mono">
               {errorMessage}
             </div>
           )}
@@ -177,49 +177,49 @@ export const AuthModal: React.FC = () => {
             /* ================= LOGIN FORM ================= */
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
-                <label className="block text-[11px] uppercase tracking-wider font-mono text-[#A1A1AA] mb-1.5">
+                <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#102A43] mb-1.5">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Mail className="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="email"
                     required
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     placeholder="name@example.com"
-                    className="w-full bg-[#212124] border border-[#2A2A2E] focus:border-[#C5A880] rounded-xs pl-10 pr-4 py-2.5 text-xs text-white placeholder-[#52525B] focus:outline-none transition-colors"
+                    className="w-full bg-[#F7F3EA] border border-[#E9E1D4] focus:border-[#B08D57] rounded-xs pl-10 pr-4 py-2.5 text-xs text-[#102A43] placeholder-[#6B7280]/60 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-[11px] uppercase tracking-wider font-mono text-[#A1A1AA]">
+                  <label className="text-[11px] uppercase tracking-wider font-semibold text-[#102A43]">
                     Password
                   </label>
                   <button
                     type="button"
-                    onClick={() => setErrorMessage('Please contact advisory at private@nestandkey.com to reset access.')}
-                    className="text-[10px] text-[#C5A880] hover:underline font-mono"
+                    onClick={() => setErrorMessage('Please contact advisory at private@crestshore.com to reset access.')}
+                    className="text-[10px] text-[#B08D57] hover:underline"
                   >
                     Forgot password?
                   </button>
                 </div>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full bg-[#212124] border border-[#2A2A2E] focus:border-[#C5A880] rounded-xs pl-10 pr-10 py-2.5 text-xs text-white placeholder-[#52525B] focus:outline-none transition-colors"
+                    className="w-full bg-[#F7F3EA] border border-[#E9E1D4] focus:border-[#B08D57] rounded-xs pl-10 pr-10 py-2.5 text-xs text-[#102A43] placeholder-[#6B7280]/60 focus:outline-none transition-colors"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717A] hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-[#102A43]"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -231,14 +231,14 @@ export const AuthModal: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleFillDemoClient}
-                  className="w-full text-left p-2.5 bg-[#212124] hover:bg-[#2A2A2E] border border-[#2A2A2E] hover:border-[#C5A880]/50 rounded-xs transition-colors flex items-center justify-between text-xs"
+                  className="w-full text-left p-2.5 bg-[#F7F3EA] hover:bg-[#E9E1D4]/60 border border-[#E9E1D4] hover:border-[#B08D57]/50 rounded-xs transition-colors flex items-center justify-between text-xs"
                 >
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
-                    <span className="text-[11px] font-mono text-[#C5A880]">Quick Test:</span>
-                    <span className="text-[11px] text-[#A1A1AA]">client@nestandkey.com</span>
+                    <Sparkles className="w-3.5 h-3.5 text-[#B08D57]" />
+                    <span className="text-[11px] font-semibold text-[#B08D57]">Quick Test:</span>
+                    <span className="text-[11px] text-[#6B7280]">client@crestshore.com</span>
                   </div>
-                  <span className="text-[10px] uppercase font-mono text-[#C5A880] font-semibold">
+                  <span className="text-[10px] uppercase text-[#B08D57] font-semibold">
                     Auto-Fill
                   </span>
                 </button>
@@ -247,10 +247,10 @@ export const AuthModal: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full mt-4 bg-[#C5A880] hover:bg-[#B8976C] text-[#18181A] py-3 rounded-xs text-xs font-bold uppercase tracking-[0.18em] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
+                className="w-full mt-4 bg-[#102A43] hover:bg-[#0B2135] text-[#FFFDF8] hover:text-[#D8C3A5] py-3 rounded-xs text-xs font-semibold uppercase tracking-[0.18em] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
               >
                 {isLoading ? (
-                  <span className="inline-block w-4 h-4 border-2 border-[#18181A] border-t-transparent rounded-full animate-spin" />
+                  <span className="inline-block w-4 h-4 border-2 border-[#FFFDF8] border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <span>Sign In to Account</span>
                 )}
@@ -260,58 +260,58 @@ export const AuthModal: React.FC = () => {
             /* ================= REGISTER FORM ================= */
             <form onSubmit={handleRegisterSubmit} className="space-y-4">
               <div>
-                <label className="block text-[11px] uppercase tracking-wider font-mono text-[#A1A1AA] mb-1.5">
+                <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#102A43] mb-1.5">
                   Full Name *
                 </label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <User className="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     required
                     value={regName}
                     onChange={(e) => setRegName(e.target.value)}
                     placeholder="Lord Alexander Sterling"
-                    className="w-full bg-[#212124] border border-[#2A2A2E] focus:border-[#C5A880] rounded-xs pl-10 pr-4 py-2.5 text-xs text-white placeholder-[#52525B] focus:outline-none transition-colors"
+                    className="w-full bg-[#F7F3EA] border border-[#E9E1D4] focus:border-[#B08D57] rounded-xs pl-10 pr-4 py-2.5 text-xs text-[#102A43] placeholder-[#6B7280]/60 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] uppercase tracking-wider font-mono text-[#A1A1AA] mb-1.5">
+                <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#102A43] mb-1.5">
                   Email Address *
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Mail className="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="email"
                     required
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
                     placeholder="alexander@familyoffice.ae"
-                    className="w-full bg-[#212124] border border-[#2A2A2E] focus:border-[#C5A880] rounded-xs pl-10 pr-4 py-2.5 text-xs text-white placeholder-[#52525B] focus:outline-none transition-colors"
+                    className="w-full bg-[#F7F3EA] border border-[#E9E1D4] focus:border-[#B08D57] rounded-xs pl-10 pr-4 py-2.5 text-xs text-[#102A43] placeholder-[#6B7280]/60 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] uppercase tracking-wider font-mono text-[#A1A1AA] mb-1.5">
+                <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#102A43] mb-1.5">
                   Phone / WhatsApp (Optional)
                 </label>
                 <div className="relative">
-                  <Phone className="w-4 h-4 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Phone className="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="tel"
                     value={regPhone}
                     onChange={(e) => setRegPhone(e.target.value)}
                     placeholder="+971 50 123 4567"
-                    className="w-full bg-[#212124] border border-[#2A2A2E] focus:border-[#C5A880] rounded-xs pl-10 pr-4 py-2.5 text-xs text-white placeholder-[#52525B] focus:outline-none transition-colors font-mono"
+                    className="w-full bg-[#F7F3EA] border border-[#E9E1D4] focus:border-[#B08D57] rounded-xs pl-10 pr-4 py-2.5 text-xs text-[#102A43] placeholder-[#6B7280]/60 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider font-mono text-[#A1A1AA] mb-1.5">
+                  <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#102A43] mb-1.5">
                     Password *
                   </label>
                   <div className="relative">
@@ -321,13 +321,13 @@ export const AuthModal: React.FC = () => {
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
                       placeholder="Min. 8 chars"
-                      className="w-full bg-[#212124] border border-[#2A2A2E] focus:border-[#C5A880] rounded-xs px-3 py-2.5 text-xs text-white placeholder-[#52525B] focus:outline-none transition-colors"
+                      className="w-full bg-[#F7F3EA] border border-[#E9E1D4] focus:border-[#B08D57] rounded-xs px-3 py-2.5 text-xs text-[#102A43] placeholder-[#6B7280]/60 focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider font-mono text-[#A1A1AA] mb-1.5">
+                  <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#102A43] mb-1.5">
                     Confirm Password *
                   </label>
                   <div className="relative">
@@ -337,24 +337,24 @@ export const AuthModal: React.FC = () => {
                       value={regConfirmPassword}
                       onChange={(e) => setRegConfirmPassword(e.target.value)}
                       placeholder="Repeat password"
-                      className="w-full bg-[#212124] border border-[#2A2A2E] focus:border-[#C5A880] rounded-xs px-3 py-2.5 text-xs text-white placeholder-[#52525B] focus:outline-none transition-colors"
+                      className="w-full bg-[#F7F3EA] border border-[#E9E1D4] focus:border-[#B08D57] rounded-xs px-3 py-2.5 text-xs text-[#102A43] placeholder-[#6B7280]/60 focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 pt-1 text-[11px] text-[#A1A1AA]">
-                <ShieldCheck className="w-4 h-4 text-[#C5A880] shrink-0" />
+              <div className="flex items-center gap-2 pt-1 text-[11px] text-[#6B7280]">
+                <ShieldCheck className="w-4 h-4 text-[#B08D57] shrink-0" />
                 <span>Strict confidentiality and UAE Data Protection compliance guaranteed.</span>
               </div>
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full mt-4 bg-[#C5A880] hover:bg-[#B8976C] text-[#18181A] py-3 rounded-xs text-xs font-bold uppercase tracking-[0.18em] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
+                className="w-full mt-4 bg-[#102A43] hover:bg-[#0B2135] text-[#FFFDF8] hover:text-[#D8C3A5] py-3 rounded-xs text-xs font-semibold uppercase tracking-[0.18em] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
               >
                 {isLoading ? (
-                  <span className="inline-block w-4 h-4 border-2 border-[#18181A] border-t-transparent rounded-full animate-spin" />
+                  <span className="inline-block w-4 h-4 border-2 border-[#FFFDF8] border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <span>Create Private Account</span>
                 )}
@@ -365,10 +365,10 @@ export const AuthModal: React.FC = () => {
           {/* Luxury Divider */}
           <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#2A2A2E]" />
+              <div className="w-full border-t border-[#E9E1D4]" />
             </div>
-            <div className="relative flex justify-center text-[10px] uppercase font-mono tracking-widest">
-              <span className="bg-[#18181A] px-3 text-[#71717A]">
+            <div className="relative flex justify-center text-[10px] uppercase tracking-widest">
+              <span className="bg-[#FFFDF8] px-3 text-[#6B7280]">
                 {mode === 'login' ? 'Or Continue With' : 'Or Register With'}
               </span>
             </div>
@@ -382,10 +382,11 @@ export const AuthModal: React.FC = () => {
         </div>
 
         {/* Footer info */}
-        <div className="px-8 py-4 bg-[#121214] border-t border-[#2A2A2E] text-center text-[10px] font-mono text-[#71717A]">
-          <span>Protected by Nestandkey Luxury Client Protocol • Encrypted Session</span>
+        <div className="px-8 py-4 bg-[#F7F3EA] border-t border-[#E9E1D4] text-center text-[10px] text-[#6B7280]">
+          <span>Protected by Crestshore Luxury Client Protocol • Encrypted Session</span>
         </div>
       </div>
     </div>
   );
 };
+export default AuthModal;

@@ -12,7 +12,7 @@ export const MainLayout: React.FC = () => {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFCF9] text-[#18181A]">
+    <div className="min-h-screen flex flex-col bg-[#F7F3EA] text-[#3E4852] font-ui">
       <Header />
       <main className="flex-grow">
         <Outlet />

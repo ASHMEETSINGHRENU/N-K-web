@@ -223,21 +223,21 @@ export const PropertiesPage: React.FC = () => {
     CATEGORIES.find((c) => c.id === (filters.purpose || 'BUY')) || CATEGORIES[0];
 
   return (
-    <div className="pt-28 pb-20 bg-[#FDFCF9] min-h-screen text-[#18181A]">
+    <div className="pt-28 pb-20 bg-[#F7F3EA] min-h-screen text-[#3E4852] font-ui">
       <div className="max-w-[1740px] mx-auto px-4 sm:px-6 lg:px-10">
         {/* Header Title Section */}
-        <div className="mb-6 pb-4 border-b border-[#E5E0D8] flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="mb-6 pb-4 border-b border-[#E9E1D4] flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold font-mono">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#B08D57] font-semibold font-mono">
                 Dubai Prime Portfolio
               </span>
-              <span className="text-[#E5E0D8]">/</span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-[#71717A] font-medium">
+              <span className="text-[#E9E1D4]">/</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#6B7280] font-medium">
                 {currentCategoryObj.label}
               </span>
             </div>
-            <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#18181A] font-light tracking-tight">
+            <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl text-[#102A43] font-normal tracking-tight">
               {filters.purpose === 'RENT'
                 ? 'Prime Dubai Residences For Lease'
                 : filters.purpose === 'OFF_PLAN'
@@ -248,8 +248,8 @@ export const PropertiesPage: React.FC = () => {
                 ? 'Commercial Real Estate For Sale'
                 : 'Luxury Dubai Properties For Sale'}
             </h1>
-            <p className="text-xs text-[#71717A] mt-1.5">
-              Showing <span className="font-medium text-[#18181A]">{properties.length}</span> curated
+            <p className="text-xs text-[#6B7280] mt-1.5">
+              Showing <span className="font-semibold text-[#102A43]">{properties.length}</span> curated
               exceptional residences across Dubai's most prestigious enclaves.
             </p>
           </div>
@@ -261,7 +261,7 @@ export const PropertiesPage: React.FC = () => {
               <select
                 value={filters.sort}
                 onChange={(e) => handleApplyFilterChange({ ...filters, sort: e.target.value })}
-                className="bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs text-[#18181A] uppercase tracking-wider focus:outline-none focus:border-[#C5A880] transition-colors cursor-pointer"
+                className="bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] uppercase tracking-wider focus:outline-none focus:border-[#B08D57] transition-colors cursor-pointer"
               >
                 <option value="price_desc">Price: High to Low</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -272,11 +272,11 @@ export const PropertiesPage: React.FC = () => {
             </div>
 
             {/* Desktop Grid/List toggle */}
-            <div className="hidden sm:flex border border-[#E5E0D8] bg-[#F7F5F0]">
+            <div className="hidden sm:flex border border-[#E9E1D4] bg-[#FFFDF8]">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2 transition-colors ${
-                  viewMode === 'grid' ? 'bg-[#18181A] text-[#C5A880]' : 'text-[#71717A] hover:text-[#18181A]'
+                  viewMode === 'grid' ? 'bg-[#102A43] text-[#D8C3A5]' : 'text-[#6B7280] hover:text-[#102A43]'
                 }`}
                 title="Grid View"
               >
@@ -285,7 +285,7 @@ export const PropertiesPage: React.FC = () => {
               <button
                 onClick={() => setViewMode('list')}
                 className={`p-2 transition-colors ${
-                  viewMode === 'list' ? 'bg-[#18181A] text-[#C5A880]' : 'text-[#71717A] hover:text-[#18181A]'
+                  viewMode === 'list' ? 'bg-[#102A43] text-[#D8C3A5]' : 'text-[#6B7280] hover:text-[#102A43]'
                 }`}
                 title="List View"
               >
@@ -297,7 +297,7 @@ export const PropertiesPage: React.FC = () => {
 
         {/* 1. Category Filter Tabs */}
         <div className="mb-4">
-          <div className="inline-flex flex-wrap gap-1.5 p-1 bg-[#F7F5F0] border border-[#E5E0D8]">
+          <div className="inline-flex flex-wrap gap-1.5 p-1 bg-[#FFFDF8] border border-[#E9E1D4]">
             {CATEGORIES.map((cat) => {
               const isActive = (filters.purpose || 'BUY') === cat.id;
               return (
@@ -306,8 +306,8 @@ export const PropertiesPage: React.FC = () => {
                   onClick={() => handleCategoryChange(cat.id)}
                   className={`px-4 py-2 text-xs uppercase tracking-[0.14em] font-medium transition-all ${
                     isActive
-                      ? 'bg-[#18181A] text-[#C5A880] shadow-sm font-semibold'
-                      : 'text-[#71717A] hover:text-[#18181A] hover:bg-[#E5E0D8]/40'
+                      ? 'bg-[#102A43] text-[#F7F3EA] shadow-sm font-semibold'
+                      : 'text-[#6B7280] hover:text-[#102A43] hover:bg-[#E9E1D4]/40'
                   }`}
                 >
                   {cat.label}
@@ -318,18 +318,18 @@ export const PropertiesPage: React.FC = () => {
         </div>
 
         {/* 2. Quick Filter Toolbar */}
-        <div className="bg-[#F7F5F0] border border-[#E5E0D8] p-3 mb-4">
+        <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-3 mb-4 shadow-sm">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2.5 items-center">
             {/* Keyword / Free text search */}
             <div className="relative lg:col-span-2">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#71717A]" />
+              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7280]" />
               <input
                 type="text"
                 placeholder="Search villas, penthouses, Burj Khalifa..."
                 value={filters.search}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 onKeyDown={(e) => e.key === 'Enter' && handleApplyFilterChange(filters)}
-                className="w-full bg-[#FDFCF9] border border-[#E5E0D8] pl-8 pr-3 py-2 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880] transition-colors"
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] pl-8 pr-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57] transition-colors"
               />
               {filters.search && (
                 <button
@@ -337,7 +337,7 @@ export const PropertiesPage: React.FC = () => {
                     const u = { ...filters, search: '' };
                     handleApplyFilterChange(u);
                   }}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717A] hover:text-[#18181A]"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-[#102A43]"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -349,7 +349,7 @@ export const PropertiesPage: React.FC = () => {
               <select
                 value={filters.community}
                 onChange={(e) => handleApplyFilterChange({ ...filters, community: e.target.value })}
-                className="w-full bg-[#FDFCF9] border border-[#E5E0D8] px-3 py-2 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880] transition-colors cursor-pointer"
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57] transition-colors cursor-pointer"
               >
                 <option value="">All Communities</option>
                 {DUBAI_COMMUNITIES.map((comm) => (
@@ -365,7 +365,7 @@ export const PropertiesPage: React.FC = () => {
               <select
                 value={filters.propertyType}
                 onChange={(e) => handleApplyFilterChange({ ...filters, propertyType: e.target.value })}
-                className="w-full bg-[#FDFCF9] border border-[#E5E0D8] px-3 py-2 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880] transition-colors cursor-pointer"
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57] transition-colors cursor-pointer"
               >
                 <option value="">All Property Types</option>
                 {PROPERTY_TYPES.map((type) => (
@@ -381,7 +381,7 @@ export const PropertiesPage: React.FC = () => {
               <select
                 value={filters.bedrooms}
                 onChange={(e) => handleApplyFilterChange({ ...filters, bedrooms: e.target.value === 'All' ? '' : e.target.value })}
-                className="w-full bg-[#FDFCF9] border border-[#E5E0D8] px-3 py-2 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880] transition-colors cursor-pointer"
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57] transition-colors cursor-pointer"
               >
                 <option value="">Any Bedrooms</option>
                 {BEDROOM_OPTIONS.filter((b) => b !== 'All').map((bed) => (
@@ -396,12 +396,12 @@ export const PropertiesPage: React.FC = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => setIsFilterDrawerOpen(true)}
-                className="w-full flex items-center justify-center gap-2 bg-[#18181A] text-[#F7F5F0] hover:text-[#C5A880] hover:bg-[#232326] px-4 py-2 text-xs uppercase tracking-wider font-semibold transition-all border border-[#18181A]"
+                className="w-full flex items-center justify-center gap-2 bg-[#102A43] text-[#F7F3EA] hover:text-[#D8C3A5] hover:bg-[#1E3A5F] px-4 py-2 text-xs uppercase tracking-wider font-semibold transition-all border border-[#102A43]"
               >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-[#C5A880]" />
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#B08D57]" />
                 <span>Filters</span>
                 {activeFilterCount > 0 && (
-                  <span className="ml-1 bg-[#C5A880] text-[#18181A] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                  <span className="ml-1 bg-[#B08D57] text-[#102A43] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                     {activeFilterCount}
                   </span>
                 )}
@@ -413,19 +413,19 @@ export const PropertiesPage: React.FC = () => {
         {/* 3. Active Filters Chips Bar */}
         {activeChips.length > 0 && (
           <div className="mb-6 flex flex-wrap items-center gap-2 pt-1 pb-2">
-            <span className="text-[11px] uppercase tracking-wider text-[#71717A] font-semibold mr-1">
+            <span className="text-[11px] uppercase tracking-wider text-[#6B7280] font-semibold mr-1">
               Active Filters:
             </span>
             {activeChips.map((chip) => (
               <span
                 key={chip.key + chip.value}
-                className="inline-flex items-center gap-1.5 bg-[#F7F5F0] border border-[#C5A880]/50 text-[#18181A] px-2.5 py-1 text-xs font-medium"
+                className="inline-flex items-center gap-1.5 bg-[#FFFDF8] border border-[#B08D57]/50 text-[#102A43] px-2.5 py-1 text-xs font-medium"
               >
-                <span className="text-[10px] text-[#71717A] uppercase">{chip.label}:</span>
-                <span className="font-semibold text-[#18181A]">{chip.value}</span>
+                <span className="text-[10px] text-[#6B7280] uppercase">{chip.label}:</span>
+                <span className="font-semibold text-[#102A43]">{chip.value}</span>
                 <button
                   onClick={() => removeSingleFilter(chip.key)}
-                  className="text-[#71717A] hover:text-[#B91C1C] transition-colors ml-0.5"
+                  className="text-[#6B7280] hover:text-[#B91C1C] transition-colors ml-0.5"
                   title="Remove filter"
                 >
                   <X className="w-3 h-3" />
@@ -434,7 +434,7 @@ export const PropertiesPage: React.FC = () => {
             ))}
             <button
               onClick={handleResetFilters}
-              className="inline-flex items-center gap-1 text-xs text-[#71717A] hover:text-[#B91C1C] underline uppercase tracking-wider ml-2 transition-colors"
+              className="inline-flex items-center gap-1 text-xs text-[#6B7280] hover:text-[#B91C1C] underline uppercase tracking-wider ml-2 transition-colors"
             >
               <RotateCcw className="w-3 h-3" />
               <span>Clear All</span>
@@ -443,13 +443,13 @@ export const PropertiesPage: React.FC = () => {
         )}
 
         {/* 4. Mobile View Switcher (< 1024px) */}
-        <div className="lg:hidden flex border border-[#E5E0D8] bg-[#F7F5F0] mb-6 p-1">
+        <div className="lg:hidden flex border border-[#E9E1D4] bg-[#FFFDF8] mb-6 p-1">
           <button
             onClick={() => setMobileTab('list')}
             className={`flex-1 py-2 text-xs uppercase tracking-wider font-semibold flex items-center justify-center gap-2 transition-all ${
               mobileTab === 'list'
-                ? 'bg-[#18181A] text-[#C5A880] shadow-sm'
-                : 'text-[#71717A] hover:text-[#18181A]'
+                ? 'bg-[#102A43] text-[#F7F3EA] shadow-sm'
+                : 'text-[#6B7280] hover:text-[#102A43]'
             }`}
           >
             <List className="w-3.5 h-3.5" />
@@ -459,8 +459,8 @@ export const PropertiesPage: React.FC = () => {
             onClick={() => setMobileTab('map')}
             className={`flex-1 py-2 text-xs uppercase tracking-wider font-semibold flex items-center justify-center gap-2 transition-all ${
               mobileTab === 'map'
-                ? 'bg-[#18181A] text-[#C5A880] shadow-sm'
-                : 'text-[#71717A] hover:text-[#18181A]'
+                ? 'bg-[#102A43] text-[#F7F3EA] shadow-sm'
+                : 'text-[#6B7280] hover:text-[#102A43]'
             }`}
           >
             <MapIcon className="w-3.5 h-3.5" />
@@ -481,23 +481,23 @@ export const PropertiesPage: React.FC = () => {
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div
                     key={i}
-                    className="aspect-[4/5] bg-[#F7F5F0] border border-[#E5E0D8] animate-pulse"
+                    className="aspect-[4/5] bg-[#FFFDF8] border border-[#E9E1D4] animate-pulse"
                   />
                 ))}
               </div>
             ) : properties.length === 0 ? (
               /* Empty State */
-              <div className="text-center py-24 border border-dashed border-[#E5E0D8] bg-[#F7F5F0] p-8">
-                <h3 className="font-serif text-2xl text-[#18181A] mb-2 font-light">
+              <div className="text-center py-24 border border-dashed border-[#E9E1D4] bg-[#FFFDF8] p-8">
+                <h3 className="font-display text-2xl text-[#102A43] mb-2 font-normal">
                   No matching residences found
                 </h3>
-                <p className="text-xs text-[#71717A] max-w-md mx-auto mb-6">
+                <p className="text-xs text-[#6B7280] max-w-md mx-auto mb-6">
                   Try broadening your search criteria, adjusting your budget range, or selecting
                   different Dubai communities.
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="bg-[#18181A] text-[#F7F5F0] hover:text-[#C5A880] px-6 py-2.5 text-xs uppercase tracking-widest font-semibold transition-all"
+                  className="bg-[#102A43] text-[#F7F3EA] hover:bg-[#1E3A5F] px-6 py-2.5 text-xs uppercase tracking-widest font-semibold transition-all"
                 >
                   Reset All Filters
                 </button>
@@ -528,47 +528,47 @@ export const PropertiesPage: React.FC = () => {
                       onMouseEnter={() => setHoveredPropertyId(prop._id)}
                       onMouseLeave={() => setHoveredPropertyId(null)}
                       onClick={() => setSelectedPropertyId(prop._id)}
-                      className={`bg-[#FDFCF9] border p-4 flex flex-col sm:flex-row gap-5 transition-all duration-300 shadow-sm ${
+                      className={`bg-[#FFFDF8] border p-4 flex flex-col sm:flex-row gap-5 transition-all duration-300 shadow-sm ${
                         isHighlighted
-                          ? 'border-[#C5A880] ring-2 ring-[#C5A880]/60 scale-[1.005]'
-                          : 'border-[#E5E0D8] hover:border-[#C5A880]'
+                          ? 'border-[#B08D57] ring-2 ring-[#B08D57]/60 scale-[1.005]'
+                          : 'border-[#E9E1D4] hover:border-[#B08D57]'
                       }`}
                     >
-                      <div className="w-full sm:w-64 aspect-[4/3] bg-[#18181A] shrink-0 overflow-hidden relative">
+                      <div className="w-full sm:w-64 aspect-[4/3] bg-[#102A43] shrink-0 overflow-hidden relative">
                         <img
                           src={prop.featuredImage}
                           alt={prop.title}
                           className="w-full h-full object-cover luxury-image-zoom"
                         />
-                        <span className="absolute top-2 left-2 bg-[#0B0B0C]/85 text-[#F7F5F0] text-[9px] uppercase tracking-widest px-2 py-0.5 border border-[#E5E0D8]/20">
+                        <span className="absolute top-2 left-2 bg-[#102A43]/85 text-[#F7F3EA] text-[9px] uppercase tracking-widest px-2 py-0.5 border border-[#1E3A5F]">
                           {prop.propertyType}
                         </span>
                       </div>
                       <div className="flex-1 flex flex-col justify-between">
                         <div>
                           <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-[10px] uppercase tracking-widest text-[#C5A880] font-mono font-semibold">
+                            <span className="text-[10px] uppercase tracking-widest text-[#B08D57] font-mono font-semibold">
                               {prop.community}, Dubai
                             </span>
-                            <span className="font-serif text-lg lg:text-xl font-medium text-[#18181A]">
+                            <span className="font-ui text-lg lg:text-xl font-semibold text-[#102A43]">
                               {formatAED(prop.priceAED)}
                               {prop.purpose === 'RENT' && (
-                                <span className="text-[11px] text-[#71717A] font-light ml-1">
+                                <span className="text-[11px] text-[#6B7280] font-normal ml-1">
                                   / yr
                                 </span>
                               )}
                             </span>
                           </div>
                           <a href={`/property/${prop.slug}`}>
-                            <h3 className="font-serif text-lg text-[#18181A] hover:text-[#C5A880] transition-colors line-clamp-1 mb-1.5">
+                            <h3 className="font-display text-lg text-[#102A43] hover:text-[#B08D57] transition-colors line-clamp-1 mb-1.5">
                               {prop.title}
                             </h3>
                           </a>
-                          <p className="text-xs text-[#71717A] line-clamp-2 leading-relaxed">
+                          <p className="text-xs text-[#6B7280] line-clamp-2 leading-relaxed">
                             {prop.description}
                           </p>
                         </div>
-                        <div className="pt-3 border-t border-[#E5E0D8] flex items-center justify-between text-xs text-[#3E3E42]">
+                        <div className="pt-3 border-t border-[#E9E1D4] flex items-center justify-between text-xs text-[#6B7280]">
                           <div className="flex gap-4">
                             <span>{prop.bedrooms} Beds</span>
                             <span>{prop.bathrooms} Baths</span>
@@ -580,13 +580,13 @@ export const PropertiesPage: React.FC = () => {
                                 e.stopPropagation();
                                 setSelectedPropertyForInquiry(prop);
                               }}
-                              className="text-[11px] uppercase tracking-wider text-[#C5A880] hover:text-[#B8976C] font-semibold"
+                              className="text-[11px] uppercase tracking-wider text-[#B08D57] hover:text-[#D8C3A5] font-semibold"
                             >
                               Enquire
                             </button>
                             <a
                               href={`/property/${prop.slug}`}
-                              className="text-[11px] uppercase tracking-wider bg-[#18181A] text-[#F7F5F0] hover:text-[#C5A880] px-3.5 py-1.5 font-medium transition-colors"
+                              className="text-[11px] uppercase tracking-wider bg-[#102A43] text-[#F7F3EA] hover:bg-[#1E3A5F] px-3.5 py-1.5 font-semibold transition-colors"
                             >
                               View Residence
                             </a>
@@ -600,11 +600,11 @@ export const PropertiesPage: React.FC = () => {
             )}
           </div>
 
-          {/* RIGHT: Google Map (42% / 40% on desktop, sticky viewport height) */}
+          {/* RIGHT: High-Definition Google Map (42% / 40% on desktop, sticky viewport height) */}
           <div
             className={`w-full ${
               mobileTab === 'list' ? 'hidden lg:block' : 'block'
-            } lg:w-[42%] xl:w-[40%] sticky top-24 h-[calc(100vh-7.5rem)] min-h-[500px]`}
+            } lg:w-[42%] xl:w-[40%] sticky top-24 h-[calc(100vh-7.5rem)] min-h-[520px]`}
           >
             <PropertyMap
               properties={properties}
@@ -617,7 +617,7 @@ export const PropertiesPage: React.FC = () => {
                 setHoveredPropertyId(id);
               }}
               onInquire={(prop) => setSelectedPropertyForInquiry(prop)}
-              className="w-full h-full border border-[#E5E0D8] shadow-sm overflow-hidden"
+              className="w-full h-full border border-[#E9E1D4] shadow-md overflow-hidden rounded-sm"
             />
           </div>
         </div>

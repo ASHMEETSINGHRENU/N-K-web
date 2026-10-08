@@ -122,26 +122,26 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
   const displayedAmenities = showAllAmenities ? LUXURY_AMENITIES : LUXURY_AMENITIES.slice(0, 10);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-hidden font-ui">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#0B0B0C]/70 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-[#0B2135]/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-lg bg-[#FDFCF9] text-[#18181A] shadow-2xl border-l border-[#E5E0D8] flex flex-col">
+        <div className="w-screen max-w-lg bg-[#FFFDF8] text-[#3E4852] shadow-2xl border-l border-[#E9E1D4] flex flex-col">
           {/* Header */}
-          <div className="p-6 border-b border-[#E5E0D8] flex items-center justify-between bg-[#F7F5F0]">
+          <div className="p-6 border-b border-[#E9E1D4] flex items-center justify-between bg-[#F7F3EA]">
             <div>
-              <h3 className="font-serif text-2xl tracking-wide font-light">Refine Search</h3>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#C5A880] font-mono mt-0.5">
+              <h3 className="font-display text-2xl tracking-wide font-normal text-[#102A43]">Refine Search</h3>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#B08D57] font-medium mt-0.5">
                 Precision Discovery Parameters
               </p>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-[#71717A] hover:text-[#18181A] hover:bg-[#E5E0D8]/40 rounded transition-colors"
+              className="p-2 text-[#6B7280] hover:text-[#102A43] hover:bg-[#E9E1D4]/50 rounded-sm transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -151,7 +151,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
           <div className="flex-1 overflow-y-auto p-6 space-y-7 text-xs">
             {/* 1. Category Filter */}
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2.5">
+              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2.5">
                 Property Category
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -164,8 +164,8 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                       onClick={() => onChange({ ...filters, purpose: cat.id })}
                       className={`py-2 px-3 text-[10px] uppercase tracking-wider border text-center transition-all ${
                         isSelected
-                          ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-bold shadow-sm'
-                          : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A] hover:border-[#C5A880]'
+                          ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold shadow-sm'
+                          : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:border-[#B08D57] hover:text-[#102A43]'
                       }`}
                     >
                       {cat.label}
@@ -177,13 +177,13 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
             {/* 2. Location (City / Community) */}
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                 Location & Community
               </label>
               <select
                 value={filters.community || ''}
                 onChange={(e) => onChange({ ...filters, community: e.target.value })}
-                className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880]"
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
               >
                 <option value="">All Dubai Prime Communities</option>
                 {DUBAI_COMMUNITIES.map((c) => (
@@ -196,17 +196,17 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
             {/* 3. Keywords Search */}
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                 Keywords & Features
               </label>
               <div className="relative">
-                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#71717A]" />
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7280]" />
                 <input
                   type="text"
                   placeholder="e.g. Sea view, upgraded, brand new, private beach..."
                   value={filters.keywords || filters.search || ''}
                   onChange={(e) => onChange({ ...filters, keywords: e.target.value, search: e.target.value })}
-                  className="w-full bg-[#F7F5F0] border border-[#E5E0D8] pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                  className="w-full bg-[#FFFDF8] border border-[#E9E1D4] pl-9 pr-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57] placeholder:text-[#6B7280]/60"
                 />
               </div>
             </div>
@@ -214,11 +214,11 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             {/* 4. Property Type (Multi-select) */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A]">
+                <label className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43]">
                   Property Type
                 </label>
                 {selectedPropertyTypes.length > 0 && (
-                  <span className="text-[10px] text-[#C5A880] font-mono">
+                  <span className="text-[10px] text-[#B08D57] font-medium">
                     {selectedPropertyTypes.length} selected
                   </span>
                 )}
@@ -233,8 +233,8 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                       onClick={() => handleTogglePropertyType(type)}
                       className={`py-2 px-2 text-[10px] uppercase tracking-wider border text-center transition-all truncate ${
                         isSelected
-                          ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-semibold'
-                          : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A] hover:border-[#C5A880]'
+                          ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                          : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:border-[#B08D57] hover:text-[#102A43]'
                       }`}
                     >
                       {type}
@@ -250,11 +250,11 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                 {/* Bedrooms */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A]">
+                    <label className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43]">
                       Bedrooms
                     </label>
                     {selectedBedrooms.length > 0 && (
-                      <span className="text-[10px] text-[#C5A880] font-mono">
+                      <span className="text-[10px] text-[#B08D57] font-medium">
                         {selectedBedrooms.join(', ')}
                       </span>
                     )}
@@ -267,10 +267,10 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                           key={bed}
                           type="button"
                           onClick={() => handleToggleBedroom(bed)}
-                          className={`py-2 text-[10px] font-mono border text-center transition-all ${
+                          className={`py-2 text-[10px] border text-center transition-all ${
                             isSelected
-                              ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-bold'
-                              : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A] hover:border-[#C5A880]'
+                              ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                              : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:border-[#B08D57] hover:text-[#102A43]'
                           }`}
                         >
                           {bed}
@@ -283,11 +283,11 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                 {/* Bathrooms */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A]">
+                    <label className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43]">
                       Bathrooms
                     </label>
                     {selectedBathrooms.length > 0 && (
-                      <span className="text-[10px] text-[#C5A880] font-mono">
+                      <span className="text-[10px] text-[#B08D57] font-medium">
                         {selectedBathrooms.join(', ')}
                       </span>
                     )}
@@ -300,10 +300,10 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                           key={bath}
                           type="button"
                           onClick={() => handleToggleBathroom(bath)}
-                          className={`py-2 text-[10px] font-mono border text-center transition-all ${
+                          className={`py-2 text-[10px] border text-center transition-all ${
                             isSelected
-                              ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-bold'
-                              : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A] hover:border-[#C5A880]'
+                              ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                              : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:border-[#B08D57] hover:text-[#102A43]'
                           }`}
                         >
                           {bath}
@@ -317,7 +317,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
             {/* 6. Price Range (AED) */}
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                 Price Range (AED)
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -326,14 +326,14 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                   placeholder="Min Price (AED)"
                   value={filters.minPrice || ''}
                   onChange={(e) => onChange({ ...filters, minPrice: e.target.value })}
-                  className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                  className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                 />
                 <input
                   type="number"
                   placeholder="Max Price (AED)"
                   value={filters.maxPrice || ''}
                   onChange={(e) => onChange({ ...filters, maxPrice: e.target.value })}
-                  className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                  className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                 />
               </div>
             </div>
@@ -342,7 +342,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             {(isRent || isCommercialRent) && (
               <>
                 <div>
-                  <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+                  <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                     Rental Period
                   </label>
                   <div className="grid grid-cols-4 gap-2">
@@ -355,8 +355,8 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                           onClick={() => onChange({ ...filters, rentalPeriod: period.toUpperCase() })}
                           className={`py-2 px-2 text-[10px] uppercase tracking-wider border text-center transition-all ${
                             isSelected
-                              ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-bold'
-                              : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A] hover:border-[#C5A880]'
+                              ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                              : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:border-[#B08D57] hover:text-[#102A43]'
                           }`}
                         >
                           {period}
@@ -367,7 +367,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+                  <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                     Number of Cheques
                   </label>
                   <div className="grid grid-cols-2 gap-3">
@@ -378,7 +378,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                       placeholder="From (e.g. 1)"
                       value={filters.chequesFrom || ''}
                       onChange={(e) => onChange({ ...filters, chequesFrom: e.target.value })}
-                      className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                      className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                     />
                     <input
                       type="number"
@@ -387,7 +387,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                       placeholder="To (e.g. 4)"
                       value={filters.chequesTo || ''}
                       onChange={(e) => onChange({ ...filters, chequesTo: e.target.value })}
-                      className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                      className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                     />
                   </div>
                 </div>
@@ -396,7 +396,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
             {/* 8. Property Size (sqft) */}
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                 Property Size (sq.ft)
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -405,14 +405,14 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                   placeholder="Min sq.ft"
                   value={filters.minArea || ''}
                   onChange={(e) => onChange({ ...filters, minArea: e.target.value })}
-                  className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                  className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                 />
                 <input
                   type="number"
                   placeholder="Max sq.ft"
                   value={filters.maxArea || ''}
                   onChange={(e) => onChange({ ...filters, maxArea: e.target.value })}
-                  className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                  className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                 />
               </div>
             </div>
@@ -420,7 +420,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             {/* 9. Furnishing Status (Only for residential or lease) */}
             {!isCommercial && (
               <div>
-                <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+                <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                   Furnishing
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -433,8 +433,8 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                         onClick={() => onChange({ ...filters, furnishing: f })}
                         className={`py-2 px-2 text-[10px] uppercase tracking-wider border text-center transition-all ${
                           isSelected
-                            ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-bold'
-                            : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A] hover:border-[#C5A880]'
+                            ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                            : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:border-[#B08D57] hover:text-[#102A43]'
                         }`}
                       >
                         {f === 'ALL' ? 'All Furnishings' : f.replace('_', ' ')}
@@ -449,13 +449,13 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             {isNewProjects && (
               <>
                 <div>
-                  <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+                  <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                     Master Developer
                   </label>
                   <select
                     value={filters.developer || ''}
                     onChange={(e) => onChange({ ...filters, developer: e.target.value })}
-                    className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880]"
+                    className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                   >
                     <option value="">All Institutional Developers</option>
                     {DEVELOPER_OPTIONS.map((dev) => (
@@ -467,7 +467,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+                  <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                     Handover Year
                   </label>
                   <div className="grid grid-cols-5 gap-1">
@@ -478,10 +478,10 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                           key={yr}
                           type="button"
                           onClick={() => onChange({ ...filters, handoverYear: isSelected ? '' : yr })}
-                          className={`py-2 text-[10px] font-mono border text-center transition-all ${
+                          className={`py-2 text-[10px] border text-center transition-all ${
                             isSelected
-                              ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-bold'
-                              : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A] hover:border-[#C5A880]'
+                              ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                              : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:border-[#B08D57] hover:text-[#102A43]'
                           }`}
                         >
                           {yr}
@@ -496,7 +496,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             {/* 11. Completion Status (Conditional for Buy & New Projects) */}
             {(isBuy || isNewProjects) && (
               <div>
-                <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+                <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                   Completion Status
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -509,8 +509,8 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                         onClick={() => onChange({ ...filters, completionStatus: isSelected ? '' : status })}
                         className={`py-2 px-2 text-[10px] uppercase tracking-wider border text-center transition-all ${
                           isSelected
-                            ? 'border-[#C5A880] bg-[#18181A] text-[#C5A880] font-bold'
-                            : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A] hover:border-[#C5A880]'
+                            ? 'border-[#B08D57] bg-[#102A43] text-[#F7F3EA] font-semibold'
+                            : 'border-[#E9E1D4] bg-[#F7F3EA] text-[#6B7280] hover:border-[#B08D57] hover:text-[#102A43]'
                         }`}
                       >
                         {status.replace('_', ' ')}
@@ -524,13 +524,13 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             {/* 12. Parking & Property Status */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+                <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                   Parking
                 </label>
                 <select
                   value={filters.parking || ''}
                   onChange={(e) => onChange({ ...filters, parking: e.target.value })}
-                  className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                  className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                 >
                   <option value="">Any Parking</option>
                   {PARKING_OPTIONS.map((p) => (
@@ -542,13 +542,13 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
               </div>
 
               <div>
-                <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+                <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                   Status
                 </label>
                 <select
                   value={filters.propertyStatus || ''}
                   onChange={(e) => onChange({ ...filters, propertyStatus: e.target.value })}
-                  className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs focus:outline-none focus:border-[#C5A880]"
+                  className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
                 >
                   <option value="">All Statuses</option>
                   {PROPERTY_STATUSES.map((s) => (
@@ -562,13 +562,13 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
             {/* 13. Agency / Agent */}
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                 Dedicated Specialist / Agent
               </label>
               <select
                 value={filters.agent || ''}
                 onChange={(e) => onChange({ ...filters, agent: e.target.value })}
-                className="w-full bg-[#F7F5F0] border border-[#E5E0D8] px-3 py-2 text-xs text-[#18181A] focus:outline-none focus:border-[#C5A880]"
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57]"
               >
                 <option value="">All RERA Certified Specialists</option>
                 {AGENTS.map((agent) => (
@@ -580,8 +580,8 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             </div>
 
             {/* 14. Floor Plan & Virtual Tours */}
-            <div className="space-y-2 pt-2 border-t border-[#E5E0D8]">
-              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A] mb-2">
+            <div className="space-y-2 pt-2 border-t border-[#E9E1D4]">
+              <label className="block text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43] mb-2">
                 Floor Plans & Virtual Media
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -597,15 +597,15 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                       key={item.id}
                       className={`flex items-center gap-2 p-2 border cursor-pointer text-xs transition-all ${
                         isChecked
-                          ? 'border-[#C5A880] bg-[#C5A880]/10 text-[#18181A]'
-                          : 'border-[#E5E0D8] bg-[#F7F5F0] text-[#71717A]'
+                          ? 'border-[#B08D57] bg-[#B08D57]/10 text-[#102A43] font-medium'
+                          : 'border-[#E9E1D4] bg-[#FFFDF8] text-[#6B7280]'
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={isChecked}
                         onChange={(e) => onChange({ ...filters, [item.id]: e.target.checked })}
-                        className="rounded border-[#E5E0D8] text-[#C5A880] focus:ring-0"
+                        className="rounded-xs border-[#E9E1D4] text-[#B08D57] focus:ring-0"
                       />
                       <span className="text-[11px]">{item.label}</span>
                     </label>
@@ -615,15 +615,15 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             </div>
 
             {/* 15. Verified Amenities (With Show More / Show Less) */}
-            <div className="pt-2 border-t border-[#E5E0D8]">
+            <div className="pt-2 border-t border-[#E9E1D4]">
               <div className="flex items-center justify-between mb-2">
-                <label className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[#18181A]">
+                <label className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[#102A43]">
                   Verified Amenities ({LUXURY_AMENITIES.length})
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowAllAmenities(!showAllAmenities)}
-                  className="text-[11px] text-[#C5A880] hover:text-[#B8976C] font-semibold flex items-center gap-0.5"
+                  className="text-[11px] text-[#B08D57] hover:text-[#D8C3A5] font-semibold flex items-center gap-0.5"
                 >
                   <span>{showAllAmenities ? 'Show Less' : 'Show All'}</span>
                   {showAllAmenities ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -636,7 +636,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                   return (
                     <label
                       key={amenity}
-                      className="flex items-center gap-2 cursor-pointer text-xs text-[#3E3E42] hover:text-[#18181A] p-1.5 hover:bg-[#F7F5F0]"
+                      className="flex items-center gap-2 cursor-pointer text-xs text-[#3E4852] hover:text-[#102A43] p-1.5 hover:bg-[#F7F3EA] rounded-xs"
                     >
                       <input
                         type="checkbox"
@@ -648,7 +648,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                             : [...current, amenity];
                           onChange({ ...filters, amenities: updated });
                         }}
-                        className="rounded border-[#E5E0D8] text-[#C5A880] focus:ring-[#C5A880]"
+                        className="rounded-xs border-[#E9E1D4] text-[#B08D57] focus:ring-[#B08D57]"
                       />
                       <span className="truncate">{amenity}</span>
                     </label>
@@ -659,18 +659,18 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
           </div>
 
           {/* Footer Controls */}
-          <div className="p-6 border-t border-[#E5E0D8] bg-[#F7F5F0] flex items-center gap-4">
+          <div className="p-6 border-t border-[#E9E1D4] bg-[#F7F3EA] flex items-center gap-4">
             <button
               type="button"
               onClick={onReset}
-              className="px-5 py-2.5 border border-[#E5E0D8] text-xs uppercase tracking-wider text-[#71717A] hover:text-[#18181A] hover:bg-[#E5E0D8]/40 transition-colors"
+              className="px-5 py-2.5 border border-[#E9E1D4] bg-[#FFFDF8] text-xs uppercase tracking-wider text-[#6B7280] hover:text-[#102A43] hover:border-[#B08D57] transition-colors"
             >
               Clear All
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-[#18181A] hover:bg-[#0B0B0C] text-[#F7F5F0] hover:text-[#C5A880] py-2.5 px-4 text-xs font-semibold uppercase tracking-widest transition-all shadow-sm"
+              className="flex-1 bg-[#102A43] hover:bg-[#0B2135] text-[#FFFDF8] hover:text-[#D8C3A5] py-2.5 px-4 text-xs font-semibold uppercase tracking-widest transition-all shadow-sm"
             >
               Apply Criteria
             </button>

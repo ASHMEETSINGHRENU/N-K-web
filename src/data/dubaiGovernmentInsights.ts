@@ -231,7 +231,7 @@ export const OFFICIAL_DUBAI_INSIGHTS: OfficialInsightArticle[] = [
     publishedDate: '16 September 2026',
     author: {
       name: 'Alexander Sterling',
-      role: 'Head of Quantitative Research, Nestandkey'
+      role: 'Head of Quantitative Research, Crestshore'
     },
     keyStats: [
       { label: 'Total Pipeline Capital', value: 'AED 97.57 Billion' },
@@ -344,7 +344,7 @@ A key finding from the developers registry is the transition toward branded resi
     publishedDate: '14 September 2026',
     author: {
       name: 'Alexander Sterling',
-      role: 'Head of Quantitative Research, Nestandkey'
+      role: 'Head of Quantitative Research, Crestshore'
     },
     keyStats: [
       { label: 'Total Land Parcels', value: '262,455 Plots' },
@@ -417,7 +417,7 @@ These valuation records demonstrate that land in prime central Dubai has detache
     publishedDate: '13 September 2026',
     author: {
       name: 'Alexander Sterling',
-      role: 'Head of Quantitative Research, Nestandkey'
+      role: 'Head of Quantitative Research, Crestshore'
     },
     keyStats: [
       { label: 'Certified Brokers', value: '43,388 Agents' },
@@ -445,7 +445,7 @@ Leading advisory brokerages maintain institutional fleets to serve international
 * **On Plan Real Estate:** 369 certified brokers
 * **Harbor Real Estate:** 365 certified brokers
 
-Nestandkey’s boutique private advisory works hand-in-hand with this ecosystem to offer verified, off-market, and turnkey portfolio access for our global clients.
+Crestshore’s boutique private advisory works hand-in-hand with this ecosystem to offer verified, off-market, and turnkey portfolio access for our global clients.
     `
   }
 ];

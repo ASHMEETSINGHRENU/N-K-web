@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  Compass,
   Heart,
   Menu,
   X,
@@ -9,12 +8,25 @@ import {
   ArrowUpRight,
   User as UserIcon,
   LogOut,
+  Bell,
+  Compass,
+  ArrowRight,
   ShieldCheck,
-  Bell
+  FileText,
+  KeyRound,
+  Wrench,
+  Eye,
+  TrendingUp,
+  FolderLock,
+  Handshake,
+  Lock,
+  Phone,
+  MessageSquare
 } from 'lucide-react';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
+import { SpeakAdvisorModal } from './SpeakAdvisorModal';
 
 interface NavLinkItem {
   label: string;
@@ -47,30 +59,31 @@ const NAVIGATION_DATA: NavCategory[] = [
         title: 'Residential Properties for Sale',
         path: '/properties/buy',
         links: [
-          { label: 'Residential Properties for Sale', path: '/properties/buy' },
-          { label: 'Apartments', path: '/properties/buy?type=Apartment' },
-          { label: 'Villas', path: '/properties/buy?type=Villa' },
-          { label: 'Townhouses', path: '/properties/buy?type=Townhouse' },
-          { label: 'Land', path: '/properties/buy?type=Plot' }
+          { label: 'All Properties for Sale', path: '/properties/buy' },
+          { label: 'Signature Villas', path: '/properties/buy?type=Villa' },
+          { label: 'Sky Penthouses', path: '/properties/buy?type=Penthouse' },
+          { label: 'Waterfront Mansions', path: '/properties/buy?type=Mansion' },
+          { label: 'Luxury Townhouses', path: '/properties/buy?type=Townhouse' },
+          { label: 'Prime Plots & Land', path: '/properties/buy?type=Plot' }
         ]
       },
       {
-        title: 'Buyer Tools',
+        title: 'Buyer & Owner Tools',
         links: [
-          { label: 'Mortgage Calculator', path: '/mortgage-calculator' },
+          { label: 'Dubai Mortgage Calculator', path: '/mortgage-calculator' },
+          { label: 'Sell / List With Us', path: '/properties/sell' },
           { label: 'Sold House Prices', path: '/properties/buy?sort=price_desc' },
-          { label: 'Sale Price Map', path: '/locations' }
+          { label: 'Prime Enclave Price Map', path: '/locations' }
         ]
       },
       {
         title: 'Buying Insights',
         path: '/insights',
         links: [
-          { label: "Buyer's Guide", path: '/insights' },
-          { label: 'Area Insights', path: '/locations' },
-          { label: 'Community Guides', path: '/communities' },
-          { label: 'Tower & Compound Guides', path: '/properties/buy' },
-          { label: 'Schools & University Guides', path: '/about' }
+          { label: "Buyer's Advisory Guide", path: '/insights' },
+          { label: 'Palm Jumeirah Insights', path: '/locations/palm-jumeirah' },
+          { label: 'Prime Community Guides', path: '/communities' },
+          { label: 'DLD Statutory Regulations', path: '/about' }
         ]
       }
     ]
@@ -85,31 +98,29 @@ const NAVIGATION_DATA: NavCategory[] = [
         title: 'Residential Properties for Rent',
         path: '/properties/rent',
         links: [
-          { label: 'Residential Properties for Rent', path: '/properties/rent' },
-          { label: 'Apartments', path: '/properties/rent?type=Apartment' },
-          { label: 'Studios', path: '/properties/rent?type=Apartment&beds=0' },
-          { label: 'Villas', path: '/properties/rent?type=Villa' },
-          { label: 'Townhouses', path: '/properties/rent?type=Townhouse' }
+          { label: 'All Prime Rentals', path: '/properties/rent' },
+          { label: 'Luxury Apartments', path: '/properties/rent?type=Apartment' },
+          { label: 'Beachfront Villas', path: '/properties/rent?type=Villa' },
+          { label: 'Panoramic Penthouses', path: '/properties/rent?type=Penthouse' },
+          { label: 'Townhouses for Rent', path: '/properties/rent?type=Townhouse' }
         ]
       },
       {
         title: 'Renter Tools',
         links: [
-          { label: 'Pay rent monthly', path: '/consultation' },
           { label: 'Rent vs Buy Calculator', path: '/mortgage-calculator' },
-          { label: 'Rented House Prices', path: '/properties/rent?sort=price_asc' },
-          { label: 'Rental Price Map', path: '/locations' }
+          { label: 'Rental Yields & Indices', path: '/properties/rent?sort=price_asc' },
+          { label: 'Ejari Lease Coordination', path: '/property-care' },
+          { label: 'Prime Location Map', path: '/locations' }
         ]
       },
       {
         title: 'Renting Insights',
         path: '/insights',
         links: [
-          { label: "Renter's Guide", path: '/insights' },
-          { label: 'Area Insights', path: '/locations' },
-          { label: 'Community Guides', path: '/communities' },
-          { label: 'Tower & Compound Guides', path: '/properties/rent' },
-          { label: 'Schools & University Guides', path: '/about' }
+          { label: "High-Net-Worth Renter's Guide", path: '/insights' },
+          { label: 'Dubai Tenancy Laws & Ejari', path: '/insights' },
+          { label: 'Prime Waterfront Enclaves', path: '/communities' }
         ]
       }
     ]
@@ -121,106 +132,122 @@ const NAVIGATION_DATA: NavCategory[] = [
     columnsCount: 3,
     sections: [
       {
-        title: 'All New Projects',
+        title: 'All New Launches',
         path: '/properties/off-plan',
         links: [
-          { label: 'All New Projects', path: '/properties/off-plan' },
-          { label: 'New Projects in Dubai', path: '/properties/off-plan?community=Dubai' },
-          { label: 'New Projects in Abu Dhabi', path: '/properties/off-plan?location=Abu+Dhabi' },
-          { label: 'New Projects in Sharjah', path: '/properties/off-plan?location=Sharjah' },
-          { label: 'New Projects in Ras Al Khaimah', path: '/properties/off-plan?location=RAK' },
-          { label: 'New Projects in Umm Al Quwain', path: '/properties/off-plan?location=UAQ' }
+          { label: 'All Off-Plan Portfolios', path: '/properties/off-plan' },
+          { label: 'New Launches in Dubai', path: '/properties/new-launches' },
+          { label: 'Palm Jumeirah Launches', path: '/properties/off-plan?community=Palm+Jumeirah' },
+          { label: 'Downtown Dubai Launches', path: '/properties/off-plan?community=Downtown+Dubai' },
+          { label: 'Jumeira Bay Island', path: '/properties/off-plan?community=Jumeira+Bay+Island' }
         ]
       },
       {
-        title: 'Find Developers in the UAE',
+        title: 'Master Developers in UAE',
         path: '/developers',
         links: [
-          { label: 'Find Developers in the UAE', path: '/developers' },
+          { label: 'All Master Developers', path: '/developers' },
           { label: 'Emaar Properties', path: '/developers/emaar-properties' },
-          { label: 'Azizi Developments', path: '/developers/azizi-developments' },
-          { label: 'Aldar Properties', path: '/developers/aldar-properties' },
+          { label: 'Omniyat Luxury', path: '/developers/omniyat' },
+          { label: 'Nakheel Waterfront', path: '/developers/nakheel' },
           { label: 'Damac Properties', path: '/developers/damac-properties' },
           { label: 'Sobha Realty', path: '/developers/sobha-realty' }
         ]
       },
       {
-        title: 'Investing Insights',
+        title: 'Investment Advisory',
         path: '/insights',
         links: [
-          { label: "Investor's Guide", path: '/insights' },
-          { label: 'Areas to invest', path: '/locations' },
-          { label: 'Latest Projects', path: '/properties/new-launches' }
+          { label: "Global Investor's Guide", path: '/insights' },
+          { label: 'UAE 10-Year Golden Visa', path: '/insights' },
+          { label: 'High-Yield Investment Zones', path: '/locations' }
         ]
       }
     ]
   },
   {
-    id: 'find-agents',
-    label: 'Find Agents',
-    path: '/contact',
+    id: 'property-care',
+    label: 'Property Care',
+    path: '/property-care',
     columnsCount: 2,
     sections: [
       {
-        title: 'Find Agents',
-        path: '/contact',
+        title: 'The 6 Core Care Services',
+        path: '/property-care',
         links: [
-          { label: 'Find an Agent', path: '/contact' },
-          { label: 'Top Rated Agents', path: '/about' },
-          { label: 'Agents in Dubai', path: '/contact?city=Dubai' },
-          { label: 'Agents in Abu Dhabi', path: '/contact?city=Abu+Dhabi' },
-          { label: 'Agents in Sharjah', path: '/contact?city=Sharjah' },
-          { label: 'Agents in Ajman', path: '/contact?city=Ajman' },
-          { label: 'Agents in Ras Al Khaimah', path: '/contact?city=RAK' }
+          { label: 'Handover & Snagging (400-Point Audit)', path: '/property-care' },
+          { label: 'Rental Coordination & Ejari', path: '/property-care' },
+          { label: 'Maintenance Coordination (24/7 HVAC)', path: '/property-care' },
+          { label: 'Property Inspections (Quarterly)', path: '/property-care' },
+          { label: 'Resale Preparation & Staging', path: '/property-care' },
+          { label: 'Document Management & Custody', path: '/property-care' }
         ]
       },
       {
-        title: 'Private Brokerage Services',
-        path: '/consultation',
+        title: 'Enduring Care Governance',
+        path: '/property-care',
         links: [
-          { label: 'Schedule Private Consultation', path: '/consultation' },
-          { label: 'RERA Certified Specialists', path: '/about' },
-          { label: 'Broker Operations Portal', path: 'http://localhost:5174', isExternal: true }
+          { label: 'Care Philosophy & Overview', path: '/property-care' },
+          { label: 'Request Property Inspection', path: '/private-clients' },
+          { label: 'Emergency Maintenance Dispatch', path: '/contact' },
+          { label: 'Private Client Office Integration', path: '/private-clients' }
         ]
       }
     ]
   },
   {
-    id: 'tools',
-    label: 'Tools',
-    path: '/mortgage-calculator',
-    columnsCount: 3,
+    id: 'partner-network',
+    label: 'Partner Network',
+    path: '/partner-network',
+    columnsCount: 2,
     sections: [
       {
-        title: 'Tools',
+        title: 'Partner Portal & Workspaces',
+        path: '/partner-network',
         links: [
-          { label: 'Mortgage Calculator', path: '/mortgage-calculator' },
-          { label: 'Rent vs Buy Calculator', path: '/mortgage-calculator' },
-          { label: 'Rental Transactions', path: '/properties/rent' },
-          { label: 'Sale Transactions', path: '/properties/buy' }
+          { label: 'Partner Dashboard', path: '/partner-network' },
+          { label: 'Submit Referral (< 2 Minutes)', path: '/partner-network' },
+          { label: 'My Referrals Pipeline', path: '/partner-network' },
+          { label: 'Commission Ledger & Payouts', path: '/partner-network' },
+          { label: 'Master Agreement (50% Split)', path: '/partner-network' }
         ]
       },
       {
-        title: 'Insights',
-        path: '/insights',
+        title: 'Institutional Protection',
         links: [
-          { label: 'Market Reports', path: '/insights' },
-          { label: 'Renter Guides', path: '/insights' },
-          { label: 'Buyer Guides', path: '/insights' },
-          { label: 'Popular Communities', path: '/communities' },
-          { label: 'Budget-Friendly Areas', path: '/locations' },
-          { label: 'Property Blog', path: '/insights' }
+          { label: 'No Client Contact Info at Stage 1', path: '/partner-network' },
+          { label: '24-Month Non-Circumvention', path: '/partner-network' },
+          { label: 'One-Click WhatsApp to Leadership', path: 'https://wa.me/971501123456', isExternal: true },
+          { label: 'Family Office Representation', path: '/partner-network' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'private-clients',
+    label: 'Private Clients',
+    path: '/private-clients',
+    columnsCount: 2,
+    sections: [
+      {
+        title: 'Private Client Office',
+        path: '/private-clients',
+        links: [
+          { label: 'Client Portfolio Dashboard', path: '/private-clients' },
+          { label: 'My Managed Properties', path: '/private-clients' },
+          { label: 'Encrypted Document Vault (8 Types)', path: '/private-clients' },
+          { label: 'Property Care Dispatch Desk', path: '/private-clients' },
+          { label: 'Service Requests Desk', path: '/private-clients' }
         ]
       },
       {
-        title: 'Area Insights',
-        path: '/locations',
+        title: 'Discreet Private Advisory',
+        path: '/contact',
         links: [
-          { label: 'Dubai', path: '/locations/palm-jumeirah' },
-          { label: 'Abu Dhabi', path: '/locations' },
-          { label: 'Sharjah', path: '/locations' },
-          { label: 'Ajman', path: '/locations' },
-          { label: 'Ras Al Khaimah', path: '/locations' }
+          { label: 'Dedicated Senior Director', path: '/private-clients' },
+          { label: 'DIFC Headquarters Suite', path: '/contact' },
+          { label: 'Confidential Boardroom Booking', path: '/contact' },
+          { label: 'Client Sign In / Portal Access', path: '/login' }
         ]
       }
     ]
@@ -238,8 +265,7 @@ const NAVIGATION_DATA: NavCategory[] = [
           { label: "Buyer's Guide", path: '/insights' },
           { label: 'Area Insights', path: '/locations' },
           { label: 'Community Guides', path: '/communities' },
-          { label: 'Tower & Compound Guides', path: '/properties/buy' },
-          { label: 'Schools & University Guides', path: '/about' }
+          { label: 'Tower & Compound Guides', path: '/properties/buy' }
         ]
       },
       {
@@ -247,31 +273,29 @@ const NAVIGATION_DATA: NavCategory[] = [
         path: '/insights',
         links: [
           { label: "Renter's Guide", path: '/insights' },
-          { label: 'Area Insights', path: '/locations' },
-          { label: 'Community Guides', path: '/communities' },
-          { label: 'Tower & Compound Guides', path: '/properties/rent' },
-          { label: 'Schools & University Guides', path: '/about' }
+          { label: 'Rental Area Insights', path: '/locations' },
+          { label: 'Ejari Legal Handbook', path: '/insights' },
+          { label: 'Schools & Enclaves', path: '/about' }
         ]
       },
       {
-        title: 'Market & Investment',
+        title: 'Market & Wealth',
         path: '/insights',
         links: [
-          { label: 'Market Reports', path: '/insights' },
-          { label: "Investor's Guide", path: '/insights' },
-          { label: 'Areas to invest', path: '/locations' },
-          { label: 'Latest Projects', path: '/properties/new-launches' },
-          { label: 'Sale Transactions', path: '/properties/buy' },
-          { label: 'Rental Transactions', path: '/properties/rent' }
+          { label: 'Quarterly Market Intelligence', path: '/insights' },
+          { label: "Investor's Strategic Guide", path: '/insights' },
+          { label: 'Prime Yield Analysis', path: '/locations' },
+          { label: 'Latest Project Launches', path: '/properties/new-launches' }
         ]
       },
       {
-        title: 'Explore',
+        title: 'Explore Dubai',
         path: '/locations',
         links: [
-          { label: 'Popular Communities', path: '/communities' },
-          { label: 'Budget-Friendly Areas', path: '/locations' },
-          { label: 'Property Blog', path: '/insights' }
+          { label: 'Palm Jumeirah', path: '/locations/palm-jumeirah' },
+          { label: 'Emirates Hills', path: '/locations' },
+          { label: 'Downtown Dubai', path: '/locations' },
+          { label: 'Jumeira Bay Island', path: '/locations' }
         ]
       }
     ]
@@ -283,26 +307,24 @@ export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({});
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isAdvisorModalOpen, setIsAdvisorModalOpen] = useState(false);
 
   const headerRef = useRef<HTMLDivElement>(null);
-  const userMenuRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const notificationMenuRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   const location = useLocation();
   const { favorites } = useFavorites();
   const { user, isAuthenticated, logout, openAuthModal } = useAuth();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
-  const isHome = location.pathname === '/';
-  const isSolid = isScrolled || !isHome || activeMenu !== null || isMobileMenuOpen;
-
-  // Track window scroll for transparent/solid navbar transition
+  // Background solid state on scroll
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -312,21 +334,21 @@ export const Header: React.FC = () => {
   useEffect(() => {
     setActiveMenu(null);
     setIsMobileMenuOpen(false);
-    setIsUserMenuOpen(false);
     setIsNotificationMenuOpen(false);
+    setIsUserMenuOpen(false);
   }, [location.pathname]);
 
-  // Click outside to close active mega menu or user dropdown
+  // Click outside to close active mega menu or popups
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setActiveMenu(null);
       }
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-        setIsUserMenuOpen(false);
-      }
       if (notificationMenuRef.current && !notificationMenuRef.current.contains(event.target as Node)) {
         setIsNotificationMenuOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -339,6 +361,8 @@ export const Header: React.FC = () => {
       if (e.key === 'Escape') {
         setActiveMenu(null);
         setIsMobileMenuOpen(false);
+        setIsNotificationMenuOpen(false);
+        setIsUserMenuOpen(false);
       }
     };
     document.addEventListener('keydown', handleKeyDown);
@@ -378,618 +402,444 @@ export const Header: React.FC = () => {
   const activeCategory = NAVIGATION_DATA.find((item) => item.id === activeMenu);
 
   return (
-    <header
-      ref={headerRef}
-      onMouseLeave={handleMouseLeave}
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        isSolid
-          ? 'bg-[#FDFCF9] text-[#18181A] border-b border-[#E5E0D8] shadow-sm'
-          : 'bg-gradient-to-b from-[#0B0B0C]/90 via-[#0B0B0C]/50 to-transparent text-[#F7F5F0]'
-      }`}
-    >
-      {/* Top Main Bar */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
-        {/* Brand Logo */}
-        <Link
-          to="/"
-          onClick={() => setActiveMenu(null)}
-          className="flex items-center gap-2.5 group shrink-0"
-          aria-label="Nestandkey Homepage"
-        >
-          <div className="w-9 h-9 rounded-full border border-[#C5A880] flex items-center justify-center text-[#C5A880] group-hover:bg-[#C5A880] group-hover:text-[#18181A] transition-colors">
-            <span className="font-serif font-bold text-xs tracking-widest">NK</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-serif text-xl lg:text-2xl tracking-[0.18em] uppercase font-light leading-tight">
-              NESTANDKEY
-            </span>
-            <span className="text-[8px] lg:text-[9px] uppercase tracking-[0.32em] text-[#C5A880] font-sans font-semibold">
-              DUBAI LUXURY REAL ESTATE
-            </span>
-          </div>
-        </Link>
-
-        {/* Desktop Primary Navigation */}
-        <nav
-          className="hidden xl:flex items-center space-x-1 lg:space-x-2"
-          aria-label="Primary Navigation"
-        >
-          {NAVIGATION_DATA.map((item) => {
-            const isOpen = activeMenu === item.id;
-            const isPathActive = location.pathname.startsWith(item.path);
-
-            return (
-              <div
-                key={item.id}
-                onMouseEnter={() => handleMouseEnter(item.id)}
-                className="relative py-6"
-              >
-                <button
-                  type="button"
-                  onClick={(e) => handleTriggerClick(e, item.id)}
-                  aria-expanded={isOpen}
-                  aria-haspopup="true"
-                  className={`flex items-center gap-1 px-3 py-1.5 text-[11px] lg:text-xs uppercase tracking-[0.15em] font-medium transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C5A880] ${
-                    isOpen || isPathActive
-                      ? 'text-[#C5A880] font-semibold'
-                      : isSolid
-                      ? 'text-[#2E2E32] hover:text-[#C5A880]'
-                      : 'text-[#EFECE6] hover:text-[#C5A880]'
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  <ChevronDown
-                    className={`w-3 h-3 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180 text-[#C5A880]' : 'opacity-70'
-                    }`}
-                  />
-                </button>
-              </div>
-            );
-          })}
-        </nav>
-
-        {/* Right-Side Action Controls */}
-        <div className="hidden lg:flex items-center space-x-4 shrink-0">
-          {/* Favorites Link */}
+    <>
+      <header
+        ref={headerRef}
+        onMouseLeave={handleMouseLeave}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled || activeMenu !== null || isMobileMenuOpen
+            ? 'bg-[#102A43] text-[#F7F3EA] border-b border-[#1E3A5F] shadow-lg'
+            : 'bg-[#102A43]/95 backdrop-blur-md text-[#F7F3EA] border-b border-[#1E3A5F]/70 shadow-md'
+        }`}
+      >
+        {/* Main Navigation Bar */}
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
+          {/* Brand Wordmark & Monogram */}
           <Link
-            to="/account/favorites"
+            to="/"
             onClick={() => setActiveMenu(null)}
-            className={`flex items-center gap-1.5 text-xs tracking-wider transition-colors relative p-1.5 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C5A880] ${
-              isSolid ? 'text-[#18181A] hover:text-[#C5A880]' : 'text-[#F7F5F0] hover:text-[#C5A880]'
-            }`}
-            title="Saved Residences"
-            aria-label={`Saved Residences (${favorites.length})`}
+            className="flex items-center gap-2.5 group shrink-0"
+            aria-label="Crestshore Homepage"
           >
-            <Heart className="w-4 h-4 text-[#C5A880]" />
-            {favorites.length > 0 && (
-              <span className="bg-[#C5A880] text-[#18181A] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                {favorites.length}
+            <div className="w-9 h-9 rounded-full border border-[#B08D57] flex items-center justify-center text-[#D8C3A5] group-hover:bg-[#B08D57] group-hover:text-[#102A43] transition-colors">
+              <span className="font-serif font-bold text-xs tracking-widest">CS</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-serif text-xl lg:text-2xl tracking-[0.18em] uppercase font-light leading-tight text-[#F7F3EA]">
+                CRESTSHORE
               </span>
-            )}
+              <span className="text-[8px] lg:text-[9px] uppercase tracking-[0.32em] text-[#D8C3A5] font-sans font-medium">
+                Where Summit Meets Shore
+              </span>
+            </div>
           </Link>
 
-          {/* Notification Bell */}
-          {isAuthenticated && (
+          {/* Desktop Primary Navigation with Rich Mega Menus */}
+          <nav
+            className="hidden xl:flex items-center space-x-1 lg:space-x-1.5"
+            aria-label="Primary Navigation"
+          >
+            {NAVIGATION_DATA.map((item) => {
+              const isOpen = activeMenu === item.id;
+              const isPathActive = location.pathname.startsWith(item.path);
+
+              return (
+                <div
+                  key={item.id}
+                  onMouseEnter={() => handleMouseEnter(item.id)}
+                  className="relative py-6"
+                >
+                  <button
+                    type="button"
+                    onClick={(e) => handleTriggerClick(e, item.id)}
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                    className={`flex items-center gap-1 px-2.5 py-1 text-[11px] lg:text-xs uppercase tracking-[0.14em] font-medium transition-colors rounded-sm ${
+                      isOpen || isPathActive
+                        ? 'text-[#D8C3A5] font-semibold'
+                        : 'text-[#F7F3EA] hover:text-[#D8C3A5]'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    <ChevronDown
+                      className={`w-3 h-3 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180 text-[#B08D57]' : 'opacity-70'
+                      }`}
+                    />
+                  </button>
+                </div>
+              );
+            })}
+          </nav>
+
+          {/* Right-Side Action Controls */}
+          <div className="hidden lg:flex items-center space-x-4 shrink-0">
+            {/* Favorites Icon */}
+            <Link
+              to="/account/favorites"
+              onClick={() => setActiveMenu(null)}
+              className="flex items-center gap-1 text-xs tracking-wider transition-colors relative p-1.5 text-[#F7F3EA] hover:text-[#D8C3A5]"
+              title="Saved Residences"
+              aria-label={`Saved Residences (${favorites.length})`}
+            >
+              <Heart className="w-4 h-4 text-[#B08D57]" />
+              {favorites.length > 0 && (
+                <span className="bg-[#B08D57] text-[#102A43] text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                  {favorites.length}
+                </span>
+              )}
+            </Link>
+
+            {/* Notifications Menu */}
             <div className="relative" ref={notificationMenuRef}>
               <button
                 type="button"
                 onClick={() => setIsNotificationMenuOpen(!isNotificationMenuOpen)}
-                className={`relative p-1.5 rounded transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C5A880] ${
-                  isSolid ? 'text-[#18181A] hover:text-[#C5A880]' : 'text-[#F7F5F0] hover:text-[#C5A880]'
-                }`}
-                title="Property Notifications"
-                aria-label={`Property Notifications (${unreadCount} unread)`}
+                className="p-1.5 text-[#F7F3EA] hover:text-[#D8C3A5] relative"
+                aria-label="Notifications"
               >
-                <Bell className="w-4 h-4 text-[#C5A880]" />
+                <Bell className="w-4 h-4 text-[#B08D57]" />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-mono font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center shadow-sm">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </span>
+                  <span className="absolute top-0 right-0 w-2 h-2 bg-[#B08D57] rounded-full" />
                 )}
               </button>
 
-              {/* Notification Dropdown Panel */}
               {isNotificationMenuOpen && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#18181A] border border-[#2A2A2E] text-white rounded-xs shadow-2xl py-3 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                  <div className="px-4 pb-2.5 border-b border-[#2A2A2E] flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Bell className="w-3.5 h-3.5 text-[#C5A880]" />
-                      <span className="font-serif text-sm text-white font-medium">
-                        Property Alerts
-                      </span>
-                      {unreadCount > 0 && (
-                        <span className="text-[10px] font-mono bg-[#C5A880] text-[#18181A] px-1.5 py-0.5 rounded-full font-bold">
-                          {unreadCount} new
-                        </span>
-                      )}
-                    </div>
+                <div className="absolute right-0 mt-2 w-80 bg-[#0B2135] border border-[#1E3A5F] shadow-2xl py-3 z-50 text-xs">
+                  <div className="px-4 pb-2 border-b border-[#1E3A5F] flex justify-between items-center">
+                    <span className="font-semibold uppercase tracking-wider text-[#D8C3A5] text-[10px]">
+                      Notifications ({unreadCount})
+                    </span>
                     {unreadCount > 0 && (
                       <button
-                        onClick={() => markAllAsRead()}
-                        className="text-[10px] font-mono uppercase tracking-wider text-[#C5A880] hover:underline"
+                        onClick={markAllAsRead}
+                        className="text-[10px] text-[#B08D57] hover:underline"
                       >
                         Mark all read
                       </button>
                     )}
                   </div>
-
-                  <div className="max-h-72 overflow-y-auto divide-y divide-[#2A2A2E]/60 text-xs">
+                  <div className="max-h-60 overflow-y-auto divide-y divide-[#1E3A5F]/60">
                     {notifications.length === 0 ? (
-                      <div className="p-6 text-center text-[#71717A] space-y-1">
-                        <Bell className="w-8 h-8 mx-auto text-[#2A2A2E] mb-2" />
-                        <p className="text-xs text-[#A1A1AA]">No property notifications</p>
-                        <p className="text-[10px] text-[#71717A]">Updates from your assigned broker will appear here.</p>
-                      </div>
+                      <div className="p-4 text-center text-[#E9E1D4]/60">No new notifications</div>
                     ) : (
-                      notifications.slice(0, 8).map((notif) => (
+                      notifications.slice(0, 5).map((n) => (
                         <div
-                          key={notif._id}
-                          onClick={() => {
-                            if (!notif.isRead) markAsRead(notif._id);
-                          }}
-                          className={`p-3.5 hover:bg-[#212124] transition-colors cursor-pointer flex gap-3 ${
-                            !notif.isRead ? 'bg-[#212124]/50 border-l-2 border-[#C5A880]' : ''
+                          key={n._id}
+                          onClick={() => markAsRead(n._id)}
+                          className={`p-3 cursor-pointer hover:bg-[#102A43] transition-colors ${
+                            !n.isRead ? 'bg-[#102A43]/50' : ''
                           }`}
                         >
-                          <div className="w-7 h-7 rounded-full bg-[#18181A] border border-[#C5A880]/40 flex items-center justify-center shrink-0 text-[#C5A880] mt-0.5">
-                            <Compass className="w-3.5 h-3.5" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between gap-1 mb-0.5">
-                              <span className={`text-xs truncate ${!notif.isRead ? 'font-semibold text-white' : 'text-[#E5E0D8]'}`}>
-                                {notif.title}
-                              </span>
-                              <span className="text-[9px] font-mono text-[#71717A] shrink-0">
-                                {new Date(notif.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
-                              </span>
-                            </div>
-                            <p className="text-[11px] text-[#A1A1AA] leading-relaxed line-clamp-2">
-                              {notif.message}
-                            </p>
-                          </div>
+                          <div className="font-medium text-[#F7F3EA] text-[11px]">{n.title}</div>
+                          <div className="text-[#E9E1D4]/70 text-[10px] mt-0.5">{n.message}</div>
                         </div>
                       ))
                     )}
                   </div>
-
-                  <div className="pt-2 px-4 border-t border-[#2A2A2E] flex justify-between items-center text-[10px] font-mono">
-                    <Link
-                      to="/profile"
-                      onClick={() => setIsNotificationMenuOpen(false)}
-                      className="text-[#C5A880] hover:underline"
-                    >
-                      Open Client Profile & Inquiries →
-                    </Link>
-                  </div>
                 </div>
               )}
             </div>
-          )}
 
-          {/* User Auth Control */}
-          {isAuthenticated && user ? (
+            {/* User Account / Profile */}
             <div className="relative" ref={userMenuRef}>
-              <button
-                type="button"
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-sm border transition-all text-xs font-mono ${
-                  isSolid
-                    ? 'border-[#E5E0D8] bg-white text-[#18181A] hover:border-[#C5A880]'
-                    : 'border-[#C5A880]/40 bg-[#18181A]/80 text-[#FDFCF9] hover:border-[#C5A880]'
-                }`}
-              >
-                <div className="w-5 h-5 rounded-full bg-[#C5A880] text-[#18181A] font-bold flex items-center justify-center text-[10px] uppercase font-serif overflow-hidden shrink-0">
-                  {user.avatar ? (
-                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                  ) : (
-                    user.name.charAt(0)
-                  )}
-                </div>
-                <span className="max-w-[85px] truncate text-xs font-medium font-sans">
-                  {user.name.split(' ')[0]}
-                </span>
-                <ChevronDown className="w-3 h-3 opacity-60" />
-              </button>
+              {isAuthenticated ? (
+                <button
+                  type="button"
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-1.5 text-xs text-[#F7F3EA] hover:text-[#D8C3A5] py-1 px-2 border border-[#1E3A5F] hover:border-[#B08D57] transition-colors"
+                >
+                  <UserIcon className="w-3.5 h-3.5 text-[#B08D57]" />
+                  <span className="max-w-[100px] truncate">{user?.name?.split(' ')[0] || 'Client'}</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => openAuthModal('login')}
+                  className="text-xs uppercase tracking-wider text-[#F7F3EA] hover:text-[#D8C3A5] font-medium"
+                >
+                  Sign In
+                </button>
+              )}
 
-              {/* User Dropdown Menu */}
-              {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-[#18181A] border border-[#2A2A2E] text-white rounded-xs shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                  <div className="px-4 py-2.5 border-b border-[#2A2A2E]">
-                    <span className="font-serif text-sm text-white block font-medium truncate">
-                      {user.name}
-                    </span>
-                    <span className="text-[10px] font-mono text-[#A1A1AA] truncate block">
-                      {user.email}
-                    </span>
-                    <span className="inline-block mt-1 text-[9px] uppercase font-mono text-[#C5A880] bg-[#212124] px-1.5 py-0.5 rounded-xs">
-                      {user.role === 'ADMIN' ? 'Administrator' : user.role === 'BROKER' ? 'Broker' : 'Private Client'}
-                    </span>
+              {isUserMenuOpen && isAuthenticated && (
+                <div className="absolute right-0 mt-2 w-48 bg-[#0B2135] border border-[#1E3A5F] shadow-2xl py-2 z-50 text-xs">
+                  <div className="px-4 py-2 border-b border-[#1E3A5F]">
+                    <div className="font-semibold text-[#F7F3EA] truncate">{user?.name}</div>
+                    <div className="text-[10px] text-[#D8C3A5] truncate">{user?.email}</div>
                   </div>
-
+                  <Link
+                    to="/private-clients"
+                    className="block px-4 py-2 text-[#E9E1D4] hover:text-[#D8C3A5] hover:bg-[#102A43] transition-colors"
+                  >
+                    Private Client Office
+                  </Link>
                   <Link
                     to="/profile"
-                    onClick={() => setIsUserMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-xs text-[#E5E0D8] hover:text-[#C5A880] hover:bg-[#212124] transition-colors"
+                    className="block px-4 py-2 text-[#E9E1D4] hover:text-[#D8C3A5] hover:bg-[#102A43] transition-colors"
                   >
-                    <UserIcon className="w-3.5 h-3.5 text-[#C5A880]" />
-                    <span>My Profile & Vault</span>
+                    Account Profile
                   </Link>
-
                   <Link
                     to="/account/favorites"
-                    onClick={() => setIsUserMenuOpen(false)}
-                    className="flex items-center justify-between px-4 py-2 text-xs text-[#E5E0D8] hover:text-[#C5A880] hover:bg-[#212124] transition-colors"
+                    className="block px-4 py-2 text-[#E9E1D4] hover:text-[#D8C3A5] hover:bg-[#102A43] transition-colors"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <Heart className="w-3.5 h-3.5 text-[#C5A880]" />
-                      <span>Saved Residences</span>
-                    </div>
-                    <span className="text-[10px] font-mono bg-[#212124] text-[#C5A880] px-1.5 py-0.5 rounded-full">
-                      {favorites.length}
-                    </span>
+                    Saved Residences ({favorites.length})
                   </Link>
-
-                  <div className="border-t border-[#2A2A2E] mt-1 pt-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsUserMenuOpen(false);
-                        logout();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-4 py-2 text-xs text-red-300 hover:bg-red-950/30 hover:text-red-200 transition-colors text-left"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsUserMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 text-red-300 hover:bg-[#102A43] flex items-center gap-2 border-t border-[#1E3A5F]/60 mt-1"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span>Sign Out</span>
+                  </button>
                 </div>
               )}
             </div>
-          ) : (
+
+            {/* Universal CTA Button everywhere: "Speak with an Advisor" (Champagne Brass outlined) */}
             <button
               type="button"
-              onClick={() => openAuthModal('login')}
-              className={`flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider transition-colors px-3 py-1.5 rounded-sm border ${
-                isSolid
-                  ? 'border-[#18181A] text-[#18181A] hover:bg-[#18181A] hover:text-[#C5A880]'
-                  : 'border-[#F7F5F0]/60 text-[#F7F5F0] hover:bg-[#F7F5F0] hover:text-[#18181A]'
-              }`}
+              onClick={() => setIsAdvisorModalOpen(true)}
+              className="border border-[#B08D57] hover:bg-[#B08D57] hover:text-[#102A43] text-[#F7F3EA] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-all flex items-center gap-1.5 shadow-sm"
             >
-              <UserIcon className="w-3.5 h-3.5 text-[#C5A880]" />
-              <span>Sign In</span>
+              <span>Speak with an Advisor</span>
             </button>
-          )}
-
-          {/* Ecosystem Portals */}
-          <div className="flex items-center space-x-2 border-l border-[#C5A880]/30 pl-3">
-            <a
-              href="http://localhost:5174"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[10px] uppercase tracking-wider px-2 py-1 rounded border border-[#C5A880]/40 text-[#C5A880] hover:bg-[#C5A880] hover:text-[#18181A] transition-all"
-              title="Open Broker Workspace"
-            >
-              Broker
-            </a>
-            <a
-              href="http://localhost:5175"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[10px] uppercase tracking-wider px-2 py-1 rounded border border-[#C5A880]/40 text-[#C5A880] hover:bg-[#C5A880] hover:text-[#18181A] transition-all"
-              title="Open Admin Control Center"
-            >
-              Admin
-            </a>
           </div>
 
-          {/* Primary CTA */}
-          <Link
-            to="/consultation"
-            onClick={() => setActiveMenu(null)}
-            className="bg-[#C5A880] hover:bg-[#B8976C] text-[#18181A] px-4 py-2 rounded text-[11px] font-semibold uppercase tracking-[0.14em] transition-all shadow-sm flex items-center gap-1.5"
+          {/* Mobile Hamburger Toggle */}
+          <button
+            onClick={() => {
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+              setActiveMenu(null);
+            }}
+            className="xl:hidden p-2 text-[#F7F3EA] hover:text-[#D8C3A5] transition-colors"
+            aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMobileMenuOpen}
           >
-            <Compass className="w-3.5 h-3.5" />
-            <span>Private Advisory</span>
-          </Link>
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
 
-        {/* Mobile Hamburger Toggle */}
-        <button
-          onClick={() => {
-            setIsMobileMenuOpen(!isMobileMenuOpen);
-            setActiveMenu(null);
-          }}
-          className={`xl:hidden p-2 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C5A880] ${
-            isSolid ? 'text-[#18181A]' : 'text-[#F7F5F0]'
-          }`}
-          aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          aria-expanded={isMobileMenuOpen}
-        >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
-
-      {/* Desktop Mega Menu Dropdown */}
-      {activeCategory && (
-        <div
-          onMouseEnter={() => {
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-              timeoutRef.current = null;
-            }
-          }}
-          onMouseLeave={handleMouseLeave}
-          className="hidden xl:block absolute top-full left-0 right-0 bg-[#FDFCF9] text-[#18181A] border-b border-[#E5E0D8] shadow-2xl transition-all animate-in fade-in slide-in-from-top-1 duration-200"
-          role="region"
-          aria-label={`${activeCategory.label} Mega Menu`}
-        >
-          {/* Subtle bridge so cursor never drops when crossing */}
-          <div className="max-w-7xl mx-auto px-8 lg:px-12 py-10">
-            <div
-              className={`grid gap-10 lg:gap-12 ${
-                activeCategory.columnsCount === 4
-                  ? 'grid-cols-4'
-                  : activeCategory.columnsCount === 2
-                  ? 'grid-cols-2 max-w-3xl'
-                  : 'grid-cols-3'
-              }`}
-            >
-              {activeCategory.sections.map((section, idx) => (
-                <div key={`${section.title}-${idx}`} className="space-y-4">
-                  {/* Section Title */}
-                  {section.path ? (
-                    <Link
-                      to={section.path}
-                      onClick={() => setActiveMenu(null)}
-                      className="group flex items-center justify-between pb-2 border-b border-[#E5E0D8] text-[11px] uppercase tracking-[0.2em] font-serif font-semibold text-[#18181A] hover:text-[#C5A880] transition-colors"
-                    >
-                      <span>{section.title}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-[#C5A880] opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Link>
-                  ) : (
-                    <div className="pb-2 border-b border-[#E5E0D8] text-[11px] uppercase tracking-[0.2em] font-serif font-semibold text-[#18181A]">
-                      {section.title}
-                    </div>
-                  )}
-
-                  {/* Section Links */}
-                  <ul className="space-y-2.5">
-                    {section.links.map((link, linkIdx) => (
-                      <li key={`${link.label}-${linkIdx}`}>
-                        {link.isExternal ? (
-                          <a
-                            href={link.path}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => setActiveMenu(null)}
-                            className="text-xs text-[#52525B] hover:text-[#C5A880] hover:translate-x-0.5 transition-all inline-flex items-center gap-1"
-                          >
-                            <span>{link.label}</span>
-                            <ArrowUpRight className="w-3 h-3 text-[#71717A]" />
-                          </a>
-                        ) : (
-                          <Link
-                            to={link.path}
-                            onClick={() => setActiveMenu(null)}
-                            className="text-xs text-[#52525B] hover:text-[#C5A880] hover:translate-x-0.5 transition-all block font-normal"
-                          >
-                            {link.label}
-                          </Link>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            {/* Curated Bottom Strip */}
-            <div className="mt-8 pt-5 border-t border-[#E5E0D8]/60 flex items-center justify-between text-[11px] text-[#71717A]">
-              <div className="flex items-center gap-2 font-mono uppercase tracking-widest text-[#C5A880] text-[10px]">
-                <span>Nestandkey Private Client Services</span>
-                <span>•</span>
-                <span>Verified RERA Registration</span>
-              </div>
-              <Link
-                to={activeCategory.path}
-                onClick={() => setActiveMenu(null)}
-                className="text-[#18181A] hover:text-[#C5A880] uppercase tracking-wider font-semibold transition-colors flex items-center gap-1"
+        {/* Desktop Mega Menu Dropdown */}
+        {activeCategory && (
+          <div
+            onMouseEnter={() => {
+              if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+              }
+            }}
+            onMouseLeave={handleMouseLeave}
+            className="hidden xl:block absolute top-full left-0 right-0 bg-[#0B2135] text-[#F7F3EA] border-b border-[#1E3A5F] shadow-2xl transition-all animate-in fade-in slide-in-from-top-1 duration-200"
+            role="region"
+            aria-label={`${activeCategory.label} Mega Menu`}
+          >
+            <div className="max-w-7xl mx-auto px-8 lg:px-12 py-10">
+              <div
+                className={`grid gap-10 lg:gap-12 ${
+                  activeCategory.columnsCount === 4
+                    ? 'grid-cols-4'
+                    : activeCategory.columnsCount === 2
+                    ? 'grid-cols-2 max-w-4xl'
+                    : 'grid-cols-3'
+                }`}
               >
-                <span>View All In {activeCategory.label}</span>
-                <ArrowUpRight className="w-3 h-3 text-[#C5A880]" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile Accordion Navigation Drawer */}
-      {isMobileMenuOpen && (
-        <div
-          className="xl:hidden bg-[#FDFCF9] text-[#18181A] border-b border-[#E5E0D8] max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl space-y-6"
-          role="region"
-          aria-label="Mobile Navigation"
-        >
-          {/* Primary Accordions */}
-          <div className="divide-y divide-[#E5E0D8]/60">
-            {NAVIGATION_DATA.map((category) => {
-              const isExpanded = !!mobileExpanded[category.id];
-
-              return (
-                <div key={category.id} className="py-3">
-                  <button
-                    type="button"
-                    onClick={() => toggleMobileCategory(category.id)}
-                    className="w-full flex items-center justify-between py-2 text-left text-sm uppercase tracking-wider font-medium text-[#18181A] hover:text-[#C5A880] transition-colors"
-                    aria-expanded={isExpanded}
-                  >
-                    <span>{category.label}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-[#C5A880] transition-transform duration-200 ${
-                        isExpanded ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-
-                  {/* Expanded Accordion Content */}
-                  {isExpanded && (
-                    <div className="pt-3 pb-2 pl-3 space-y-5 animate-in fade-in duration-200">
-                      {category.sections.map((section, secIdx) => (
-                        <div key={`${section.title}-${secIdx}`} className="space-y-2">
-                          <div className="text-[10px] uppercase tracking-widest font-mono text-[#C5A880] font-semibold">
-                            {section.title}
-                          </div>
-                          <ul className="space-y-2 pl-1 border-l border-[#E5E0D8]">
-                            {section.links.map((link, linkIdx) => (
-                              <li key={`${link.label}-${linkIdx}`}>
-                                {link.isExternal ? (
-                                  <a
-                                    href={link.path}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="block pl-3 py-1 text-xs text-[#52525B] hover:text-[#C5A880]"
-                                  >
-                                    {link.label}
-                                  </a>
-                                ) : (
-                                  <Link
-                                    to={link.path}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="block pl-3 py-1 text-xs text-[#52525B] hover:text-[#C5A880]"
-                                  >
-                                    {link.label}
-                                  </Link>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-
-                      <div className="pt-2">
-                        <Link
-                          to={category.path}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#18181A] hover:text-[#C5A880] uppercase tracking-wider"
-                        >
-                          <span>Explore All {category.label}</span>
-                          <ArrowUpRight className="w-3 h-3 text-[#C5A880]" />
-                        </Link>
+                {activeCategory.sections.map((section, idx) => (
+                  <div key={`${section.title}-${idx}`} className="space-y-4">
+                    {/* Section Title */}
+                    {section.path ? (
+                      <Link
+                        to={section.path}
+                        onClick={() => setActiveMenu(null)}
+                        className="group flex items-center justify-between pb-2 border-b border-[#1E3A5F] text-[11px] uppercase tracking-[0.2em] font-serif font-semibold text-[#D8C3A5] hover:text-[#FFFDF8] transition-colors"
+                      >
+                        <span>{section.title}</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 text-[#B08D57] opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    ) : (
+                      <div className="pb-2 border-b border-[#1E3A5F] text-[11px] uppercase tracking-[0.2em] font-serif font-semibold text-[#D8C3A5]">
+                        {section.title}
                       </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                    )}
 
-          {/* User Account / Sign In */}
-          <div className="pt-2 border-t border-[#E5E0D8]">
-            {isAuthenticated && user ? (
-              <div className="bg-[#F7F5F0] p-3 rounded-xs border border-[#E5E0D8] space-y-2 mb-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-[#18181A] text-[#C5A880] flex items-center justify-center font-serif text-xs font-bold overflow-hidden shrink-0">
-                      {user.avatar ? (
-                        <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                      ) : (
-                        user.name.charAt(0)
-                      )}
-                    </div>
-                    <div>
-                      <span className="font-serif text-xs text-[#18181A] font-medium block truncate max-w-[170px]">
-                        {user.name}
-                      </span>
-                      <span className="text-[10px] font-mono text-[#71717A] block truncate max-w-[170px]">
-                        {user.email}
-                      </span>
-                    </div>
+                    {/* Section Links */}
+                    <ul className="space-y-2.5">
+                      {section.links.map((link, linkIdx) => (
+                        <li key={`${link.label}-${linkIdx}`}>
+                          {link.isExternal ? (
+                            <a
+                              href={link.path}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => setActiveMenu(null)}
+                              className="text-xs text-[#E9E1D4]/80 hover:text-[#FFFDF8] hover:translate-x-0.5 transition-all inline-flex items-center gap-1"
+                            >
+                              <span>{link.label}</span>
+                              <ArrowUpRight className="w-3 h-3 text-[#B08D57]" />
+                            </a>
+                          ) : (
+                            <Link
+                              to={link.path}
+                              onClick={() => setActiveMenu(null)}
+                              className="text-xs text-[#E9E1D4]/80 hover:text-[#FFFDF8] hover:translate-x-0.5 transition-all block font-normal"
+                            >
+                              {link.label}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      logout();
-                    }}
-                    className="text-[10px] font-mono uppercase text-red-600 hover:underline"
-                  >
-                    Sign Out
-                  </button>
+                ))}
+              </div>
+
+              {/* Bottom Curated Bar */}
+              <div className="mt-8 pt-5 border-t border-[#1E3A5F]/70 flex items-center justify-between text-[11px] text-[#E9E1D4]/70">
+                <div className="flex items-center gap-2 font-mono uppercase tracking-widest text-[#B08D57] text-[10px]">
+                  <span>Crestshore Global Real Estate & Wealth Advisory</span>
+                  <span>•</span>
+                  <span>Licensed RERA ORN 28941</span>
                 </div>
                 <Link
-                  to="/profile"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full text-center bg-[#18181A] text-[#C5A880] py-2 text-xs font-mono uppercase tracking-wider font-semibold rounded-xs"
+                  to={activeCategory.path}
+                  onClick={() => setActiveMenu(null)}
+                  className="text-[#D8C3A5] hover:text-[#FFFDF8] uppercase tracking-wider font-semibold transition-colors flex items-center gap-1"
                 >
-                  My Portfolio & Profile
+                  <span>Explore {activeCategory.label} Portal</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#B08D57]" />
                 </Link>
               </div>
-            ) : (
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Accordion Drawer */}
+        {isMobileMenuOpen && (
+          <div
+            className="xl:hidden bg-[#0B2135] text-[#F7F3EA] border-b border-[#1E3A5F] max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl space-y-6"
+            role="region"
+            aria-label="Mobile Navigation"
+          >
+            {/* Primary Accordions */}
+            <div className="divide-y divide-[#1E3A5F]/70">
+              {NAVIGATION_DATA.map((category) => {
+                const isExpanded = !!mobileExpanded[category.id];
+
+                return (
+                  <div key={category.id} className="py-3">
+                    <button
+                      type="button"
+                      onClick={() => toggleMobileCategory(category.id)}
+                      className="w-full flex items-center justify-between py-2 text-left text-sm uppercase tracking-wider font-medium text-[#F7F3EA] hover:text-[#D8C3A5] transition-colors"
+                      aria-expanded={isExpanded}
+                    >
+                      <span>{category.label}</span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-[#B08D57] transition-transform duration-200 ${
+                          isExpanded ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+
+                    {/* Expanded Accordion Links */}
+                    {isExpanded && (
+                      <div className="pt-3 pb-2 pl-3 space-y-4 animate-in fade-in duration-200">
+                        {category.sections.map((section, secIdx) => (
+                          <div key={`${section.title}-${secIdx}`} className="space-y-2">
+                            <div className="text-[10px] uppercase tracking-widest font-mono text-[#D8C3A5] font-semibold">
+                              {section.title}
+                            </div>
+                            <ul className="space-y-2 pl-1 border-l border-[#1E3A5F]">
+                              {section.links.map((link, linkIdx) => (
+                                <li key={`${link.label}-${linkIdx}`}>
+                                  {link.isExternal ? (
+                                    <a
+                                      href={link.path}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      className="block pl-3 py-1 text-xs text-[#E9E1D4]/80 hover:text-[#FFFDF8]"
+                                    >
+                                      {link.label}
+                                    </a>
+                                  ) : (
+                                    <Link
+                                      to={link.path}
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      className="block pl-3 py-1 text-xs text-[#E9E1D4]/80 hover:text-[#FFFDF8]"
+                                    >
+                                      {link.label}
+                                    </Link>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Mobile Actions Bottom */}
+            <div className="pt-4 border-t border-[#1E3A5F] space-y-3">
               <button
                 type="button"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  openAuthModal('login');
+                  setIsAdvisorModalOpen(true);
                 }}
-                className="w-full mb-2 bg-[#18181A] text-[#C5A880] py-2.5 rounded-xs text-xs font-mono uppercase tracking-wider font-bold flex items-center justify-center gap-2"
+                className="w-full bg-[#B08D57] text-[#102A43] py-3 text-xs uppercase tracking-wider font-semibold text-center block"
               >
-                <UserIcon className="w-3.5 h-3.5" />
-                <span>Sign In to Account</span>
+                Speak with an Advisor
               </button>
-            )}
-          </div>
 
-          {/* Saved Residences Link */}
-          <div>
-            <Link
-              to="/account/favorites"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-between py-2 text-sm uppercase tracking-wider font-medium text-[#18181A] hover:text-[#C5A880]"
-            >
-              <div className="flex items-center gap-2">
-                <Heart className="w-4 h-4 text-[#C5A880]" />
-                <span>Saved Residences</span>
+              <div className="flex gap-2">
+                <Link
+                  to="/account/favorites"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5]"
+                >
+                  Saved ({favorites.length})
+                </Link>
+                {isAuthenticated ? (
+                  <Link
+                    to="/private-clients"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5]"
+                  >
+                    Private Office
+                  </Link>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      openAuthModal('login');
+                    }}
+                    className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5]"
+                  >
+                    Sign In
+                  </button>
+                )}
               </div>
-              <span className="bg-[#C5A880] text-[#18181A] text-xs px-2 py-0.5 rounded-full font-bold">
-                {favorites.length}
-              </span>
-            </Link>
-          </div>
-
-          {/* Ecosystem Portals & CTA */}
-          <div className="pt-4 border-t border-[#E5E0D8] space-y-3">
-            <div className="flex gap-2">
-              <a
-                href="http://localhost:5174"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 text-center text-xs uppercase tracking-wider py-2.5 rounded border border-[#C5A880] text-[#18181A] hover:bg-[#C5A880]/10 transition-colors"
-              >
-                Broker Portal
-              </a>
-              <a
-                href="http://localhost:5175"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 text-center text-xs uppercase tracking-wider py-2.5 rounded border border-[#C5A880] text-[#18181A] hover:bg-[#C5A880]/10 transition-colors"
-              >
-                Admin Panel
-              </a>
             </div>
-
-            <Link
-              to="/consultation"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block w-full text-center bg-[#C5A880] hover:bg-[#B8976C] text-[#18181A] py-3 rounded text-xs uppercase tracking-widest font-semibold transition-colors shadow-sm"
-            >
-              Request Private Advisory
-            </Link>
           </div>
-        </div>
-      )}
-    </header>
+        )}
+      </header>
+
+      {/* Global Universal Advisor Modal */}
+      <SpeakAdvisorModal
+        isOpen={isAdvisorModalOpen}
+        onClose={() => setIsAdvisorModalOpen(false)}
+        initialService="Header Advisory Consultation"
+      />
+    </>
   );
 };
 

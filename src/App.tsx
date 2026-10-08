@@ -20,6 +20,11 @@ import { FavoritesPage } from './pages/Account/FavoritesPage';
 import { ProfilePage } from './pages/Account/ProfilePage';
 import { LoginPage } from './pages/Auth/LoginPage';
 import { RegisterPage } from './pages/Auth/RegisterPage';
+import { PropertyCarePage } from './pages/PropertyCare/PropertyCarePage';
+import { SellPropertyPage } from './pages/Properties/SellPropertyPage';
+import { PartnerNetworkPage } from './pages/PartnerNetwork/PartnerNetworkPage';
+import { PrivateClientsPage } from './pages/PrivateClients/PrivateClientsPage';
+import { LegalPage } from './pages/Legal/LegalPage';
 
 export const App: React.FC = () => {
   React.useEffect(() => {
@@ -48,6 +53,7 @@ export const App: React.FC = () => {
               <Route path="properties" element={<PropertiesPage />} />
               <Route path="properties/buy" element={<PropertiesPage />} />
               <Route path="properties/rent" element={<PropertiesPage />} />
+              <Route path="properties/sell" element={<SellPropertyPage />} />
               <Route path="properties/off-plan" element={<PropertiesPage />} />
               <Route path="properties/new-launches" element={<PropertiesPage />} />
               <Route path="property/:slug" element={<PropertyDetailsPage />} />
@@ -57,7 +63,11 @@ export const App: React.FC = () => {
               <Route path="communities/:slug" element={<CommunityDetailsPage />} />
               <Route path="developers" element={<DevelopersPage />} />
               <Route path="developers/:slug" element={<DevelopersPage />} />
+              <Route path="mortgage" element={<MortgagePage />} />
               <Route path="mortgage-calculator" element={<MortgagePage />} />
+              <Route path="property-care" element={<PropertyCarePage />} />
+              <Route path="partner-network" element={<PartnerNetworkPage />} />
+              <Route path="private-clients" element={<PrivateClientsPage />} />
               <Route path="insights" element={<InsightsPage />} />
               <Route path="insights/:slug" element={<InsightDetailsPage />} />
               <Route path="about" element={<AboutPage />} />
@@ -66,6 +76,9 @@ export const App: React.FC = () => {
               <Route path="account/favorites" element={<FavoritesPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="account/profile" element={<ProfilePage />} />
+              <Route path="privacy" element={<LegalPage />} />
+              <Route path="terms" element={<LegalPage />} />
+              <Route path="legal" element={<LegalPage />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
