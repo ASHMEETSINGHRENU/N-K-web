@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { api } from '../../services/api';
@@ -17,28 +17,66 @@ import {
   Phone,
   MessageSquare,
   AlertCircle,
-  FileCheck,
-  KeyRound,
-  Wrench,
-  Eye,
-  TrendingUp,
-  UserCheck,
-  Check,
-  Calendar,
   Lock,
   ChevronRight
 } from 'lucide-react';
 import { SpeakAdvisorModal } from '../../components/common/SpeakAdvisorModal';
 
-export const PrivateClientsPage: React.FC = () => {
-  const { user } = useAuth();
-  const { fetchNotifications } = useNotifications();
+export type PrivateClientTab = 'portal-access' | 'dashboard' | 'properties' | 'documents';
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'properties' | 'documents' | 'care' | 'requests' | 'contact'>('dashboard');
+export const PrivateClientsPage: React.FC = () => {
+  const { user, isAuthenticated, login, logout } = useAuth();
+  const { fetchNotifications } = useNotifications();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const tabParam = searchParams.get('tab') as PrivateClientTab | null;
+  const [activeTab, setActiveTab] = useState<PrivateClientTab>(
+    tabParam && ['portal-access', 'dashboard', 'properties', 'documents'].includes(tabParam)
+      ? tabParam
+      : (isAuthenticated ? 'dashboard' : 'portal-access')
+  );
+
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [isAdvisorModalOpen, setIsAdvisorModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+
+  // Portal Direct Sign In State
+  const [portalEmail, setPortalEmail] = useState('');
+  const [portalPassword, setPortalPassword] = useState('');
+  const [isPortalLoggingIn, setIsPortalLoggingIn] = useState(false);
+  const [portalAuthError, setPortalAuthError] = useState<string | null>(null);
+
+  // Synchronize activeTab with URL search params
+  useEffect(() => {
+    const t = searchParams.get('tab') as PrivateClientTab | null;
+    if (t && ['portal-access', 'dashboard', 'properties', 'documents'].includes(t)) {
+      setActiveTab(t);
+    }
+  }, [searchParams]);
+
+  const handleTabChange = (newTab: PrivateClientTab) => {
+    setActiveTab(newTab);
+    setSearchParams({ tab: newTab });
+  };
+
+  const handlePortalLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPortalAuthError(null);
+    if (!portalEmail || !portalPassword) {
+      setPortalAuthError('Please enter both client email and password.');
+      return;
+    }
+    setIsPortalLoggingIn(true);
+    try {
+      await login(portalEmail, portalPassword);
+      setActiveTab('dashboard');
+      setSearchParams({ tab: 'dashboard' });
+    } catch (err: any) {
+      setPortalAuthError(err?.message || 'Authentication failed. Please verify credentials.');
+    } finally {
+      setIsPortalLoggingIn(false);
+    }
+  };
 
   // Document Upload State
   const [uploadProperty, setUploadProperty] = useState('Villa Aurum – Palm Jumeirah');
@@ -46,13 +84,6 @@ export const PrivateClientsPage: React.FC = () => {
   const [uploadFileName, setUploadFileName] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-
-  // Service Request State
-  const [requestProperty, setRequestProperty] = useState('Villa Aurum – Palm Jumeirah');
-  const [requestService, setRequestService] = useState('Handover and Snagging');
-  const [requestNotes, setRequestNotes] = useState('');
-  const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
-  const [requestSuccess, setRequestSuccess] = useState(false);
 
   // Client Properties
   const [properties] = useState([
@@ -171,28 +202,6 @@ export const PrivateClientsPage: React.FC = () => {
     }
   ]);
 
-  // Service Requests
-  const [requestsList, setRequestsList] = useState([
-    {
-      id: 'REQ-8821',
-      service: 'Handover and Snagging',
-      property: 'Villa Aurum – Palm Jumeirah',
-      date: '2026-10-03',
-      status: 'In Progress',
-      statusColor: 'text-[#B08D57] bg-[#B08D57]/10 border-[#B08D57]/30',
-      notes: 'Developer de-snagging inspection executed. Final report generated and uploaded to Document Vault.'
-    },
-    {
-      id: 'REQ-7619',
-      service: 'Rental Coordination',
-      property: 'The One Sky Duplex – Downtown',
-      date: '2026-06-15',
-      status: 'Completed',
-      statusColor: 'text-[#5D7A65] bg-[#5D7A65]/10 border-[#5D7A65]/30',
-      notes: 'Tenant renewal executed at +5% index limit; Ejari filed and security deposit held in trust.'
-    }
-  ]);
-
   const documentCategories = [
     { id: 'all', label: 'All Documents' },
     { id: 'title', label: 'Title Deeds' },
@@ -232,47 +241,6 @@ export const PrivateClientsPage: React.FC = () => {
     }, 600);
   };
 
-  const handleRequestSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmittingRequest(true);
-
-    try {
-      const newReqId = `REQ-${Math.floor(1000 + Math.random() * 9000)}`;
-      await api.submitLead({
-        name: user?.name || 'Private Client',
-        email: user?.email || 'private-client@crestshore.com',
-        mobile: '+971 50 112 3456',
-        preferredContactMethod: 'WHATSAPP',
-        leadType: 'INQUIRY',
-        message: `[PRIVATE CLIENT REQUEST ${newReqId}] Service: ${requestService} | Property: ${requestProperty} | Notes: ${requestNotes || 'Standard service request'}`,
-        source: 'PRIVATE_CLIENT_OFFICE'
-      });
-
-      const newEntry = {
-        id: newReqId,
-        service: requestService,
-        property: requestProperty,
-        date: new Date().toISOString().split('T')[0],
-        status: 'In Review',
-        statusColor: 'text-[#1E3A5F] bg-[#1E3A5F]/10 border-[#1E3A5F]/30',
-        notes: 'Request registered. Your dedicated Senior Advisor has been dispatched.'
-      };
-
-      setRequestsList([newEntry, ...requestsList]);
-      setRequestSuccess(true);
-      fetchNotifications();
-      setTimeout(() => {
-        setIsRequestModalOpen(false);
-        setRequestSuccess(false);
-        setRequestNotes('');
-      }, 1500);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsSubmittingRequest(false);
-    }
-  };
-
   const filteredDocuments =
     selectedCategory === 'all'
       ? documents
@@ -297,17 +265,17 @@ export const PrivateClientsPage: React.FC = () => {
               Client Portfolio & Vault
             </h1>
             <p className="text-xs sm:text-sm text-[#E9E1D4]/80 font-light max-w-xl leading-relaxed">
-              Institutional governance for your real estate holdings. Access deeds, contracts, maintenance logs, and request dedicated concierge coordination.
+              Institutional governance for your real estate holdings. Access deeds, contracts, maintenance logs, and confidential client portal.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <button
-              onClick={() => setIsRequestModalOpen(true)}
+              onClick={() => setIsUploadModalOpen(true)}
               className="bg-[#B08D57] hover:bg-[#D8C3A5] text-[#102A43] px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-2 shadow-sm"
             >
-              <Plus className="w-4 h-4" />
-              <span>Request Service</span>
+              <UploadCloud className="w-4 h-4" />
+              <span>Upload Document</span>
             </button>
             <button
               onClick={() => setIsAdvisorModalOpen(true)}
@@ -319,22 +287,32 @@ export const PrivateClientsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. Client Menu Navigation (Brief Item #8: Dashboard | My Properties | Documents | Property Care | Requests | Contact) */}
+      {/* 2. Client Menu Navigation (Client Change 9: 4 clean tabs) */}
       <div className="sticky top-20 z-40 bg-[#0B2135] border-b border-[#1E3A5F] shadow-sm">
         <div className="max-w-6xl mx-auto px-6 lg:px-12">
           <nav className="flex space-x-1 sm:space-x-4 overflow-x-auto py-2 text-xs uppercase tracking-[0.15em]">
             <button
-              onClick={() => setActiveTab('dashboard')}
+              onClick={() => handleTabChange('portal-access')}
+              className={`px-3 py-2 transition-all whitespace-nowrap border-b-2 font-medium ${
+                activeTab === 'portal-access'
+                  ? 'border-[#B08D57] text-[#D8C3A5]'
+                  : 'border-transparent text-[#E9E1D4]/70 hover:text-[#F7F3EA]'
+              }`}
+            >
+              Client Sign In / Portal Access
+            </button>
+            <button
+              onClick={() => handleTabChange('dashboard')}
               className={`px-3 py-2 transition-all whitespace-nowrap border-b-2 font-medium ${
                 activeTab === 'dashboard'
                   ? 'border-[#B08D57] text-[#D8C3A5]'
                   : 'border-transparent text-[#E9E1D4]/70 hover:text-[#F7F3EA]'
               }`}
             >
-              Dashboard
+              Client Portfolio Dashboard
             </button>
             <button
-              onClick={() => setActiveTab('properties')}
+              onClick={() => handleTabChange('properties')}
               className={`px-3 py-2 transition-all whitespace-nowrap border-b-2 font-medium ${
                 activeTab === 'properties'
                   ? 'border-[#B08D57] text-[#D8C3A5]'
@@ -344,44 +322,14 @@ export const PrivateClientsPage: React.FC = () => {
               My Properties ({properties.length})
             </button>
             <button
-              onClick={() => setActiveTab('documents')}
+              onClick={() => handleTabChange('documents')}
               className={`px-3 py-2 transition-all whitespace-nowrap border-b-2 font-medium ${
                 activeTab === 'documents'
                   ? 'border-[#B08D57] text-[#D8C3A5]'
                   : 'border-transparent text-[#E9E1D4]/70 hover:text-[#F7F3EA]'
               }`}
             >
-              Documents ({documents.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('care')}
-              className={`px-3 py-2 transition-all whitespace-nowrap border-b-2 font-medium ${
-                activeTab === 'care'
-                  ? 'border-[#B08D57] text-[#D8C3A5]'
-                  : 'border-transparent text-[#E9E1D4]/70 hover:text-[#F7F3EA]'
-              }`}
-            >
-              Property Care
-            </button>
-            <button
-              onClick={() => setActiveTab('requests')}
-              className={`px-3 py-2 transition-all whitespace-nowrap border-b-2 font-medium ${
-                activeTab === 'requests'
-                  ? 'border-[#B08D57] text-[#D8C3A5]'
-                  : 'border-transparent text-[#E9E1D4]/70 hover:text-[#F7F3EA]'
-              }`}
-            >
-              Requests ({requestsList.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('contact')}
-              className={`px-3 py-2 transition-all whitespace-nowrap border-b-2 font-medium ${
-                activeTab === 'contact'
-                  ? 'border-[#B08D57] text-[#D8C3A5]'
-                  : 'border-transparent text-[#E9E1D4]/70 hover:text-[#F7F3EA]'
-              }`}
-            >
-              Contact Crestshore
+              Encrypted Document Vault ({documents.length})
             </button>
           </nav>
         </div>
@@ -389,7 +337,154 @@ export const PrivateClientsPage: React.FC = () => {
 
       {/* 3. Main Workspace Area */}
       <main className="max-w-6xl mx-auto px-6 lg:px-12 py-12">
-        {/* TAB 1: DASHBOARD */}
+        {/* TAB 1: CLIENT SIGN IN / PORTAL ACCESS (Client Change 9) */}
+        {activeTab === 'portal-access' && (
+          <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in">
+            {isAuthenticated ? (
+              <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-8 sm:p-10 shadow-sm space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E9E1D4]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-[#102A43] text-[#D8C3A5] flex items-center justify-center font-display text-base font-semibold">
+                      <ShieldCheck className="w-6 h-6 text-[#B08D57]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="w-2 h-2 rounded-full bg-[#5D7A65]" />
+                        <span className="text-[10px] text-[#5D7A65] uppercase tracking-wider font-semibold font-mono">
+                          VIP Portal Session Active
+                        </span>
+                      </div>
+                      <h2 className="font-display text-2xl text-[#102A43]">{user?.name || 'Private Client'}</h2>
+                    </div>
+                  </div>
+
+                  <span className="text-[10px] uppercase font-mono px-3 py-1 bg-[#F7F3EA] border border-[#E9E1D4] text-[#B08D57] font-semibold tracking-wider self-start sm:self-center">
+                    AES-256 Vault Active
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div className="p-4 bg-[#F7F3EA] border border-[#E9E1D4] space-y-1">
+                    <span className="text-[10px] uppercase tracking-wider text-[#6B7280] font-medium block">Account Identity</span>
+                    <span className="text-[#102A43] font-semibold block">{user?.email}</span>
+                  </div>
+                  <div className="p-4 bg-[#F7F3EA] border border-[#E9E1D4] space-y-1">
+                    <span className="text-[10px] uppercase tracking-wider text-[#6B7280] font-medium block">Client Membership Tier</span>
+                    <span className="text-[#B08D57] font-semibold block uppercase tracking-wider">Crestshore VIP Private Office</span>
+                  </div>
+                  <div className="p-4 bg-[#F7F3EA] border border-[#E9E1D4] space-y-1">
+                    <span className="text-[10px] uppercase tracking-wider text-[#6B7280] font-medium block">Allocated Estates</span>
+                    <span className="text-[#102A43] font-semibold block">{properties.length} Prime UAE Properties</span>
+                  </div>
+                  <div className="p-4 bg-[#F7F3EA] border border-[#E9E1D4] space-y-1">
+                    <span className="text-[10px] uppercase tracking-wider text-[#6B7280] font-medium block">Assigned Senior Director</span>
+                    <span className="text-[#102A43] font-semibold block">Tariq Al-Mansoor</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => handleTabChange('dashboard')}
+                    className="flex-1 bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] py-3 text-xs uppercase tracking-wider font-semibold transition-all text-center flex items-center justify-center gap-2 shadow-sm"
+                  >
+                    <span>View Client Portfolio Dashboard</span>
+                    <ArrowRight className="w-4 h-4 text-[#B08D57]" />
+                  </button>
+                  <button
+                    onClick={() => logout()}
+                    className="sm:w-36 border border-[#E9E1D4] hover:border-red-300 text-red-600 hover:bg-red-50 py-3 text-xs uppercase tracking-wider font-semibold transition-all text-center"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-8 sm:p-10 shadow-sm space-y-6">
+                <div className="text-center space-y-2 pb-6 border-b border-[#E9E1D4]">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#B08D57] font-semibold block">
+                    Institutional Client Security
+                  </span>
+                  <h2 className="font-display text-2xl sm:text-3xl text-[#102A43]">
+                    Client Sign In / Portal Access
+                  </h2>
+                  <p className="text-xs text-[#6B7280] max-w-md mx-auto leading-relaxed">
+                    Secure single sign-on access to your confidential Dubai real estate holdings, encrypted title deeds, and dedicated advisory communications.
+                  </p>
+                </div>
+
+                <form onSubmit={handlePortalLogin} className="space-y-4 max-w-md mx-auto text-xs">
+                  {portalAuthError && (
+                    <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs">
+                      {portalAuthError}
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-wider text-[#102A43] font-semibold mb-1">
+                      Client Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={portalEmail}
+                      onChange={(e) => setPortalEmail(e.target.value)}
+                      placeholder="client@crestshore.com"
+                      required
+                      className="w-full bg-[#FFFDF8] border border-[#E9E1D4] focus:border-[#B08D57] px-4 py-2.5 text-xs text-[#102A43] outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-wider text-[#102A43] font-semibold mb-1">
+                      Confidential Access Key / Password
+                    </label>
+                    <input
+                      type="password"
+                      value={portalPassword}
+                      onChange={(e) => setPortalPassword(e.target.value)}
+                      placeholder="••••••••••••"
+                      required
+                      className="w-full bg-[#FFFDF8] border border-[#E9E1D4] focus:border-[#B08D57] px-4 py-2.5 text-xs text-[#102A43] outline-none"
+                    />
+                  </div>
+
+                  <div className="pt-2 space-y-2.5">
+                    <button
+                      type="submit"
+                      disabled={isPortalLoggingIn}
+                      className="w-full bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] py-3 text-xs uppercase tracking-wider font-semibold transition-all disabled:opacity-60 shadow-sm"
+                    >
+                      {isPortalLoggingIn ? 'Authenticating...' : 'Sign In to Client Portal'}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPortalEmail('client@crestshore.com');
+                        setPortalPassword('Client@123456');
+                        setPortalAuthError(null);
+                      }}
+                      className="w-full bg-[#F7F3EA] hover:bg-[#E9E1D4] text-[#102A43] py-2 text-xs uppercase tracking-wider font-medium transition-colors"
+                    >
+                      Auto-Fill Verified Client Demo Key
+                    </button>
+                  </div>
+                </form>
+
+                <div className="p-4 bg-[#0B2135] text-[#F7F3EA] border border-[#1E3A5F] text-xs space-y-1 max-w-md mx-auto">
+                  <div className="flex items-center gap-2 text-[#D8C3A5] font-semibold">
+                    <Lock className="w-3.5 h-3.5 text-[#B08D57]" />
+                    <span>Discreet Client Security Standard</span>
+                  </div>
+                  <p className="text-[#E9E1D4]/80 text-[11px] leading-relaxed">
+                    Credentials are issue-managed directly by Crestshore Senior Leadership. All title queries are cross-referenced with Dubai REST blockchain.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 2: CLIENT PORTFOLIO DASHBOARD */}
         {activeTab === 'dashboard' && (
           <div className="space-y-10 animate-in fade-in">
             {/* Latest Advisory Update (Brief Item #8: "See the latest update") */}
@@ -448,22 +543,22 @@ export const PrivateClientsPage: React.FC = () => {
 
               <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-6 shadow-sm">
                 <span className="text-[10px] uppercase tracking-wider text-[#6B7280] font-medium block mb-1">
-                  Active Care Requests
+                  Private Advisory Status
                 </span>
-                <div className="font-display text-3xl font-light text-[#B08D57]">1 In Progress</div>
-                <div className="text-[11px] text-[#6B7280] mt-2">De-snagging verification</div>
+                <div className="font-display text-2xl font-light text-[#5D7A65]">Active Mandate</div>
+                <div className="text-[11px] text-[#6B7280] mt-2">Tariq Al-Mansoor Direct</div>
               </div>
             </div>
 
             {/* Quick Actions Bar */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <button
-                onClick={() => setIsRequestModalOpen(true)}
+                onClick={() => handleTabChange('properties')}
                 className="bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] p-5 text-left transition-colors shadow-sm flex items-center justify-between"
               >
                 <div>
-                  <h4 className="font-display text-lg">Request Property Care</h4>
-                  <p className="text-[11px] text-[#E9E1D4]/80">Snagging, rental, maintenance & visa</p>
+                  <h4 className="font-display text-lg">My Properties</h4>
+                  <p className="text-[11px] text-[#E9E1D4]/80">View active real estate holdings & status</p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-[#B08D57]" />
               </button>
@@ -493,7 +588,7 @@ export const PrivateClientsPage: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 2: MY PROPERTIES (Brief Item #8: Client can view properties) */}
+        {/* TAB 3: MY PROPERTIES (Client Change 9) */}
         {activeTab === 'properties' && (
           <div className="space-y-8 animate-in fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E9E1D4]">
@@ -504,10 +599,11 @@ export const PrivateClientsPage: React.FC = () => {
                 </p>
               </div>
               <button
-                onClick={() => setIsRequestModalOpen(true)}
-                className="bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] px-4 py-2 text-xs uppercase tracking-wider font-semibold transition-all"
+                onClick={() => setIsAdvisorModalOpen(true)}
+                className="bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] px-4 py-2 text-xs uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5"
               >
-                + Request Support for Property
+                <Phone className="w-3.5 h-3.5 text-[#B08D57]" />
+                <span>Consult Senior Director</span>
               </button>
             </div>
 
@@ -661,209 +757,6 @@ export const PrivateClientsPage: React.FC = () => {
             </div>
           </div>
         )}
-
-        {/* TAB 4: PROPERTY CARE (Brief Item #8: 6 services) */}
-        {activeTab === 'care' && (
-          <div className="space-y-8 animate-in fade-in">
-            <div className="pb-4 border-b border-[#E9E1D4]">
-              <h2 className="font-display text-2xl text-[#102A43]">Property Care Services</h2>
-              <p className="text-xs text-[#6B7280] mt-1">
-                "We do not disappear after the transaction. Crestshore remains available to help coordinate the practical life of your property."
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                {
-                  name: 'Handover & Snagging',
-                  icon: FileCheck,
-                  desc: '400-point developer architectural audit and rectification governance prior to final title acceptance.'
-                },
-                {
-                  name: 'Rental Coordination',
-                  icon: KeyRound,
-                  desc: 'Discreet tenant vetting, Ejari registration, rental cheque collection, and lease management.'
-                },
-                {
-                  name: 'Maintenance Coordination',
-                  icon: Wrench,
-                  desc: '24/7 preventative HVAC, chiller, pool, and smart-home care with vetted luxury contractors.'
-                },
-                {
-                  name: 'Property Inspections',
-                  icon: Eye,
-                  desc: 'Quarterly photographic condition audits and inventory governance for overseas owners.'
-                },
-                {
-                  name: 'Resale Preparation',
-                  icon: TrendingUp,
-                  desc: 'Interior styling, cinematic videography, and off-market positioning for capital repositioning.'
-                },
-                {
-                  name: 'Document Management',
-                  icon: FolderLock,
-                  desc: 'Institutional cataloging and digital vault custody for deeds, warranties, and permits.'
-                }
-              ].map((srv, idx) => {
-                const Icon = srv.icon;
-                return (
-                  <div
-                    key={idx}
-                    className="bg-[#FFFDF8] border border-[#E9E1D4] p-6 shadow-sm flex flex-col justify-between hover:border-[#B08D57]/60 transition-colors"
-                  >
-                    <div>
-                      <div className="w-10 h-10 rounded-full bg-[#102A43] text-[#D8C3A5] flex items-center justify-center mb-4">
-                        <Icon className="w-5 h-5 text-[#B08D57]" />
-                      </div>
-                      <h4 className="font-display text-xl text-[#102A43] mb-2">{srv.name}</h4>
-                      <p className="text-xs text-[#6B7280] leading-relaxed mb-6">{srv.desc}</p>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        setRequestService(srv.name);
-                        setIsRequestModalOpen(true);
-                      }}
-                      className="w-full bg-[#F7F3EA] hover:bg-[#102A43] hover:text-[#FFFDF8] text-[#102A43] py-2.5 text-xs uppercase tracking-wider font-semibold transition-colors text-center block"
-                    >
-                      Request This Service
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* TAB 5: REQUESTS (Brief Item #8: Help with handover, snagging, rental, maintenance, resale, visa, mortgage) */}
-        {activeTab === 'requests' && (
-          <div className="space-y-8 animate-in fade-in">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E9E1D4]">
-              <div>
-                <h2 className="font-display text-2xl text-[#102A43]">Service Requests Desk</h2>
-                <p className="text-xs text-[#6B7280] mt-1">
-                  Track ongoing concierge and advisory assistance across your portfolio.
-                </p>
-              </div>
-
-              <button
-                onClick={() => setIsRequestModalOpen(true)}
-                className="bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] px-4 py-2 text-xs uppercase tracking-wider font-semibold transition-all"
-              >
-                + New Service Request
-              </button>
-            </div>
-
-            <div className="bg-[#FFFDF8] border border-[#E9E1D4] overflow-hidden shadow-sm">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#102A43] text-[#F7F3EA] uppercase tracking-wider text-[10px]">
-                    <tr>
-                      <th className="py-3 px-4">Request ID</th>
-                      <th className="py-3 px-4">Service Category</th>
-                      <th className="py-3 px-4">Property</th>
-                      <th className="py-3 px-4">Date Submitted</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4">Notes / Update</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E9E1D4]">
-                    {requestsList.map((req) => (
-                      <tr key={req.id} className="hover:bg-[#F7F3EA]/50">
-                        <td className="py-4 px-4 font-mono font-semibold text-[#102A43]">{req.id}</td>
-                        <td className="py-4 px-4 font-medium text-[#102A43]">{req.service}</td>
-                        <td className="py-4 px-4 text-[#3E4852]">{req.property}</td>
-                        <td className="py-4 px-4 text-[#6B7280]">{req.date}</td>
-                        <td className="py-4 px-4">
-                          <span className={`text-[10px] px-2 py-0.5 border font-medium ${req.statusColor}`}>
-                            {req.status}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4 text-xs text-[#6B7280] max-w-xs">{req.notes}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 6: CONTACT CRESTSHORE (Brief Item #8: "Contact Crestshore") */}
-        {activeTab === 'contact' && (
-          <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in">
-            <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-8 sm:p-10 shadow-sm space-y-6">
-              <div className="pb-6 border-b border-[#E9E1D4]">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[#B08D57] font-semibold block mb-1">
-                  Dedicated Representation
-                </span>
-                <h2 className="font-display text-2xl sm:text-3xl text-[#102A43]">
-                  Your Crestshore Advisory Desk
-                </h2>
-                <p className="text-xs text-[#6B7280] mt-1">
-                  Direct communication with your designated Private Client Director and concierge team.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="p-6 bg-[#F7F3EA] border border-[#E9E1D4] space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-[#102A43] text-[#D8C3A5] flex items-center justify-center font-display text-base font-semibold">
-                      TM
-                    </div>
-                    <div>
-                      <h4 className="font-display text-lg text-[#102A43]">Tariq Al-Mansoor</h4>
-                      <p className="text-[11px] text-[#B08D57] uppercase tracking-wider font-medium">
-                        Senior Managing Director • Private Office
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 text-xs text-[#3E4852] pt-2 border-t border-[#E9E1D4]">
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-[#B08D57]" />
-                      <span>Direct: +971 4 456 7890</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MessageSquare className="w-3.5 h-3.5 text-[#25D366]" />
-                      <span>WhatsApp: +971 50 112 3456</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 flex gap-2">
-                    <a
-                      href="https://wa.me/971501123456?text=Hello%20Tariq,%20I%20am%20inquiring%20from%20my%20Private%20Client%20Portal."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 bg-[#25D366] hover:bg-[#1EBE5D] text-white py-2 text-xs font-semibold uppercase tracking-wider text-center transition-colors block"
-                    >
-                      WhatsApp Direct
-                    </a>
-                  </div>
-                </div>
-
-                <div className="p-6 bg-[#102A43] text-[#F7F3EA] border border-[#1E3A5F] space-y-4 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <span className="text-[10px] uppercase tracking-wider text-[#D8C3A5] font-semibold block">
-                      DIFC Headquarters
-                    </span>
-                    <h4 className="font-display text-xl text-[#F7F3EA]">Executive Suite & Advisory Lounge</h4>
-                    <p className="text-xs text-[#E9E1D4]/80 leading-relaxed font-light">
-                      Level 42, ICD Brookfield Place, DIFC, Dubai, United Arab Emirates. Private parking and confidential boardroom facilities available upon request.
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => setIsAdvisorModalOpen(true)}
-                    className="w-full bg-[#F7F3EA] hover:bg-[#FFFDF8] text-[#102A43] py-2.5 text-xs uppercase tracking-wider font-semibold transition-colors"
-                  >
-                    Schedule In-Person Meeting
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
 
       {/* Upload Document Modal (Brief Item #8: Select client/property → Upload document → Choose category → Save) */}
@@ -951,91 +844,6 @@ export const PrivateClientsPage: React.FC = () => {
                     className="flex-1 bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] py-2.5 text-xs uppercase tracking-wider font-semibold transition-colors"
                   >
                     {isUploading ? 'Encrypting & Saving...' : 'Save to Vault'}
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Service Request Modal */}
-      {isRequestModalOpen && (
-        <div className="fixed inset-0 z-50 bg-[#0B2135]/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#FFFDF8] border border-[#E9E1D4] max-w-lg w-full p-8 shadow-2xl animate-in zoom-in-95">
-            <h3 className="font-display text-2xl text-[#102A43] mb-1">Request Property Care Assistance</h3>
-            <p className="text-xs text-[#6B7280] mb-6">
-              Our dedicated coordination desk will attend to your request immediately.
-            </p>
-
-            {requestSuccess ? (
-              <div className="p-6 bg-[#5D7A65]/10 border border-[#5D7A65]/30 text-center space-y-2">
-                <CheckCircle2 className="w-8 h-8 text-[#5D7A65] mx-auto" />
-                <h4 className="text-sm font-semibold text-[#102A43]">Request Successfully Dispatched</h4>
-                <p className="text-xs text-[#6B7280]">Your advisor has received the ticket.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleRequestSubmit} className="space-y-4 text-xs">
-                <div>
-                  <label className="text-[11px] uppercase tracking-wider text-[#6B7280] font-medium block mb-1">
-                    Select Property
-                  </label>
-                  <select
-                    value={requestProperty}
-                    onChange={(e) => setRequestProperty(e.target.value)}
-                    className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#102A43] focus:outline-none focus:border-[#B08D57]"
-                  >
-                    <option value="Villa Aurum – Palm Jumeirah">Villa Aurum – Palm Jumeirah</option>
-                    <option value="The One Sky Duplex – Downtown">The One Sky Duplex – Downtown</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-[11px] uppercase tracking-wider text-[#6B7280] font-medium block mb-1">
-                    Service Required
-                  </label>
-                  <select
-                    value={requestService}
-                    onChange={(e) => setRequestService(e.target.value)}
-                    className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#102A43] focus:outline-none focus:border-[#B08D57]"
-                  >
-                    <option value="Handover and Snagging">Handover and Snagging</option>
-                    <option value="Rental Coordination">Rental Coordination</option>
-                    <option value="Maintenance Coordination">Maintenance Coordination</option>
-                    <option value="Property Inspections">Property Inspections</option>
-                    <option value="Resale Preparation">Resale Preparation</option>
-                    <option value="Golden Visa Assistance">Golden Visa Assistance</option>
-                    <option value="Mortgage Coordination">Mortgage Coordination</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-[11px] uppercase tracking-wider text-[#6B7280] font-medium block mb-1">
-                    Specific Notes / Instructions
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={requestNotes}
-                    onChange={(e) => setRequestNotes(e.target.value)}
-                    placeholder="Provide instructions, timelines, or contractor preferences..."
-                    className="w-full bg-[#FFFDF8] border border-[#E9E1D4] p-3 text-xs text-[#102A43] focus:outline-none focus:border-[#B08D57]"
-                  />
-                </div>
-
-                <div className="pt-2 flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setIsRequestModalOpen(false)}
-                    className="flex-1 border border-[#E9E1D4] py-2.5 text-xs uppercase tracking-wider text-[#3E4852]"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmittingRequest}
-                    className="flex-1 bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] py-2.5 text-xs uppercase tracking-wider font-semibold transition-colors"
-                  >
-                    {isSubmittingRequest ? 'Submitting...' : 'Dispatch Request'}
                   </button>
                 </div>
               </form>

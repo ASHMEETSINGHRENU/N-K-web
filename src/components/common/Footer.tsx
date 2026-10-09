@@ -63,16 +63,25 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Prime Communities */}
+          {/* Prime Communities (Client Change 7) */}
           <div>
             <h4 className="text-xs uppercase tracking-[0.2em] text-[#D8C3A5] font-semibold mb-6 font-ui">
               Prime Communities
             </h4>
-            <ul className="space-y-3 text-xs tracking-wider text-[#E9E1D4]/75 font-ui">
-              {DUBAI_COMMUNITIES.slice(0, 6).map((c) => (
+            <ul className="space-y-2.5 text-xs tracking-wider text-[#E9E1D4]/75 font-ui">
+              {[
+                { name: 'Palm Jumeirah', slug: 'palm-jumeirah' },
+                { name: 'Emirates Hills', slug: 'emirates-hills' },
+                { name: 'Jumeirah Bay Island', slug: 'jumeirah-bay-island' },
+                { name: 'Dubai Hills Estate', slug: 'dubai-hills-estate' },
+                { name: 'Tilal Al Ghaf', slug: 'tilal-al-ghaf' },
+                { name: 'Jumeirah Golf Estates', slug: 'jumeirah-golf-estates' },
+                { name: 'Dubai Creek Harbour', slug: 'dubai-creek-harbour' },
+                { name: 'Downtown Dubai', slug: 'downtown-dubai' }
+              ].map((c) => (
                 <li key={c.slug}>
                   <Link
-                    to={`/communities/${c.slug}`}
+                    to={`/properties?community=${encodeURIComponent(c.name)}`}
                     className="hover:text-[#F7F3EA] transition-colors flex items-center justify-between group"
                   >
                     <span>{c.name}</span>
@@ -122,7 +131,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Core Mandate & Network */}
+          {/* Crestshore Network (Client Change 7: Broker Workspace removed, non-repeating) */}
           <div>
             <h4 className="text-xs uppercase tracking-[0.2em] text-[#D8C3A5] font-semibold mb-6 font-ui">
               Crestshore Network
@@ -150,53 +159,17 @@ export const Footer: React.FC = () => {
                   Contact Advisory Desk
                 </Link>
               </li>
-              <li>
-                <a
-                  href="http://localhost:5174"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-[#D8C3A5] transition-colors flex items-center gap-1.5 text-[#E9E1D4]/60"
-                >
-                  <span>Broker Workspace</span>
-                  <ArrowUpRight className="w-3 h-3 text-[#B08D57]" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="http://localhost:5175"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-[#D8C3A5] transition-colors flex items-center gap-1.5 text-[#E9E1D4]/60"
-                >
-                  <span>Admin Control</span>
-                  <ArrowUpRight className="w-3 h-3 text-[#B08D57]" />
-                </a>
-              </li>
             </ul>
           </div>
         </div>
 
-        {/* Exact Client Brief Footer Navigation Row (Item #5) */}
-        <div className="py-6 border-b border-[#1E3A5F]/70 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs tracking-wider text-[#D8C3A5] font-medium font-ui">
-          <Link to="/properties" className="hover:text-[#FFFDF8] transition-colors">Properties</Link>
+        {/* Discreet Legal & Statutory Notice Bar (Non-repeating, Client Change 7) */}
+        <div className="py-6 border-b border-[#1E3A5F]/70 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs tracking-wider text-[#D8C3A5] font-medium font-ui">
+          <Link to="/privacy" className="hover:text-[#FFFDF8] transition-colors">Privacy Policy</Link>
           <span className="text-[#1E3A5F]">·</span>
-          <Link to="/mortgage" className="hover:text-[#FFFDF8] transition-colors">Mortgage</Link>
+          <Link to="/terms" className="hover:text-[#FFFDF8] transition-colors">Terms of Service</Link>
           <span className="text-[#1E3A5F]">·</span>
-          <Link to="/property-care" className="hover:text-[#FFFDF8] transition-colors">Property Care</Link>
-          <span className="text-[#1E3A5F]">·</span>
-          <Link to="/partner-network" className="hover:text-[#FFFDF8] transition-colors">Partner Network</Link>
-          <span className="text-[#1E3A5F]">·</span>
-          <Link to="/private-clients" className="hover:text-[#FFFDF8] transition-colors">Private Client Login</Link>
-          <span className="text-[#1E3A5F]">·</span>
-          <Link to="/about" className="hover:text-[#FFFDF8] transition-colors">About</Link>
-          <span className="text-[#1E3A5F]">·</span>
-          <Link to="/contact" className="hover:text-[#FFFDF8] transition-colors">Contact</Link>
-          <span className="text-[#1E3A5F]">·</span>
-          <Link to="/privacy" className="hover:text-[#FFFDF8] transition-colors">Privacy</Link>
-          <span className="text-[#1E3A5F]">·</span>
-          <Link to="/terms" className="hover:text-[#FFFDF8] transition-colors">Terms</Link>
-          <span className="text-[#1E3A5F]">·</span>
-          <Link to="/legal" className="hover:text-[#FFFDF8] transition-colors">Legal/Regulatory Information</Link>
+          <Link to="/legal" className="hover:text-[#FFFDF8] transition-colors">Legal & Regulatory Information</Link>
         </div>
 
         {/* Bottom Legal & Privacy Notice */}

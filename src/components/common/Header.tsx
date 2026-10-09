@@ -188,9 +188,9 @@ const NAVIGATION_DATA: NavCategory[] = [
         path: '/property-care',
         links: [
           { label: 'Care Philosophy & Overview', path: '/property-care' },
-          { label: 'Request Property Inspection', path: '/private-clients' },
-          { label: 'Emergency Maintenance Dispatch', path: '/contact' },
-          { label: 'Private Client Office Integration', path: '/private-clients' }
+          { label: 'Schedule Property Inspection', path: '/property-care' },
+          { label: 'Emergency Technical Dispatch', path: '/property-care' },
+          { label: 'Operational Care Records', path: '/property-care' }
         ]
       }
     ]
@@ -202,23 +202,21 @@ const NAVIGATION_DATA: NavCategory[] = [
     columnsCount: 2,
     sections: [
       {
-        title: 'Partner Portal & Workspaces',
+        title: 'Partner Portal',
         path: '/partner-network',
         links: [
-          { label: 'Partner Dashboard', path: '/partner-network' },
-          { label: 'Submit Referral (< 2 Minutes)', path: '/partner-network' },
-          { label: 'My Referrals Pipeline', path: '/partner-network' },
-          { label: 'Commission Ledger & Payouts', path: '/partner-network' },
-          { label: 'Master Agreement (50% Split)', path: '/partner-network' }
+          { label: 'For Wealth Managers & Family Offices', path: '/partner-network' },
+          { label: 'Submit Referral Mandate', path: '/partner-network' },
+          { label: 'My Referrals & Commission Ledger', path: '/partner-network' }
         ]
       },
       {
-        title: 'Institutional Protection',
+        title: 'Agreements & Support',
+        path: '/partner-network',
         links: [
-          { label: 'No Client Contact Info at Stage 1', path: '/partner-network' },
-          { label: '24-Month Non-Circumvention', path: '/partner-network' },
-          { label: 'One-Click WhatsApp to Leadership', path: 'https://wa.me/971501123456', isExternal: true },
-          { label: 'Family Office Representation', path: '/partner-network' }
+          { label: 'Partner Agreement & Terms', path: '/partner-network' },
+          { label: '24-Hour Commission Settlement', path: '/partner-network' },
+          { label: 'Direct WhatsApp Leadership', path: 'https://wa.me/971501123456', isExternal: true }
         ]
       }
     ]
@@ -227,27 +225,16 @@ const NAVIGATION_DATA: NavCategory[] = [
     id: 'private-clients',
     label: 'Private Clients',
     path: '/private-clients',
-    columnsCount: 2,
+    columnsCount: 1,
     sections: [
       {
         title: 'Private Client Office',
         path: '/private-clients',
         links: [
-          { label: 'Client Portfolio Dashboard', path: '/private-clients' },
-          { label: 'My Managed Properties', path: '/private-clients' },
-          { label: 'Encrypted Document Vault (8 Types)', path: '/private-clients' },
-          { label: 'Property Care Dispatch Desk', path: '/private-clients' },
-          { label: 'Service Requests Desk', path: '/private-clients' }
-        ]
-      },
-      {
-        title: 'Discreet Private Advisory',
-        path: '/contact',
-        links: [
-          { label: 'Dedicated Senior Director', path: '/private-clients' },
-          { label: 'DIFC Headquarters Suite', path: '/contact' },
-          { label: 'Confidential Boardroom Booking', path: '/contact' },
-          { label: 'Client Sign In / Portal Access', path: '/login' }
+          { label: 'Client Sign In / Portal Access', path: '/private-clients?tab=portal-access' },
+          { label: 'Client Portfolio Dashboard', path: '/private-clients?tab=dashboard' },
+          { label: 'My Properties', path: '/private-clients?tab=properties' },
+          { label: 'Encrypted Document Vault', path: '/private-clients?tab=documents' }
         ]
       }
     ]
@@ -264,8 +251,7 @@ const NAVIGATION_DATA: NavCategory[] = [
         links: [
           { label: "Buyer's Guide", path: '/insights' },
           { label: 'Area Insights', path: '/locations' },
-          { label: 'Community Guides', path: '/communities' },
-          { label: 'Tower & Compound Guides', path: '/properties/buy' }
+          { label: 'Community Guides', path: '/communities' }
         ]
       },
       {
@@ -645,6 +631,8 @@ export const Header: React.FC = () => {
                     ? 'grid-cols-4'
                     : activeCategory.columnsCount === 2
                     ? 'grid-cols-2 max-w-4xl'
+                    : activeCategory.columnsCount === 1
+                    ? 'grid-cols-1 max-w-md mx-auto'
                     : 'grid-cols-3'
                 }`}
               >
@@ -717,10 +705,10 @@ export const Header: React.FC = () => {
           </div>
         )}
 
-        {/* Mobile Accordion Drawer */}
+        {/* Mobile & Tablet Accordion Drawer (All Centered for Tablet View) */}
         {isMobileMenuOpen && (
           <div
-            className="xl:hidden bg-[#0B2135] text-[#F7F3EA] border-b border-[#1E3A5F] max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl space-y-6"
+            className="xl:hidden bg-[#0B2135] text-[#F7F3EA] border-b border-[#1E3A5F] max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl space-y-6 text-center"
             role="region"
             aria-label="Mobile Navigation"
           >
@@ -734,7 +722,7 @@ export const Header: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => toggleMobileCategory(category.id)}
-                      className="w-full flex items-center justify-between py-2 text-left text-sm uppercase tracking-wider font-medium text-[#F7F3EA] hover:text-[#D8C3A5] transition-colors"
+                      className="w-full flex items-center justify-center gap-2.5 py-2.5 text-center text-sm uppercase tracking-[0.2em] font-medium text-[#F7F3EA] hover:text-[#D8C3A5] transition-colors"
                       aria-expanded={isExpanded}
                     >
                       <span>{category.label}</span>
@@ -745,32 +733,45 @@ export const Header: React.FC = () => {
                       />
                     </button>
 
-                    {/* Expanded Accordion Links */}
+                    {/* Expanded Accordion Links (Centered for Tablets) */}
                     {isExpanded && (
-                      <div className="pt-3 pb-2 pl-3 space-y-4 animate-in fade-in duration-200">
+                      <div className="pt-3 pb-3 space-y-5 animate-in fade-in duration-200 flex flex-col items-center text-center">
+                        {/* Centered description specifically when on Partner Network (Client Change 1) */}
+                        {category.id === 'partner-network' && (
+                          <div className="py-2.5 px-4 max-w-md mx-auto text-center border-y border-[#1E3A5F]/60 w-full mb-1">
+                            <span className="text-[10px] uppercase tracking-[0.28em] text-[#D8C3A5] font-semibold block">
+                              Crestshore Partner Network
+                            </span>
+                            <p className="text-xs text-[#E9E1D4]/80 mt-1 font-light italic leading-relaxed">
+                              Private referrals. Clear progress. Trusted collaboration.
+                            </p>
+                          </div>
+                        )}
+
                         {category.sections.map((section, secIdx) => (
-                          <div key={`${section.title}-${secIdx}`} className="space-y-2">
-                            <div className="text-[10px] uppercase tracking-widest font-mono text-[#D8C3A5] font-semibold">
+                          <div key={`${section.title}-${secIdx}`} className="space-y-2 w-full flex flex-col items-center text-center">
+                            <div className="text-[10px] uppercase tracking-[0.22em] font-mono text-[#D8C3A5] font-semibold text-center">
                               {section.title}
                             </div>
-                            <ul className="space-y-2 pl-1 border-l border-[#1E3A5F]">
+                            <ul className="space-y-2 flex flex-col items-center w-full text-center">
                               {section.links.map((link, linkIdx) => (
-                                <li key={`${link.label}-${linkIdx}`}>
+                                <li key={`${link.label}-${linkIdx}`} className="w-full text-center">
                                   {link.isExternal ? (
                                     <a
                                       href={link.path}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       onClick={() => setIsMobileMenuOpen(false)}
-                                      className="block pl-3 py-1 text-xs text-[#E9E1D4]/80 hover:text-[#FFFDF8]"
+                                      className="py-1 text-xs text-[#E9E1D4]/80 hover:text-[#FFFDF8] inline-flex items-center justify-center gap-1.5 transition-colors text-center"
                                     >
-                                      {link.label}
+                                      <span>{link.label}</span>
+                                      <ArrowUpRight className="w-3 h-3 text-[#B08D57]" />
                                     </a>
                                   ) : (
                                     <Link
                                       to={link.path}
                                       onClick={() => setIsMobileMenuOpen(false)}
-                                      className="block pl-3 py-1 text-xs text-[#E9E1D4]/80 hover:text-[#FFFDF8]"
+                                      className="py-1 text-xs text-[#E9E1D4]/80 hover:text-[#FFFDF8] block transition-colors text-center"
                                     >
                                       {link.label}
                                     </Link>
@@ -787,24 +788,24 @@ export const Header: React.FC = () => {
               })}
             </div>
 
-            {/* Mobile Actions Bottom */}
-            <div className="pt-4 border-t border-[#1E3A5F] space-y-3">
+            {/* Mobile Actions Bottom (Centered) */}
+            <div className="pt-4 border-t border-[#1E3A5F] space-y-3 max-w-sm mx-auto w-full text-center">
               <button
                 type="button"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   setIsAdvisorModalOpen(true);
                 }}
-                className="w-full bg-[#B08D57] text-[#102A43] py-3 text-xs uppercase tracking-wider font-semibold text-center block"
+                className="w-full bg-[#B08D57] hover:bg-[#D8C3A5] text-[#102A43] py-3 text-xs uppercase tracking-wider font-semibold text-center block transition-colors shadow-sm"
               >
                 Speak with an Advisor
               </button>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 justify-center">
                 <Link
                   to="/account/favorites"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5]"
+                  className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5] transition-colors"
                 >
                   Saved ({favorites.length})
                 </Link>
@@ -812,7 +813,7 @@ export const Header: React.FC = () => {
                   <Link
                     to="/private-clients"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5]"
+                    className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5] transition-colors"
                   >
                     Private Office
                   </Link>
@@ -822,7 +823,7 @@ export const Header: React.FC = () => {
                       setIsMobileMenuOpen(false);
                       openAuthModal('login');
                     }}
-                    className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5]"
+                    className="flex-1 py-2 text-center text-xs border border-[#1E3A5F] text-[#E9E1D4] hover:text-[#D8C3A5] transition-colors"
                   >
                     Sign In
                   </button>

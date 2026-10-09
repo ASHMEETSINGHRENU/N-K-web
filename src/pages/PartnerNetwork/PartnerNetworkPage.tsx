@@ -36,7 +36,7 @@ export const PartnerNetworkPage: React.FC = () => {
   const { fetchNotifications } = useNotifications();
 
   // Mode: 'public' (landing screen) or 'portal' (workspace)
-  const [viewMode, setViewMode] = useState<'public' | 'portal'>('portal');
+  const [viewMode, setViewMode] = useState<'public' | 'portal'>('public');
 
   // Partner Account & ID (CP-0048 as specified in Brief Item #4)
   const [partnerId] = useState('CP-0048');
@@ -314,32 +314,76 @@ export const PartnerNetworkPage: React.FC = () => {
       {/* ======================================================== */}
       {viewMode === 'public' && (
         <div className="animate-in fade-in">
-          {/* Hero Section */}
-          <section className="bg-[#102A43] text-[#F7F3EA] py-20 px-6 lg:px-12 border-b border-[#1E3A5F] text-center">
-            <div className="max-w-4xl mx-auto space-y-5">
-              <span className="text-[10px] uppercase tracking-[0.28em] text-[#D8C3A5] font-semibold">
-                Private Referrals • Clear Progress • Trusted Collaboration
-              </span>
-              <h1 className="font-display text-4xl sm:text-6xl font-light text-[#F7F3EA]">
-                Crestshore Partner Network
+          {/* Hero Section - Client Change 4: Bold, Ultra-Clean, Exactly as Specified */}
+          <section className="bg-[#102A43] text-[#F7F3EA] py-20 lg:py-28 px-6 lg:px-12 border-b border-[#1E3A5F] text-center">
+            <div className="max-w-4xl mx-auto space-y-6">
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-[#FFFDF8] tracking-tight">
+                Refer your client
               </h1>
-              <p className="text-sm sm:text-base text-[#E9E1D4]/90 max-w-2xl mx-auto leading-relaxed font-light">
-                Approved brokers, agents, advisors and strategic partners can submit qualified property and investment opportunities, track referral progress and collaborate with Crestshore.
-              </p>
+              <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-[#D8C3A5] tracking-tight max-w-3xl mx-auto leading-snug">
+                Be our global partner & get your commission paid in 24 hours
+              </h2>
 
-              <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
                 <button
                   onClick={() => setIsApplyModalOpen(true)}
-                  className="w-full sm:w-auto bg-[#F7F3EA] hover:bg-[#FFFDF8] text-[#102A43] px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] transition-all shadow-md"
+                  className="w-full sm:w-auto bg-[#B08D57] hover:bg-[#D8C3A5] text-[#102A43] px-8 py-4 text-xs font-bold uppercase tracking-[0.16em] transition-all shadow-lg text-center"
                 >
-                  Apply as a Partner
+                  Register yourself as Crestshore partner
                 </button>
                 <button
-                  onClick={() => setViewMode('portal')}
-                  className="w-full sm:w-auto border border-[#B08D57] hover:bg-[#B08D57] hover:text-[#102A43] text-[#F7F3EA] px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] transition-all"
+                  onClick={() => {
+                    setViewMode('portal');
+                    setActiveTab('agreement');
+                  }}
+                  className="w-full sm:w-auto border-2 border-[#B08D57] hover:bg-[#B08D57] hover:text-[#102A43] text-[#F7F3EA] px-8 py-4 text-xs font-bold uppercase tracking-[0.16em] transition-all text-center"
                 >
-                  Log In to Partner Portal
+                  View agreement
                 </button>
+              </div>
+            </div>
+          </section>
+
+          {/* Institutional Partner Section: For Wealth Managers & Family Offices (Client Change 8) */}
+          <section className="py-16 px-6 lg:px-12 bg-[#FFFDF8] border-b border-[#E9E1D4]">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+                <div className="md:col-span-8 space-y-4">
+                  <div className="flex items-center gap-2 text-[#B08D57]">
+                    <Handshake className="w-4 h-4" />
+                    <span className="text-[10px] uppercase tracking-[0.25em] font-mono font-semibold">
+                      Partner Network
+                    </span>
+                  </div>
+                  <h2 className="font-display text-3xl sm:text-4xl text-[#102A43] font-light leading-tight">
+                    For Wealth Managers &amp; <span className="italic text-[#B08D57]">Family Offices</span>
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[#6B7280] leading-relaxed max-w-2xl">
+                    Introduce clients with institutional confidence. Submit referrals in under two minutes without disclosing personal contact data upfront, protected by signed master agreements and guaranteed fee splits.
+                  </p>
+                </div>
+
+                <div className="md:col-span-4 flex flex-col gap-3">
+                  <button
+                    onClick={() => {
+                      setViewMode('portal');
+                      setActiveTab('submit');
+                    }}
+                    className="w-full bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all text-center shadow-sm flex items-center justify-center gap-2"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#B08D57]" />
+                    <span>Enter Partner Portal</span>
+                  </button>
+                  <a
+                    href="https://wa.me/971501123456?text=Hello%20Crestshore,%20inquiring%20about%20the%20Partner%20Network."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full border border-[#25D366]/60 hover:border-[#25D366] hover:bg-[#25D366] hover:text-white text-[#25D366] px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all text-center flex items-center justify-center gap-2"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>WhatsApp Leadership</span>
+                  </a>
+                </div>
               </div>
             </div>
           </section>
@@ -536,6 +580,76 @@ export const PartnerNetworkPage: React.FC = () => {
                     </button>
                   </div>
                 )}
+
+                {/* Client Change 4: Bold Highlighted 24-Hour Commission Banner */}
+                <div className="relative overflow-hidden bg-gradient-to-r from-[#102A43] via-[#0B2135] to-[#102A43] border-2 border-[#B08D57] p-8 sm:p-10 shadow-xl text-[#F7F3EA] rounded-sm text-center">
+                  <div className="absolute -top-16 -right-16 w-56 h-56 bg-[#B08D57]/20 rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-[#B08D57]/15 rounded-full blur-3xl pointer-events-none" />
+
+                  <div className="relative z-10 max-w-3xl mx-auto space-y-4">
+                    <h2 className="font-display text-3xl sm:text-5xl font-bold text-[#FFFDF8] tracking-tight">
+                      Refer your client
+                    </h2>
+                    <h3 className="font-display text-xl sm:text-3xl font-bold text-[#D8C3A5] tracking-tight leading-snug">
+                      Be our global partner & get your commission paid in 24 hours
+                    </h3>
+
+                    <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+                      <button
+                        onClick={() => setIsApplyModalOpen(true)}
+                        className="w-full sm:w-auto bg-[#B08D57] hover:bg-[#D8C3A5] text-[#102A43] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] transition-all shadow-md text-center"
+                      >
+                        Register yourself as Crestshore partner
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab('agreement')}
+                        className="w-full sm:w-auto border-2 border-[#B08D57] hover:bg-[#B08D57] hover:text-[#102A43] text-[#FFFDF8] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] transition-all text-center"
+                      >
+                        View agreement
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Institutional Mandate: For Wealth Managers & Family Offices (Client Change 8) */}
+                <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-8 shadow-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    <div className="md:col-span-8 space-y-3">
+                      <div className="flex items-center gap-2 text-[#B08D57]">
+                        <Handshake className="w-4 h-4" />
+                        <span className="text-[10px] uppercase tracking-[0.25em] font-mono font-semibold">
+                          Institutional Advisory Gateway
+                        </span>
+                      </div>
+                      <h3 className="font-display text-2xl sm:text-3xl text-[#102A43] font-light">
+                        For Wealth Managers &amp; <span className="italic text-[#B08D57]">Family Offices</span>
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#6B7280] leading-relaxed max-w-2xl">
+                        Introduce clients with institutional confidence. Submit referrals in under two minutes without disclosing personal contact data upfront, protected by signed master agreements and guaranteed fee splits.
+                      </p>
+                    </div>
+
+                    <div className="md:col-span-4 flex flex-col gap-3">
+                      <button
+                        onClick={() => setActiveTab('submit')}
+                        className="w-full bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] px-6 py-3.5 text-xs font-bold uppercase tracking-wider transition-all shadow-sm flex items-center justify-center gap-2"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-[#B08D57]" />
+                        <span>Submit Referral Mandate</span>
+                      </button>
+                      <a
+                        href="https://wa.me/971501123456?text=Hello%20Crestshore,%20Partner%20ID%20CP-0048%20inquiring."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full border border-[#25D366]/60 hover:border-[#25D366] hover:bg-[#25D366] hover:text-white text-[#25D366] px-6 py-3.5 text-xs font-bold uppercase tracking-wider transition-all text-center flex items-center justify-center gap-2"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        <span>WhatsApp Leadership</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Dashboard Metrics (Brief Item #7: Partner name/ID, Agreement status, Large submit button, Active referrals, Total paid, Total pending, Latest update) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
