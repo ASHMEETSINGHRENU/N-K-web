@@ -14,10 +14,13 @@ import {
   X,
   ChevronDown,
   RotateCcw,
-  Map as MapIcon
+  Map as MapIcon,
+  ShieldCheck,
+  MessageCircle
 } from 'lucide-react';
 import { formatAED } from '@nestandkey/utils';
 import { DUBAI_COMMUNITIES, PROPERTY_TYPES } from '@nestandkey/constants';
+import { getBrokerDisplayInfo } from '../../components/property/brokerHelper';
 
 const CATEGORIES = [
   { id: 'BUY', label: 'Buy' },
@@ -223,37 +226,34 @@ export const PropertiesPage: React.FC = () => {
     CATEGORIES.find((c) => c.id === (filters.purpose || 'BUY')) || CATEGORIES[0];
 
   return (
-    <div className="pt-28 pb-20 bg-[#F7F3EA] min-h-screen text-[#3E4852] font-ui">
-      <div className="max-w-[1740px] mx-auto px-4 sm:px-6 lg:px-10">
-        {/* Header Title Section */}
-        <div className="mb-6 pb-4 border-b border-[#E9E1D4] flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-[#B08D57] font-semibold font-mono">
-                Dubai Prime Portfolio
-              </span>
-              <span className="text-[#E9E1D4]">/</span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-[#6B7280] font-medium">
-                {currentCategoryObj.label}
-              </span>
-            </div>
-            <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl text-[#102A43] font-normal tracking-tight">
-              {filters.purpose === 'RENT'
-                ? 'Prime Dubai Residences For Lease'
-                : filters.purpose === 'OFF_PLAN'
-                ? 'Off-Plan & New Launch Projects'
-                : filters.purpose === 'COMMERCIAL_RENT'
-                ? 'Commercial Spaces For Lease'
-                : filters.purpose === 'COMMERCIAL_BUY'
-                ? 'Commercial Real Estate For Sale'
-                : 'Luxury Dubai Properties For Sale'}
-            </h1>
-            <p className="text-xs text-[#6B7280] mt-1.5">
-              Showing <span className="font-semibold text-[#102A43]">{properties.length}</span> curated
-              exceptional residences across Dubai's most prestigious enclaves.
-            </p>
-          </div>
-
+    <div className="pb-20 bg-[#F7F3EA] min-h-screen text-[#3E4852] font-ui">
+      <section className="relative min-h-[72vh] flex items-end overflow-hidden bg-[#0B2135] text-[#F7F3EA]">
+        <img
+          src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2400&q=85"
+          alt="Interior of a Dubai residence"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135]/85 via-[#0B2135]/35 to-[#0B2135]/25" />
+        <div className="relative z-10 w-full px-5 sm:px-10 lg:px-16 pb-14 pt-36">
+          <p className="crest-kicker text-[#D8C3A5] mb-4">{currentCategoryObj.label}</p>
+          <h1 className="font-display crest-title max-w-5xl">
+            {filters.purpose === 'RENT'
+              ? 'Residences for lease'
+              : filters.purpose === 'OFF_PLAN'
+              ? 'New launches'
+              : filters.purpose === 'COMMERCIAL_RENT'
+              ? 'Commercial spaces for lease'
+              : filters.purpose === 'COMMERCIAL_BUY'
+              ? 'Commercial property for sale'
+              : 'Properties for sale'}
+          </h1>
+          <p className="mt-5 text-sm font-light text-[#E9E1D4]">
+            Showing <span className="text-[#F7F3EA]">{properties.length}</span> residences across Dubai.
+          </p>
+        </div>
+      </section>
+      <div className="max-w-[1740px] mx-auto px-4 sm:px-6 lg:px-10 pt-8">
+        <div className="mb-6 pb-4 border-b border-[#E9E1D4] flex flex-col md:flex-row md:items-end justify-end gap-4">
           {/* View Mode & Sort Controls */}
           <div className="flex items-center gap-3">
             {/* Sort Select */}
@@ -568,6 +568,65 @@ export const PropertiesPage: React.FC = () => {
                             {prop.description}
                           </p>
                         </div>
+
+                        {/* Dedicated Listing Broker Row in List View */}
+                        {(() => {
+                          const broker = getBrokerDisplayInfo(prop);
+                          const cleanWhatsApp = broker.whatsappNumber ? broker.whatsappNumber.replace(/[^0-9]/g, '') : null;
+                          return (
+                            <div className="my-3 py-2 px-3 bg-[#FAF7F0] border border-[#E9E1D4] rounded-xs flex items-center justify-between gap-3">
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <div className="relative shrink-0">
+                                  <img
+                                    src={broker.photoUrl}
+                                    alt={broker.name}
+                                    className="w-8 h-8 rounded-full object-cover border border-[#B08D57]/70 shadow-xs"
+                                    loading="lazy"
+                                  />
+                                  <span
+                                    className="absolute -bottom-0.5 -right-0.5 bg-[#5D7A65] text-white p-0.5 rounded-full shadow-xs"
+                                    title="RERA Certified Broker"
+                                  >
+                                    <ShieldCheck className="w-2 h-2" />
+                                  </span>
+                                </div>
+                                <div className="min-w-0">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-[9px] uppercase tracking-wider text-[#B08D57] font-mono font-bold">
+                                      Listed by
+                                    </span>
+                                    <span className="text-xs font-semibold text-[#102A43] truncate font-ui">
+                                      {broker.name}
+                                    </span>
+                                    <span className="text-[9px] text-[#5D7A65] font-mono font-medium hidden sm:inline">
+                                      • RERA {broker.brn || broker.reraNumber}
+                                    </span>
+                                  </div>
+                                  <p className="text-[10px] text-[#6B7280] truncate font-ui">
+                                    {broker.title}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {cleanWhatsApp && (
+                                <a
+                                  href={`https://wa.me/${cleanWhatsApp}?text=${encodeURIComponent(
+                                    `Hello ${broker.name}, I am interested in viewing ${prop.title} in ${prop.community} (Ref: ${prop.slug}).`
+                                  )}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="shrink-0 flex items-center gap-1 bg-[#25D366]/10 hover:bg-[#25D366] text-[#128C7E] hover:text-white border border-[#25D366]/30 px-2 py-1 rounded-xs transition-colors duration-200 text-[10px] font-semibold"
+                                  title={`WhatsApp ${broker.name}`}
+                                >
+                                  <MessageCircle className="w-3 h-3" />
+                                  <span className="hidden sm:inline">WhatsApp</span>
+                                </a>
+                              )}
+                            </div>
+                          );
+                        })()}
+
                         <div className="pt-3 border-t border-[#E9E1D4] flex items-center justify-between text-xs text-[#6B7280]">
                           <div className="flex gap-4">
                             <span>{prop.bedrooms} Beds</span>

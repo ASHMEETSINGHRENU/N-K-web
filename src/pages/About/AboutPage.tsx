@@ -90,12 +90,18 @@ export const AboutPage: React.FC = () => {
       {/* ======================================================== */}
       {/* 1. ABOUT PAGE SECTION (Brief Item #1)                    */}
       {/* ======================================================== */}
-      <section className="bg-[#102A43] text-[#F7F3EA] py-20 px-6 lg:px-12 border-b border-[#1E3A5F]">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <span className="text-[10px] uppercase tracking-[0.28em] text-[#D8C3A5] font-semibold block">
+      <section className="relative min-h-[88vh] flex items-end overflow-hidden bg-[#0B2135] text-[#F7F3EA]">
+        <img
+          src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=2400&q=85"
+          alt="Architectural residence overlooking landscaped grounds"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135]/85 via-[#0B2135]/40 to-[#0B2135]/20" />
+        <div className="relative z-10 max-w-5xl px-6 lg:px-16 pb-16 pt-36 space-y-6">
+          <span className="crest-kicker text-[#D8C3A5] block">
             Crestshore Philosophy & Mandate
           </span>
-          <h1 className="font-display text-4xl sm:text-6xl font-light text-[#F7F3EA] leading-[1.08]">
+          <h1 className="font-display crest-title text-[#F7F3EA]">
             A more considered way to own property.
           </h1>
           <p className="text-base sm:text-lg text-[#E9E1D4] leading-relaxed font-light">

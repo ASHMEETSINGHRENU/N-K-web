@@ -96,19 +96,22 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="pt-28 pb-24 bg-[#F7F3EA] min-h-screen font-ui text-[#3E4852]">
-      <div className="max-w-6xl mx-auto px-6 lg:px-12 space-y-12">
-        {/* ======================================================== */}
-        {/* PAGE HEADER (Brief Item #4)                              */}
-        {/* ======================================================== */}
-        <div className="border-b border-[#E9E1D4] pb-8 space-y-4">
-          <span className="text-[10px] uppercase tracking-[0.28em] text-[#B08D57] font-semibold block">
-            Private Client Desk & Global Inquiries
+    <div className="pb-24 bg-[#F7F3EA] min-h-screen font-ui text-[#3E4852]">
+      <section className="relative min-h-[78vh] flex items-end overflow-hidden bg-[#0B2135] text-[#F7F3EA]">
+        <img
+          src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=2400&q=85"
+          alt="Evening view from a private residence"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B2135]/80 via-[#0B2135]/45 to-[#0B2135]/15" />
+        <div className="relative z-10 max-w-4xl px-6 lg:px-16 pb-16 pt-36 space-y-5">
+          <span className="crest-kicker text-[#D8C3A5] block">
+            Private Client Desk
           </span>
-          <h1 className="font-display text-4xl sm:text-5xl text-[#102A43] font-normal leading-tight">
+          <h1 className="font-display crest-title">
             Begin a private conversation.
           </h1>
-          <p className="text-sm sm:text-base text-[#6B7280] max-w-3xl leading-relaxed">
+          <p className="text-base font-light text-[#E9E1D4] max-w-2xl leading-relaxed">
             Whether you are acquiring, selling, renting, financing or caring for property in Dubai, we welcome a discreet first conversation. Tell us what you are considering and we will direct your enquiry to the right person.
           </p>
 
@@ -145,10 +148,9 @@ export const ContactPage: React.FC = () => {
             </a>
           </div>
         </div>
+      </section>
 
-        {/* ======================================================== */}
-        {/* MAIN TWO-COLUMN CONTENT                                  */}
-        {/* ======================================================== */}
+      <div className="max-w-6xl mx-auto px-6 lg:px-12 pt-16 space-y-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Contact Details Block & Reassurance */}
           <div className="lg:col-span-5 space-y-8">

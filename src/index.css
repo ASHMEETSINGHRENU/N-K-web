@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Outfit:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-ui: 'DM Sans', Arial, sans-serif;
+  --font-display: 'Bodoni Moda', 'Times New Roman', serif;
+  --font-ui: 'Outfit', Arial, sans-serif;
   --color-deep-navy: #102A43;
   --color-midnight-navy: #0B2135;
   --color-harbour-blue: #1E3A5F;
@@ -15,9 +15,20 @@
   --color-soft-stone: #E9E1D4;
   --color-champagne-brass: #B08D57;
   --color-soft-gold: #D8C3A5;
+  --color-deep-brass: #9B7A49;
   --color-slate-text: #3E4852;
   --color-muted-grey: #6B7280;
   --color-muted-sage: #5D7A65;
+
+  --page-background: var(--color-warm-ivory);
+  --surface: var(--color-warm-white);
+  --text-primary: var(--color-deep-navy);
+  --text-body: var(--color-slate-text);
+  --text-secondary: var(--color-muted-grey);
+  --accent: var(--color-champagne-brass);
+  --content-max-width: 1440px;
+  --page-gutter: clamp(20px, 4vw, 72px);
+  --section-space: clamp(72px, 9vw, 128px);
 }
 
 @layer base {
@@ -27,14 +38,58 @@
     background-color: #F7F3EA;
   }
 
-  h1, h2, h3, .display, .property-title, .founder-quote, .font-serif {
+  h1, h2, h3, .display, .property-title, .founder-quote, .font-serif, .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
-    line-height: 1.12;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 0.96;
+  }
+
+  .crest-kicker {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+  }
+
+  .crest-hero {
+    font-size: clamp(3.5rem, 8.6vw, 8.75rem);
+  }
+
+  .crest-title {
+    font-size: clamp(2.75rem, 5.6vw, 5.75rem);
   }
 
   body, p, a, button, input, select, textarea, .nav, .dashboard, .metadata {
     font-family: var(--font-ui);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-champagne-brass);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .luxury-image-zoom,
+  .group:hover .luxury-image-zoom {
+    transform: none !important;
+  }
+
+  .community-stick {
+    position: relative !important;
+    top: auto !important;
+    height: 82vh !important;
   }
 }
 
@@ -52,6 +107,26 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #9B7A49;
+}
+
+@keyframes developer-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.developer-marquee-track {
+  animation: developer-marquee 70s linear infinite;
+}
+
+.developer-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .developer-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
 }
 
 /* Subtle image scale transition */

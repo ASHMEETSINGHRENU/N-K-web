@@ -53,10 +53,10 @@ export default {
         'soft-black': '#0B2135'
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans: ['"DM Sans"', 'Arial', 'sans-serif'],
-        ui: ['"DM Sans"', 'Arial', 'sans-serif']
+        serif: ['"Bodoni Moda"', 'Times New Roman', 'serif'],
+        display: ['"Bodoni Moda"', 'Times New Roman', 'serif'],
+        sans: ['Outfit', 'Arial', 'sans-serif'],
+        ui: ['Outfit', 'Arial', 'sans-serif']
       }
     },
   },

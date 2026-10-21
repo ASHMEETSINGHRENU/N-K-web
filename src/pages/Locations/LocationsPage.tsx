@@ -5,15 +5,21 @@ import { ArrowUpRight } from 'lucide-react';
 
 export const LocationsPage: React.FC = () => {
   return (
-    <div className="pt-28 pb-24 bg-[#F7F3EA] min-h-screen font-ui">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <div className="pb-24 bg-[#F7F3EA] min-h-screen font-ui">
+      <section className="relative min-h-[78vh] flex items-end overflow-hidden bg-[#0B2135]">
+        <img
+          src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2400&q=85"
+          alt="Dubai skyline"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135]/80 via-[#0B2135]/30 to-[#0B2135]/20" />
+        <div className="relative z-10 px-6 lg:px-16 pb-14 pt-36 text-[#F7F3EA]">
+          <span className="crest-kicker text-[#D8C3A5] block mb-4">Emirate Geography</span>
+          <h1 className="font-display crest-title max-w-4xl">Prime Dubai locations</h1>
+        </div>
+      </section>
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16">
         <div className="mb-16 pb-6 border-b border-[#E9E1D4]">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#B08D57] font-semibold block mb-2">
-            Emirate Geography
-          </span>
-          <h1 className="font-display text-4xl lg:text-5xl text-[#102A43] font-normal">
-            Prime Dubai Locations & Enclaves
-          </h1>
           <p className="text-xs text-[#6B7280] mt-2 max-w-xl">
             From the world-renowned archipelago of Palm Jumeirah to the lush parklands of Dubai Hills Estate, explore Dubai’s most prestigious residential quarters.
           </p>

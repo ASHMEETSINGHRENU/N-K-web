@@ -110,12 +110,18 @@ export const PropertyCarePage: React.FC = () => {
   return (
     <div className="bg-[#F7F3EA] text-[#3E4852] font-ui pt-24">
       {/* 1. Header Banner */}
-      <section className="bg-[#102A43] text-[#F7F3EA] py-20 px-6 lg:px-12 border-b border-[#1E3A5F]">
-        <div className="max-w-5xl mx-auto text-center space-y-4">
-          <span className="text-[10px] uppercase tracking-[0.28em] text-[#D8C3A5] font-mono font-semibold">
+      <section className="relative min-h-[82vh] flex items-end overflow-hidden bg-[#0B2135] text-[#F7F3EA]">
+        <img
+          src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2400&q=85"
+          alt="Calm interior of a cared-for residence"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135]/85 via-[#0B2135]/40 to-[#0B2135]/25" />
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-4 px-6 pb-16 pt-36">
+          <span className="crest-kicker text-[#D8C3A5]">
             Long-Term Asset Management
           </span>
-          <h1 className="font-display text-4xl sm:text-6xl font-light text-[#F7F3EA] tracking-tight">
+          <h1 className="font-display crest-title text-[#F7F3EA]">
             Property Care
           </h1>
           <p className="font-display text-xl sm:text-2xl text-[#E9E1D4] font-normal italic max-w-3xl mx-auto leading-relaxed pt-2">

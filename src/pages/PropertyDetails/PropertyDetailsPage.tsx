@@ -6,6 +6,7 @@ import { useFavorites } from '../../context/FavoritesContext';
 import { LeadEnquiryModal } from '../../components/forms/LeadEnquiryModal';
 import { MortgageCalculatorWidget } from '../../components/forms/MortgageCalculatorWidget';
 import { PropertyCard } from '../../components/property/PropertyCard';
+import { getBrokerDisplayInfo } from '../../components/property/brokerHelper';
 import {
   Bed,
   Bath,
@@ -106,8 +107,8 @@ export const PropertyDetailsPage: React.FC = () => {
       </div>
 
       {/* 2. FULL-SCREEN EDITORIAL GALLERY */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 aspect-[16/9] lg:aspect-[21/9] overflow-hidden">
+      <div className="w-full mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 min-h-[72vh] lg:min-h-[84vh] overflow-hidden">
           {/* Main Large Image */}
           <div
             className="lg:col-span-3 h-full relative cursor-pointer group bg-[#102A43]"
@@ -407,46 +408,49 @@ export const PropertyDetailsPage: React.FC = () => {
             </div>
 
             {/* Dedicated Property Specialist Profile Card */}
-            {broker && (
-              <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-6 shadow-sm">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#B08D57] font-semibold block mb-4 font-mono">
-                  Dedicated Property Specialist
-                </span>
+            {property && (() => {
+              const brokerInfo = getBrokerDisplayInfo(property);
+              return (
+                <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-6 shadow-sm">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#B08D57] font-semibold block mb-4 font-mono">
+                    Dedicated Property Specialist
+                  </span>
 
-                <div className="flex items-center gap-4 mb-4">
-                  <img
-                    src={broker.photoUrl || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80'}
-                    alt={broker.title}
-                    className="w-16 h-16 rounded-full object-cover border border-[#B08D57]"
-                  />
-                  <div>
-                    <h4 className="font-display text-lg font-semibold text-[#102A43]">{broker.title}</h4>
-                    <p className="text-xs text-[#6B7280]">{broker.agencyName || 'Crestshore Luxury Real Estate'}</p>
-                    <div className="flex items-center gap-1 text-[11px] text-[#5D7A65] font-mono mt-1 font-medium">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#5D7A65]" />
-                      <span>RERA Certified • {broker.experienceYears}y Experience</span>
+                  <div className="flex items-center gap-4 mb-4">
+                    <img
+                      src={brokerInfo.photoUrl}
+                      alt={brokerInfo.name}
+                      className="w-16 h-16 rounded-full object-cover border border-[#B08D57]"
+                    />
+                    <div>
+                      <h4 className="font-display text-lg font-semibold text-[#102A43]">{brokerInfo.name}</h4>
+                      <p className="text-xs text-[#6B7280]">{brokerInfo.title || brokerInfo.agency}</p>
+                      <div className="flex items-center gap-1 text-[11px] text-[#5D7A65] font-mono mt-1 font-medium">
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#5D7A65]" />
+                        <span>RERA Certified • {brokerInfo.experienceYears}y Experience</span>
+                      </div>
                     </div>
                   </div>
+
+                  {broker?.languages?.length > 0 && (
+                    <div className="text-[11px] text-[#6B7280] mb-4">
+                      <span>Languages: </span>
+                      <span className="text-[#102A43] font-semibold">{broker.languages.join(', ')}</span>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      setEnquiryType('SPECIALIST_CALL');
+                      setIsEnquiryModalOpen(true);
+                    }}
+                    className="w-full bg-[#102A43] hover:bg-[#1E3A5F] text-[#F7F3EA] py-2.5 text-xs uppercase tracking-widest font-semibold transition-all"
+                  >
+                    Connect with Specialist
+                  </button>
                 </div>
-
-                {broker.languages?.length > 0 && (
-                  <div className="text-[11px] text-[#6B7280] mb-4">
-                    <span>Languages: </span>
-                    <span className="text-[#102A43] font-semibold">{broker.languages.join(', ')}</span>
-                  </div>
-                )}
-
-                <button
-                  onClick={() => {
-                    setEnquiryType('SPECIALIST_CALL');
-                    setIsEnquiryModalOpen(true);
-                  }}
-                  className="w-full bg-[#102A43] hover:bg-[#1E3A5F] text-[#F7F3EA] py-2.5 text-xs uppercase tracking-widest font-semibold transition-all"
-                >
-                  Speak With Specialist
-                </button>
-              </div>
-            )}
+              );
+            })()}
           </div>
         </div>
       </div>

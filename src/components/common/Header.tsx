@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   FileText,
   KeyRound,
+  Key,
   Wrench,
   Eye,
   TrendingUp,
@@ -27,6 +28,7 @@ import { useFavorites } from '../../context/FavoritesContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { SpeakAdvisorModal } from './SpeakAdvisorModal';
+import { MagnificationDock } from './MagnificationDock';
 
 interface NavLinkItem {
   label: string;
@@ -288,6 +290,16 @@ const NAVIGATION_DATA: NavCategory[] = [
   }
 ];
 
+const NAV_ICONS: Record<string, React.ReactNode> = {
+  buy: <KeyRound size={16} strokeWidth={1.5} />,
+  rent: <Key size={16} strokeWidth={1.5} />,
+  'new-projects': <Compass size={16} strokeWidth={1.5} />,
+  'property-care': <ShieldCheck size={16} strokeWidth={1.5} />,
+  'partner-network': <Handshake size={16} strokeWidth={1.5} />,
+  'private-clients': <Lock size={16} strokeWidth={1.5} />,
+  insights: <TrendingUp size={16} strokeWidth={1.5} />
+};
+
 export const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -298,6 +310,8 @@ export const Header: React.FC = () => {
   const [isAdvisorModalOpen, setIsAdvisorModalOpen] = useState(false);
 
   const headerRef = useRef<HTMLDivElement>(null);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
+  const mobilePanelRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const notificationMenuRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -355,6 +369,17 @@ export const Header: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    if (isMobileMenuOpen) {
+      const firstControl = mobilePanelRef.current?.querySelector<HTMLElement>('button, a');
+      firstControl?.focus();
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   // Desktop hover interactions with grace period to prevent flickering
   const handleMouseEnter = (id: string) => {
     if (timeoutRef.current) {
@@ -373,11 +398,6 @@ export const Header: React.FC = () => {
     }, 180);
   };
 
-  const handleTriggerClick = (e: React.MouseEvent, id: string) => {
-    e.preventDefault();
-    setActiveMenu((prev) => (prev === id ? null : id));
-  };
-
   const toggleMobileCategory = (id: string) => {
     setMobileExpanded((prev) => ({
       ...prev,
@@ -386,16 +406,18 @@ export const Header: React.FC = () => {
   };
 
   const activeCategory = NAVIGATION_DATA.find((item) => item.id === activeMenu);
+  const isHome = location.pathname === '/';
+  const headerIsSolid = !isHome || isScrolled || activeMenu !== null || isMobileMenuOpen;
 
   return (
     <>
       <header
         ref={headerRef}
         onMouseLeave={handleMouseLeave}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled || activeMenu !== null || isMobileMenuOpen
-            ? 'bg-[#102A43] text-[#F7F3EA] border-b border-[#1E3A5F] shadow-lg'
-            : 'bg-[#102A43]/95 backdrop-blur-md text-[#F7F3EA] border-b border-[#1E3A5F]/70 shadow-md'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 text-[#F7F3EA] ${
+          headerIsSolid
+            ? 'bg-[#0B2135] border-b border-[#1E3A5F] shadow-[0_12px_40px_-24px_rgba(11,33,53,0.8)]'
+            : 'bg-transparent border-b border-transparent'
         }`}
       >
         {/* Main Navigation Bar */}
@@ -420,42 +442,32 @@ export const Header: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Primary Navigation with Rich Mega Menus */}
-          <nav
-            className="hidden xl:flex items-center space-x-1 lg:space-x-1.5"
-            aria-label="Primary Navigation"
-          >
-            {NAVIGATION_DATA.map((item) => {
-              const isOpen = activeMenu === item.id;
-              const isPathActive = location.pathname.startsWith(item.path);
-
-              return (
-                <div
-                  key={item.id}
-                  onMouseEnter={() => handleMouseEnter(item.id)}
-                  className="relative py-6"
-                >
-                  <button
-                    type="button"
-                    onClick={(e) => handleTriggerClick(e, item.id)}
-                    aria-expanded={isOpen}
-                    aria-haspopup="true"
-                    className={`flex items-center gap-1 px-2.5 py-1 text-[11px] lg:text-xs uppercase tracking-[0.14em] font-medium transition-colors rounded-sm ${
-                      isOpen || isPathActive
-                        ? 'text-[#D8C3A5] font-semibold'
-                        : 'text-[#F7F3EA] hover:text-[#D8C3A5]'
-                    }`}
-                  >
-                    <span>{item.label}</span>
-                    <ChevronDown
-                      className={`w-3 h-3 transition-transform duration-200 ${
-                        isOpen ? 'rotate-180 text-[#B08D57]' : 'opacity-70'
-                      }`}
-                    />
-                  </button>
-                </div>
-              );
-            })}
+          {/* Desktop navigation — magnification dock, same menus as before */}
+          <nav className="hidden xl:flex items-center" aria-label="Primary Navigation">
+            <MagnificationDock
+              ariaLabel="Primary navigation"
+              panelHeight={48}
+              baseItemSize={34}
+              magnification={48}
+              distance={108}
+              dockHeight={48}
+              items={NAVIGATION_DATA.map((item) => {
+                const isOpen = activeMenu === item.id;
+                const isPathActive = location.pathname.startsWith(item.path);
+                return {
+                  icon: NAV_ICONS[item.id],
+                  label: item.label,
+                  hasPopup: true,
+                  pressed: isOpen,
+                  onMouseEnter: () => handleMouseEnter(item.id),
+                  onClick: () => setActiveMenu((prev) => (prev === item.id ? null : item.id)),
+                  className:
+                    isOpen || isPathActive
+                      ? 'bg-[#B08D57] text-[#102A43] border-[#B08D57]'
+                      : 'hover:text-[#D8C3A5]'
+                };
+              })}
+            />
           </nav>
 
           {/* Right-Side Action Controls */}
@@ -602,6 +614,7 @@ export const Header: React.FC = () => {
               setIsMobileMenuOpen(!isMobileMenuOpen);
               setActiveMenu(null);
             }}
+            ref={menuToggleRef}
             className="xl:hidden p-2 text-[#F7F3EA] hover:text-[#D8C3A5] transition-colors"
             aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={isMobileMenuOpen}
@@ -708,7 +721,8 @@ export const Header: React.FC = () => {
         {/* Mobile & Tablet Accordion Drawer (All Centered for Tablet View) */}
         {isMobileMenuOpen && (
           <div
-            className="xl:hidden bg-[#0B2135] text-[#F7F3EA] border-b border-[#1E3A5F] max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl space-y-6 text-center"
+            ref={mobilePanelRef}
+            className="xl:hidden bg-[#0B2135] text-[#F7F3EA] border-b border-[#1E3A5F] max-h-[calc(100vh-5rem)] overflow-y-auto px-6 py-6 shadow-2xl space-y-6 text-center"
             role="region"
             aria-label="Mobile Navigation"
           >

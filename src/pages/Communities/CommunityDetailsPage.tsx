@@ -37,20 +37,20 @@ export const CommunityDetailsPage: React.FC = () => {
   return (
     <div className="pt-20 pb-24 bg-[#F7F3EA] min-h-screen font-ui">
       {/* Community Hero */}
-      <div className="relative aspect-[21/9] min-h-[360px] bg-[#102A43] overflow-hidden flex items-end">
+      <div className="relative min-h-[88vh] bg-[#102A43] overflow-hidden flex items-end">
         <img
           src={communityMeta.highlightImage}
           alt={communityMeta.name}
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135] via-[#0B2135]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135]/85 via-[#0B2135]/30 to-[#0B2135]/20" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 pb-12 w-full text-[#F7F3EA]">
-          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#D8C3A5] mb-2 font-mono">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 pb-16 pt-36 w-full text-[#F7F3EA]">
+          <div className="flex items-center gap-2 crest-kicker text-[#D8C3A5] mb-5">
             <MapPin className="w-3.5 h-3.5" />
             <span>Dubai Enclave Guide</span>
           </div>
-          <h1 className="font-display text-4xl sm:text-6xl font-normal tracking-tight mb-3">
+          <h1 className="font-display crest-hero mb-5 max-w-5xl">
             {communityMeta.name}
           </h1>
           <p className="text-xs sm:text-sm text-[#E9E1D4] max-w-2xl font-light">

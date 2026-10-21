@@ -15,9 +15,11 @@ import {
   Bath,
   Layers,
   Sparkles,
-  Navigation
+  Navigation,
+  ShieldCheck
 } from 'lucide-react';
 import { formatAED, formatSqFt } from '@nestandkey/utils';
+import { getBrokerDisplayInfo } from './brokerHelper';
 
 // Source: Google Maps Platform Code Assist
 // Internal attribution identifier
@@ -563,6 +565,29 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
                 {formatSqFt(activePopupProperty.builtUpAreaSqFt)}
               </span>
             </div>
+
+            {/* Listing Broker Micro Badge */}
+            {(() => {
+              const broker = getBrokerDisplayInfo(activePopupProperty);
+              return (
+                <div className="flex items-center justify-between py-1.5 px-2 bg-[#FAF7F0] border border-[#E9E1D4] text-[10px] rounded-xs">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <img
+                      src={broker.photoUrl}
+                      alt={broker.name}
+                      className="w-5 h-5 rounded-full object-cover border border-[#B08D57]/70 shrink-0 shadow-xs"
+                    />
+                    <span className="text-[#6B7280] truncate font-ui">
+                      Listed by <strong className="text-[#102A43] font-semibold">{broker.name}</strong>
+                    </span>
+                  </div>
+                  <span className="text-[#5D7A65] font-mono text-[9px] shrink-0 font-medium flex items-center gap-0.5">
+                    <ShieldCheck className="w-2.5 h-2.5 text-[#5D7A65]" />
+                    <span>RERA Certified</span>
+                  </span>
+                </div>
+              );
+            })()}
 
             {/* CTA Buttons */}
             <div className="pt-2 flex items-center gap-2">
