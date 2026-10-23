@@ -367,46 +367,7 @@ export const InsightsPage: React.FC = () => {
         </section>
 
         {/* Methodology & Official Data Transparency Footnote */}
-        <section className="bg-[#102A43] text-[#F7F3EA] p-8 rounded-sm border border-[#1E3A5F] shadow-sm">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-[#1E3A5F]">
-            <div className="flex items-center gap-3">
-              <FileSpreadsheet className="w-6 h-6 text-[#B08D57]" />
-              <div>
-                <h3 className="font-display text-lg text-white font-normal">
-                  Official Open Data Methodology & Statutory Compliance
-                </h3>
-                <p className="text-xs text-[#E9E1D4]/80">
-                  Data Grounding: Dubai Land Department (DLD) & RERA Open Data Registries (Cycle: September 2026)
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-[11px] font-mono text-[#D8C3A5]">
-              <CheckCircle2 className="w-4 h-4 text-[#5D7A65]" />
-              <span>Certified Open Records</span>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-[#E9E1D4]/80 font-normal leading-relaxed">
-            <div>
-              <span className="text-[#FFFDF8] font-mono font-medium block mb-1">
-                1. Mega-Project Pipeline Auditing
-              </span>
-              Synthesized from 332 active municipal schemes. Capital valuations represent verified engineering escrow allocations deposited under UAE Law No. 8 of 2007.
-            </div>
-            <div>
-              <span className="text-[#FFFDF8] font-mono font-medium block mb-1">
-                2. Land Registry & Spatial Zoning
-              </span>
-              Calculated across 262,455 recorded land parcels, categorizing freehold boundaries, industrial masterplans, and commercial development corridors.
-            </div>
-            <div>
-              <span className="text-[#FFFDF8] font-mono font-medium block mb-1">
-                3. Brokerage & Regulatory Licensing
-              </span>
-              Cross-referenced with 43,388 certified real estate broker licenses (BRN) and 194 registered master developers authorized by RERA.
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   );

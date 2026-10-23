@@ -134,7 +134,7 @@ export const PrivateClientsPage: React.FC = () => {
       id: 'doc-2',
       title: 'Form F Unified Sale & Purchase Agreement',
       category: 'booking/contracts',
-      categoryLabel: 'Booking / Contracts',
+      categoryLabel: 'Booking / reservation form ',
       property: 'Villa Aurum – Palm Jumeirah',
       date: '2026-08-20',
       size: '3.8 MB',
@@ -143,7 +143,7 @@ export const PrivateClientsPage: React.FC = () => {
     {
       id: 'doc-3',
       title: 'DLD Trustee Conveyance Escrow Receipt',
-      category: 'mortgage/payments',
+      category: 'Payment receipts ',
       categoryLabel: 'Mortgage / Payments',
       property: 'Villa Aurum – Palm Jumeirah',
       date: '2026-09-12',
@@ -153,7 +153,7 @@ export const PrivateClientsPage: React.FC = () => {
     {
       id: 'doc-4',
       title: '400-Point Architectural Snagging Audit Report',
-      category: 'handover',
+      category: 'Handover & snagging report ',
       categoryLabel: 'Handover',
       property: 'Villa Aurum – Palm Jumeirah',
       date: '2026-10-04',
@@ -163,7 +163,7 @@ export const PrivateClientsPage: React.FC = () => {
     {
       id: 'doc-5',
       title: 'Official Ejari Tenancy Contract (2026-2027)',
-      category: 'tenancy',
+      category: 'Tenancy & ejari',
       categoryLabel: 'Tenancy',
       property: 'The One Sky Duplex – Downtown',
       date: '2026-06-01',
@@ -173,7 +173,7 @@ export const PrivateClientsPage: React.FC = () => {
     {
       id: 'doc-6',
       title: 'UAE 10-Year Golden Visa Real Estate Nomination Certificate',
-      category: 'visa',
+      category: 'Golden visa & investor visa',
       categoryLabel: 'Visa',
       property: 'Villa Aurum – Palm Jumeirah',
       date: '2026-09-28',
@@ -183,7 +183,7 @@ export const PrivateClientsPage: React.FC = () => {
     {
       id: 'doc-7',
       title: 'Annual HVAC & Pool Preventative Maintenance Agreement',
-      category: 'maintenance',
+      category: 'Floor plans & brochures',
       categoryLabel: 'Maintenance',
       property: 'Villa Aurum – Palm Jumeirah',
       date: '2026-09-30',

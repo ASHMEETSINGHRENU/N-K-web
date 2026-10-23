@@ -72,7 +72,7 @@ export const PropertiesPage: React.FC = () => {
     rentalFrequency: searchParams.get('rentalFrequency') || searchParams.get('rentalPeriod') || '',
     cheques: searchParams.get('cheques') || '',
     furnishing: searchParams.get('furnishing') || '',
-    completionStatus: searchParams.get('completionStatus') || '',
+    completionStatus: location.pathname.includes('/ready') ? 'READY' : (searchParams.get('completionStatus') || ''),
     developer: searchParams.get('developer') || '',
     handoverYear: searchParams.get('handoverYear') || '',
     handoverQuarter: searchParams.get('handoverQuarter') || '',
@@ -83,6 +83,19 @@ export const PropertiesPage: React.FC = () => {
     sort: searchParams.get('sort') || 'price_desc',
     search: searchParams.get('search') || searchParams.get('keywords') || ''
   });
+
+  useEffect(() => {
+    const isReady = location.pathname.includes('/ready');
+    const isOffPlan = location.pathname.includes('/off-plan') || location.pathname.includes('/new-launches');
+    const isRent = location.pathname.includes('/rent');
+    const isBuy = location.pathname.includes('/buy');
+
+    setFilters((prev: any) => ({
+      ...prev,
+      purpose: isOffPlan ? 'OFF_PLAN' : isRent ? 'RENT' : isBuy ? 'BUY' : (searchParams.get('purpose') || prev.purpose || 'BUY'),
+      completionStatus: isReady ? 'READY' : (searchParams.get('completionStatus') || (prev.completionStatus === 'READY' ? '' : prev.completionStatus) || '')
+    }));
+  }, [location.pathname]);
 
   const loadProperties = async () => {
     setIsLoading(true);

@@ -29,7 +29,7 @@ export const PropertyCarePage: React.FC = () => {
         'Our certified engineers inspect every millimeter of your developer handover. From MEP systems and thermal isolation to marble finishes, joinery alignment, and paint quality, we log developer rectifications before you sign acceptance.',
       icon: FileCheck,
       details: [
-        'Full 400-point developer architectural audit',
+        'Full 300-point developer architectural audit',
         'Formal snagging report submitted directly to developer',
         'De-snagging reinspection prior to final title release',
         'Utility connection & DEWA activation coordination'

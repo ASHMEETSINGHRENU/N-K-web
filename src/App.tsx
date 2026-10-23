@@ -55,6 +55,7 @@ export const App: React.FC = () => {
               <Route path="properties/rent" element={<PropertiesPage />} />
               <Route path="properties/sell" element={<SellPropertyPage />} />
               <Route path="properties/off-plan" element={<PropertiesPage />} />
+              <Route path="properties/ready" element={<PropertiesPage />} />
               <Route path="properties/new-launches" element={<PropertiesPage />} />
               <Route path="property/:slug" element={<PropertyDetailsPage />} />
               <Route path="locations" element={<LocationsPage />} />

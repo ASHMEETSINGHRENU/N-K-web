@@ -55,18 +55,13 @@ const NAVIGATION_DATA: NavCategory[] = [
     id: 'buy',
     label: 'Buy',
     path: '/properties/buy',
-    columnsCount: 3,
+    columnsCount: 2,
     sections: [
       {
         title: 'Residential Properties for Sale',
         path: '/properties/buy',
         links: [
-          { label: 'All Properties for Sale', path: '/properties/buy' },
-          { label: 'Signature Villas', path: '/properties/buy?type=Villa' },
-          { label: 'Sky Penthouses', path: '/properties/buy?type=Penthouse' },
-          { label: 'Waterfront Mansions', path: '/properties/buy?type=Mansion' },
-          { label: 'Luxury Townhouses', path: '/properties/buy?type=Townhouse' },
-          { label: 'Prime Plots & Land', path: '/properties/buy?type=Plot' }
+          { label: 'All Properties for Sale', path: '/properties/buy' }
         ]
       },
       {
@@ -74,18 +69,8 @@ const NAVIGATION_DATA: NavCategory[] = [
         links: [
           { label: 'Dubai Mortgage Calculator', path: '/mortgage-calculator' },
           { label: 'Sell / List With Us', path: '/properties/sell' },
-          { label: 'Sold House Prices', path: '/properties/buy?sort=price_desc' },
-          { label: 'Prime Enclave Price Map', path: '/locations' }
-        ]
-      },
-      {
-        title: 'Buying Insights',
-        path: '/insights',
-        links: [
-          { label: "Buyer's Advisory Guide", path: '/insights' },
-          { label: 'Palm Jumeirah Insights', path: '/locations/palm-jumeirah' },
-          { label: 'Prime Community Guides', path: '/communities' },
-          { label: 'DLD Statutory Regulations', path: '/about' }
+          { label: 'Prime Enclave Map', path: '/locations' },
+          { label: 'Prime Community Guides', path: '/communities' }
         ]
       }
     ]
@@ -100,29 +85,22 @@ const NAVIGATION_DATA: NavCategory[] = [
         title: 'Residential Properties for Rent',
         path: '/properties/rent',
         links: [
-          { label: 'All Prime Rentals', path: '/properties/rent' },
-          { label: 'Luxury Apartments', path: '/properties/rent?type=Apartment' },
-          { label: 'Beachfront Villas', path: '/properties/rent?type=Villa' },
-          { label: 'Panoramic Penthouses', path: '/properties/rent?type=Penthouse' },
-          { label: 'Townhouses for Rent', path: '/properties/rent?type=Townhouse' }
+          { label: 'All Prime Rentals', path: '/properties/rent' }
+        ]
+      },
+      {
+        title: 'Commercial Properties for Rent',
+        path: '/properties?purpose=COMMERCIAL_RENT',
+        links: [
+          { label: 'All Prime Rentals', path: '/properties?purpose=COMMERCIAL_RENT' }
         ]
       },
       {
         title: 'Renter Tools',
         links: [
           { label: 'Rent vs Buy Calculator', path: '/mortgage-calculator' },
-          { label: 'Rental Yields & Indices', path: '/properties/rent?sort=price_asc' },
           { label: 'Ejari Lease Coordination', path: '/property-care' },
           { label: 'Prime Location Map', path: '/locations' }
-        ]
-      },
-      {
-        title: 'Renting Insights',
-        path: '/insights',
-        links: [
-          { label: "High-Net-Worth Renter's Guide", path: '/insights' },
-          { label: 'Dubai Tenancy Laws & Ejari', path: '/insights' },
-          { label: 'Prime Waterfront Enclaves', path: '/communities' }
         ]
       }
     ]
@@ -131,38 +109,14 @@ const NAVIGATION_DATA: NavCategory[] = [
     id: 'new-projects',
     label: 'New Projects',
     path: '/properties/off-plan',
-    columnsCount: 3,
+    columnsCount: 1,
     sections: [
       {
-        title: 'All New Launches',
+        title: 'Project Portfolios',
         path: '/properties/off-plan',
         links: [
-          { label: 'All Off-Plan Portfolios', path: '/properties/off-plan' },
-          { label: 'New Launches in Dubai', path: '/properties/new-launches' },
-          { label: 'Palm Jumeirah Launches', path: '/properties/off-plan?community=Palm+Jumeirah' },
-          { label: 'Downtown Dubai Launches', path: '/properties/off-plan?community=Downtown+Dubai' },
-          { label: 'Jumeira Bay Island', path: '/properties/off-plan?community=Jumeira+Bay+Island' }
-        ]
-      },
-      {
-        title: 'Master Developers in UAE',
-        path: '/developers',
-        links: [
-          { label: 'All Master Developers', path: '/developers' },
-          { label: 'Emaar Properties', path: '/developers/emaar-properties' },
-          { label: 'Omniyat Luxury', path: '/developers/omniyat' },
-          { label: 'Nakheel Waterfront', path: '/developers/nakheel' },
-          { label: 'Damac Properties', path: '/developers/damac-properties' },
-          { label: 'Sobha Realty', path: '/developers/sobha-realty' }
-        ]
-      },
-      {
-        title: 'Investment Advisory',
-        path: '/insights',
-        links: [
-          { label: "Global Investor's Guide", path: '/insights' },
-          { label: 'UAE 10-Year Golden Visa', path: '/insights' },
-          { label: 'High-Yield Investment Zones', path: '/locations' }
+          { label: 'All Off-Plan Portfolio', path: '/properties/off-plan' },
+          { label: 'All Ready Portfolio', path: '/properties/ready' }
         ]
       }
     ]
@@ -171,28 +125,13 @@ const NAVIGATION_DATA: NavCategory[] = [
     id: 'property-care',
     label: 'Property Care',
     path: '/property-care',
-    columnsCount: 2,
+    columnsCount: 1,
     sections: [
       {
-        title: 'The 6 Core Care Services',
-        path: '/property-care',
+        title: 'Private Client Access',
+        path: '/private-clients?tab=dashboard',
         links: [
-          { label: 'Handover & Snagging (400-Point Audit)', path: '/property-care' },
-          { label: 'Rental Coordination & Ejari', path: '/property-care' },
-          { label: 'Maintenance Coordination (24/7 HVAC)', path: '/property-care' },
-          { label: 'Property Inspections (Quarterly)', path: '/property-care' },
-          { label: 'Resale Preparation & Staging', path: '/property-care' },
-          { label: 'Document Management & Custody', path: '/property-care' }
-        ]
-      },
-      {
-        title: 'Enduring Care Governance',
-        path: '/property-care',
-        links: [
-          { label: 'Care Philosophy & Overview', path: '/property-care' },
-          { label: 'Schedule Property Inspection', path: '/property-care' },
-          { label: 'Emergency Technical Dispatch', path: '/property-care' },
-          { label: 'Operational Care Records', path: '/property-care' }
+          { label: 'Access to Private Client Dashboard', path: '/private-clients?tab=dashboard' }
         ]
       }
     ]
@@ -201,24 +140,13 @@ const NAVIGATION_DATA: NavCategory[] = [
     id: 'partner-network',
     label: 'Partner Network',
     path: '/partner-network',
-    columnsCount: 2,
+    columnsCount: 1,
     sections: [
       {
         title: 'Partner Portal',
         path: '/partner-network',
         links: [
-          { label: 'For Wealth Managers & Family Offices', path: '/partner-network' },
-          { label: 'Submit Referral Mandate', path: '/partner-network' },
-          { label: 'My Referrals & Commission Ledger', path: '/partner-network' }
-        ]
-      },
-      {
-        title: 'Agreements & Support',
-        path: '/partner-network',
-        links: [
-          { label: 'Partner Agreement & Terms', path: '/partner-network' },
-          { label: '24-Hour Commission Settlement', path: '/partner-network' },
-          { label: 'Direct WhatsApp Leadership', path: 'https://wa.me/971501123456', isExternal: true }
+          { label: 'Register as Partner', path: '/partner-network?apply=true' }
         ]
       }
     ]
@@ -233,7 +161,7 @@ const NAVIGATION_DATA: NavCategory[] = [
         title: 'Private Client Office',
         path: '/private-clients',
         links: [
-          { label: 'Client Sign In / Portal Access', path: '/private-clients?tab=portal-access' },
+          { label: 'Client Sign In / Private Portal access', path: '/private-clients?tab=portal-access' },
           { label: 'Client Portfolio Dashboard', path: '/private-clients?tab=dashboard' },
           { label: 'My Properties', path: '/private-clients?tab=properties' },
           { label: 'Encrypted Document Vault', path: '/private-clients?tab=documents' }
@@ -312,7 +240,7 @@ export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const mobilePanelRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const notificationMenuRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -638,6 +566,17 @@ export const Header: React.FC = () => {
             aria-label={`${activeCategory.label} Mega Menu`}
           >
             <div className="max-w-7xl mx-auto px-8 lg:px-12 py-10">
+              {activeCategory.id === 'partner-network' && (
+                <div className="max-w-md mx-auto text-center pb-5 mb-6 border-b border-[#1E3A5F]/70">
+                  <span className="text-[11px] uppercase tracking-[0.28em] text-[#D8C3A5] font-semibold block font-mono">
+                    Crestshore Partner Network
+                  </span>
+                  <p className="text-xs text-[#E9E1D4]/80 mt-1 font-light italic leading-relaxed">
+                    Private referrals. Clear progress. Trusted collaboration.
+                  </p>
+                </div>
+              )}
+
               <div
                 className={`grid gap-10 lg:gap-12 ${
                   activeCategory.columnsCount === 4

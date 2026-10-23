@@ -105,8 +105,7 @@ export const AboutPage: React.FC = () => {
             A more considered way to own property.
           </h1>
           <p className="text-base sm:text-lg text-[#E9E1D4] leading-relaxed font-light">
-            Crestshore is a global real estate and property advisory for private clients, families, investors and trusted professional partners. We help people make thoughtful property decisions in Dubai and across selected international markets—from acquisition and finance to handover, property care, rental, resale and the practical details that follow.
-          </p>
+            Crestshore is a global real estate and property advisory for private clients, families, investors and trusted professional partners. We help people make thoughtful property decisions in Dubai and across selected international markets—from acquisition and finance to handover, property care and the practical details that follow.          </p>
         </div>
       </section>
 

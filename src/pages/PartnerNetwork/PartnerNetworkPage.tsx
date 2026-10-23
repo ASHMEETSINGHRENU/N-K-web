@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
@@ -34,9 +34,17 @@ import { SpeakAdvisorModal } from '../../components/common/SpeakAdvisorModal';
 export const PartnerNetworkPage: React.FC = () => {
   const { user } = useAuth();
   const { fetchNotifications } = useNotifications();
+  const [searchParams] = useSearchParams();
 
   // Mode: 'public' (landing screen) or 'portal' (workspace)
   const [viewMode, setViewMode] = useState<'public' | 'portal'>('public');
+
+  // Auto-open application modal if directed from navbar with ?apply=true or ?register=true
+  useEffect(() => {
+    if (searchParams.get('apply') === 'true' || searchParams.get('register') === 'true') {
+      setIsApplyModalOpen(true);
+    }
+  }, [searchParams]);
 
   // Partner Account & ID (CP-0048 as specified in Brief Item #4)
   const [partnerId] = useState('CP-0048');
@@ -321,7 +329,7 @@ export const PartnerNetworkPage: React.FC = () => {
                 Refer your client
               </h1>
               <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-[#D8C3A5] tracking-tight max-w-3xl mx-auto leading-snug">
-                Be our global partner & get your commission paid in 24 hours
+                Be our global partner & Get your fees paid in 24 hours
               </h2>
 
               <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
@@ -715,18 +723,7 @@ export const PartnerNetworkPage: React.FC = () => {
                   )}
                 </div>
 
-                {/* Latest Update & Recent Referrals */}
-                <div className="bg-[#FFFDF8] border border-[#E9E1D4] p-6 shadow-sm space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#E9E1D4]">
-                    <span className="text-xs uppercase tracking-wider text-[#102A43] font-semibold">
-                      Latest Activity Update
-                    </span>
-                    <span className="text-[11px] text-[#6B7280]">Today, 11:20 AM GST</span>
-                  </div>
-                  <div className="p-4 bg-[#F7F3EA] border border-[#E9E1D4] text-xs leading-relaxed text-[#3E4852]">
-                    <strong>Referral CS-R-000123:</strong> Initial shortlist of 3 off-market beachfront villas shared with private desk. Buyer viewing scheduling in progress with assigned Senior Director.
-                  </div>
-                </div>
+
               </div>
             )}
 

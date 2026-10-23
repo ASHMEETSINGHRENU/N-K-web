@@ -124,6 +124,9 @@ export const HomePage: React.FC = () => {
           <p className="mt-8 max-w-lg text-base sm:text-lg font-light leading-relaxed text-[#E9E1D4]">
             Exceptional real estate, considered financing, and long-term property care for clients in Dubai and around the world.
           </p>
+          <p className="mt-6 text-[13px] sm:text-sm tracking-[0.2em] uppercase text-[#D8C3A5] font-medium font-ui">
+            AED 1bn+ Transacted &nbsp;|&nbsp; 8+ Years in Dubai
+          </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-3">
             <Link
               to="/properties"
