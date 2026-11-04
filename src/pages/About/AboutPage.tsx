@@ -39,49 +39,22 @@ export const AboutPage: React.FC = () => {
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80'
     },
     {
+      title: 'Co-Founder & Managing Partner',
+      role: 'Prime Acquisitions & Operations',
+      name: 'Omar Farooq',
+      bio: 'Oversees super-prime transactions, developer partnerships, and operational governance across Dubai luxury residential enclaves.',
+      languages: 'English, Arabic',
+      markets: 'Palm Jumeirah, Dubai Hills Estate, Emirates Hills',
+      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80'
+    },
+    {
       title: 'Property Advisor',
       role: 'Acquisitions & Advisory',
       name: 'Elena Rostova',
       bio: 'Supports property research, private viewings, negotiation and transaction coordination within the relevant market and licensing framework.',
-      languages: 'English, Russian',
+      languages: 'English, Russian, German',
       markets: 'Palm Jumeirah, Jumeira Bay Island, Downtown Dubai',
       image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80'
-    },
-    {
-      title: 'Mortgage Advisor / Lending Partner',
-      role: 'Financing Desk',
-      name: 'Marcus Vance',
-      bio: 'Supports financing enquiries, loan-to-value structuring and lender coordination across approved UAE banking partners.',
-      languages: 'English',
-      markets: 'UAE Central Bank Residential & Commercial Financing',
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80'
-    },
-    {
-      title: 'Property Care Coordinator',
-      role: 'Operations & Upkeep',
-      name: 'Soraya Haddad',
-      bio: 'Coordinates handover, snagging, maintenance, rental and resale support through Crestshore and vetted specialist providers.',
-      languages: 'English, Arabic',
-      markets: 'Dubai Luxury Residential Estates',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80'
-    },
-    {
-      title: 'Client Services / Private Office',
-      role: 'Vault & Concierge',
-      name: 'Julian Sterling',
-      bio: 'Supports document organisation, encrypted vault custody, client requests, updates and concierge coordination.',
-      languages: 'English, German',
-      markets: 'Private Client Office & Document Custody',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80'
-    },
-    {
-      title: 'Professional Network',
-      role: 'Strategic Specialists',
-      name: 'Institutional Panel',
-      bio: 'CAs, wealth managers, legal, tax, banking, visa, insurance and specialist providers engaged when appropriate under strict discretion.',
-      languages: 'Multilingual Global Coverage',
-      markets: 'Cross-Border Wealth & Tax Coordination',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80'
     }
   ];
 
@@ -199,19 +172,20 @@ export const AboutPage: React.FC = () => {
       {/* ======================================================== */}
       {/* 2. FOUNDER'S VOICE (Brief Item #2)                       */}
       {/* ======================================================== */}
-      <section className="py-20 bg-[#FFFDF8] border-y border-[#E9E1D4]">
-        <div className="max-w-4xl mx-auto px-6 lg:px-12 space-y-8">
-          <div className="border-b border-[#E9E1D4] pb-4">
-            <span className="text-[10px] uppercase tracking-[0.25em] text-[#B08D57] font-semibold block mb-1">
+      <section className="py-20 lg:py-24 bg-[#FFFDF8] border-y border-[#E9E1D4]">
+        <div className="max-w-6xl mx-auto px-6 lg:px-12 space-y-10">
+          <div className="border-b border-[#E9E1D4] pb-5">
+            <span className="text-[10px] uppercase tracking-[0.28em] text-[#B08D57] font-semibold block mb-2 font-mono">
               Founder’s Voice
             </span>
-            <h2 className="font-display text-3xl sm:text-4xl text-[#102A43]">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#102A43] max-w-4xl leading-tight">
               A personal commitment to how property should be handled.
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-            <div className="md:col-span-8 space-y-5 text-xs sm:text-sm text-[#3E4852] leading-relaxed">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Left: Founder's Narrative */}
+            <div className="lg:col-span-7 space-y-5 text-sm sm:text-base text-[#3E4852] leading-relaxed font-light">
               <p>
                 I created Crestshore with a simple belief: property advice should feel more personal, more considered and more dependable.
               </p>
@@ -230,34 +204,80 @@ export const AboutPage: React.FC = () => {
 
               {/* Founder Signature Block */}
               <div className="pt-6 border-t border-[#E9E1D4] space-y-1">
-                <span className="font-display text-xl text-[#102A43] font-medium block">
+                <span className="font-display text-2xl text-[#102A43] font-medium block">
                   Tariq Al-Mansoor
                 </span>
-                <span className="text-xs text-[#B08D57] block font-semibold">Founder, Crestshore</span>
-                <span className="text-[11px] text-[#6B7280] block">
-                  Where Summit Meets Shore. • Global real estate & wealth advisory
+                <span className="text-xs text-[#B08D57] block font-semibold tracking-wider font-mono uppercase">
+                  Founder, Crestshore
+                </span>
+                <span className="text-xs text-[#6B7280] block font-light">
+                  Where Summit Meets Shore • Global Real Estate & Wealth Advisory
                 </span>
               </div>
             </div>
 
-            <div className="md:col-span-4 bg-[#F7F3EA] border border-[#E9E1D4] p-5 text-center space-y-4">
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80"
-                alt="Tariq Al-Mansoor - Founder"
-                className="w-32 h-32 rounded-full object-cover mx-auto border-2 border-[#B08D57]"
-              />
-              <div>
-                <h4 className="font-display text-lg text-[#102A43]">Tariq Al-Mansoor</h4>
-                <span className="text-[10px] uppercase tracking-wider text-[#B08D57] font-semibold block">
-                  Founder & Principal Advisor
-                </span>
+            {/* Right: Grand Luxury Landscape Founder Showcase */}
+            <div className="lg:col-span-5">
+              <div className="bg-[#FAF7F0] border border-[#E9E1D4] shadow-xl overflow-hidden group">
+                {/* Large Panoramic / Landscape Executive Portrait Frame */}
+                <div className="relative w-full aspect-[16/11] sm:aspect-[16/10] overflow-hidden bg-[#102A43]">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=85"
+                    alt="Tariq Al-Mansoor - Founder & Principal Advisor"
+                    className="w-full h-full object-cover object-[center_18%] transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135]/90 via-[#0B2135]/25 to-transparent pointer-events-none" />
+
+                  {/* Certified Authority Badge */}
+                  <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 bg-[#0B2135]/85 backdrop-blur-md px-3 py-1 border border-[#B08D57]/40 text-[#F7F3EA] text-[10px] uppercase tracking-[0.2em] font-mono">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#B08D57]" />
+                    <span>RERA Certified</span>
+                  </div>
+
+                  {/* Overlay Title on Landscape Base */}
+                  <div className="absolute bottom-4 left-4 right-4 z-10">
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-[#D8C3A5] font-semibold block font-mono">
+                      Leadership & Advisory
+                    </span>
+                    <h3 className="font-display text-2xl sm:text-3xl text-[#FFFDF8] font-normal leading-tight">
+                      Tariq Al-Mansoor
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Card Content & Direct Advisory Access */}
+                <div className="p-6 sm:p-7 space-y-5 bg-[#FAF7F0]">
+                  <div>
+                    <span className="text-[11px] uppercase tracking-[0.22em] text-[#B08D57] font-semibold block mb-1 font-mono">
+                      Founder & Principal Advisor
+                    </span>
+                    <p className="text-xs text-[#6B7280] leading-relaxed">
+                      Advising high-net-worth families, international investors, and private wealth desks on super-prime Dubai acquisitions and portfolio management.
+                    </p>
+                  </div>
+
+                  {/* Credentials Grid */}
+                  <div className="grid grid-cols-2 gap-3 py-3 border-y border-[#E9E1D4] text-[11px]">
+                    <div>
+                      <span className="text-[#6B7280] block text-[9px] uppercase tracking-wider font-mono">Experience</span>
+                      <span className="text-[#102A43] font-semibold font-ui">14+ Years in Dubai</span>
+                    </div>
+                    <div>
+                      <span className="text-[#6B7280] block text-[9px] uppercase tracking-wider font-mono">Primary Focus</span>
+                      <span className="text-[#102A43] font-semibold font-ui">Prime & Super-Prime</span>
+                    </div>
+                  </div>
+
+                  {/* Action CTA Button */}
+                  <button
+                    onClick={() => openAdvisor('Founder Direct Conversation')}
+                    className="w-full bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] py-3.5 px-6 text-xs uppercase tracking-[0.2em] font-semibold transition-all duration-300 shadow-md flex items-center justify-center gap-2 group-hover:border-[#B08D57]"
+                  >
+                    <span>Speak with Tariq</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#B08D57] transition-transform duration-300 group-hover:translate-x-1" />
+                  </button>
+                </div>
               </div>
-              <button
-                onClick={() => openAdvisor('Founder Direct Conversation')}
-                className="w-full bg-[#102A43] hover:bg-[#1E3A5F] text-[#FFFDF8] py-2 text-xs uppercase tracking-wider font-semibold transition-colors"
-              >
-                Speak with Tariq
-              </button>
             </div>
           </div>
         </div>

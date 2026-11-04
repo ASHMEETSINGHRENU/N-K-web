@@ -14,3 +14,11 @@ dist-ssr/
 # Editor & OS files
 .DS_Store
 Thumbs.db
+
+# Large video media assets
+*.mp4
+*.mov
+*.avi
+*.wmv
+assets/landing page vedio/
+public/videos/

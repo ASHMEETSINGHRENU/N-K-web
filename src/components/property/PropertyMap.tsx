@@ -48,7 +48,14 @@ const DUBAI_COMMUNITY_COORDINATES: Record<string, { lat: number; lng: number; zo
   'business bay': { lat: 25.1857, lng: 55.2708, zoom: 14 },
   'difc': { lat: 25.2117, lng: 55.2818, zoom: 14 },
   'bluewaters island': { lat: 25.0792, lng: 55.1221, zoom: 14 },
-  'al barari': { lat: 25.0978, lng: 55.3120, zoom: 13 }
+  'al barari': { lat: 25.0978, lng: 55.3120, zoom: 13 },
+  'damac lagoons': { lat: 25.0180, lng: 55.2380, zoom: 13 },
+  'villanova': { lat: 25.0825, lng: 55.3560, zoom: 13 },
+  'town square': { lat: 25.0135, lng: 55.2885, zoom: 13 },
+  'dubai south': { lat: 24.9080, lng: 55.1520, zoom: 13 },
+  'emaar south': { lat: 24.9080, lng: 55.1520, zoom: 13 },
+  'tilal al ghaf': { lat: 25.0290, lng: 55.2280, zoom: 13 },
+  'motor city': { lat: 25.0485, lng: 55.2365, zoom: 14 }
 };
 
 // Key landmarks for distance & connectivity calculations

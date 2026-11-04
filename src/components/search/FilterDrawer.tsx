@@ -33,7 +33,7 @@ const CATEGORIES = [
   { id: 'BUY', label: 'Buy' },
   { id: 'OFF_PLAN', label: 'New Projects' },
   { id: 'COMMERCIAL_RENT', label: 'Commercial Rent' },
-  { id: 'COMMERCIAL_BUY', label: 'Commercial Buy' }
+  { id: 'COMMERCIAL_BUY', label: 'Commercial Properties for Sale' }
 ];
 
 const BEDROOM_OPTIONS = ['Studio', '1', '2', '3', '4', '5', '6', '7', '7+'];
@@ -49,11 +49,25 @@ const DEVELOPER_OPTIONS = [
   'DAMAC Properties',
   'Sobha Realty',
   'Ellington Properties',
-  'Aldar Properties'
+  'Aldar Properties',
+  'Dubai Properties',
+  'Nshama',
+  'Majid Al Futtaim',
+  'Union Properties'
 ];
 const HANDOVER_YEARS = ['2024', '2025', '2026', '2027', '2028+'];
 const HANDOVER_QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 const AGENTS = [
+  'Drew Thomson',
+  'Aziz Mallick',
+  'Hamdi Bulugma',
+  'Arman Kiomarsi',
+  'Hanada',
+  'Stecy Belle',
+  'Jack Smillie',
+  'Elliot Branch',
+  'Colin Donachie',
+  'Rob Cummins',
   'Omar Farooq',
   'Elena Rostova',
   'Tariq Mansoor',

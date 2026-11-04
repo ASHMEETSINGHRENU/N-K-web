@@ -107,12 +107,12 @@ export const HomePage: React.FC = () => {
     <div className="flex flex-col w-full font-ui bg-[#F7F3EA] text-[#3E4852] antialiased">
       <section className="relative min-h-[100svh] flex items-end bg-[#0B2135] text-[#F7F3EA] overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2800&q=85"
-          alt="Dubai waterfront skyline at dusk"
+          src={dubaiMarina}
+          alt="Dubai Marina skyline luxury residences"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B2135]/80 via-[#0B2135]/35 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135]/75 via-transparent to-[#0B2135]/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B2135]/80 via-[#0B2135]/35 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B2135]/75 via-transparent to-[#0B2135]/30 pointer-events-none" />
 
         <div className="relative z-10 w-full px-5 sm:px-10 lg:px-16 pb-28 sm:pb-32 pt-36">
           <p className="crest-kicker text-[#D8C3A5] mb-6">Where Summit Meets Shore</p>

@@ -17,6 +17,7 @@ import {
   Phone,
   MessageSquare,
   ShieldCheck,
+  Building,
   Check,
   Clock,
   Sparkles,
@@ -198,20 +199,41 @@ export const PropertyDetailsPage: React.FC = () => {
 
           {/* Key Statistics Grid - Warm White cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 bg-[#FFFDF8] border border-[#E9E1D4] shadow-sm">
-            <div className="space-y-1">
-              <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Bedrooms</span>
-              <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
-                <Bed className="w-4 h-4 text-[#B08D57]" />
-                <span>{property.bedrooms}</span>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Bathrooms</span>
-              <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
-                <Bath className="w-4 h-4 text-[#B08D57]" />
-                <span>{property.bathrooms}</span>
-              </div>
-            </div>
+            {property.propertyType?.toLowerCase().includes('office') || property.purpose === 'COMMERCIAL_RENT' ? (
+              <>
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Category</span>
+                  <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
+                    <Building className="w-4 h-4 text-[#B08D57]" />
+                    <span>Commercial</span>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Fit-Out</span>
+                  <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
+                    <Check className="w-4 h-4 text-[#B08D57]" />
+                    <span className="text-base uppercase tracking-wider font-medium">{property.furnishing === 'FURNISHED' ? 'Fitted & Furnished' : 'Fitted'}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Bedrooms</span>
+                  <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
+                    <Bed className="w-4 h-4 text-[#B08D57]" />
+                    <span>{property.bedrooms}</span>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Bathrooms</span>
+                  <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
+                    <Bath className="w-4 h-4 text-[#B08D57]" />
+                    <span>{property.bathrooms}</span>
+                  </div>
+                </div>
+              </>
+            )}
             <div className="space-y-1">
               <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Built-Up Area</span>
               <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
@@ -220,7 +242,7 @@ export const PropertyDetailsPage: React.FC = () => {
               </div>
             </div>
             <div className="space-y-1">
-              <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Completion</span>
+              <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Status</span>
               <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
                 <Clock className="w-4 h-4 text-[#B08D57]" />
                 <span className="text-sm uppercase tracking-wider font-ui font-medium">{property.completionStatus}</span>
@@ -432,12 +454,39 @@ export const PropertyDetailsPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {broker?.languages?.length > 0 && (
+                  {property?.assignedBroker?.languages?.length > 0 && (
                     <div className="text-[11px] text-[#6B7280] mb-4">
                       <span>Languages: </span>
-                      <span className="text-[#102A43] font-semibold">{broker.languages.join(', ')}</span>
+                      <span className="text-[#102A43] font-semibold">
+                        {property.assignedBroker.languages.join(', ')}
+                      </span>
                     </div>
                   )}
+
+                  <div className="flex gap-2 mb-3">
+                    {brokerInfo.phone && (
+                      <a
+                        href={`tel:${brokerInfo.phone}`}
+                        className="flex-1 bg-white hover:bg-[#F7F3EA] border border-[#102A43] text-[#102A43] py-2.5 text-center text-xs uppercase tracking-wider font-semibold transition-all flex items-center justify-center gap-1.5"
+                      >
+                        <Phone className="w-3.5 h-3.5" />
+                        Call
+                      </a>
+                    )}
+                    {brokerInfo.whatsappNumber && (
+                      <a
+                        href={`https://wa.me/${brokerInfo.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                          `Hello ${brokerInfo.name}, I am interested in viewing ${property.title} in ${property.community} (Ref: ${property.referenceNumber || property.slug}).`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 bg-[#25D366] hover:bg-[#20ba5a] text-white py-2.5 text-center text-xs uppercase tracking-wider font-semibold transition-all flex items-center justify-center gap-1.5"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        WhatsApp
+                      </a>
+                    )}
+                  </div>
 
                   <button
                     onClick={() => {
@@ -446,7 +495,7 @@ export const PropertyDetailsPage: React.FC = () => {
                     }}
                     className="w-full bg-[#102A43] hover:bg-[#1E3A5F] text-[#F7F3EA] py-2.5 text-xs uppercase tracking-widest font-semibold transition-all"
                   >
-                    Connect with Specialist
+                    Private Enquiry / Viewing
                   </button>
                 </div>
               );

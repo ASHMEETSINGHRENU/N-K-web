@@ -27,7 +27,7 @@ const CATEGORIES = [
   { id: 'RENT', label: 'Rent' },
   { id: 'OFF_PLAN', label: 'New Projects' },
   { id: 'COMMERCIAL_RENT', label: 'Commercial Rent' },
-  { id: 'COMMERCIAL_BUY', label: 'Commercial Buy' }
+  { id: 'COMMERCIAL_BUY', label: 'Commercial Properties for Sale' }
 ];
 
 const BEDROOM_OPTIONS = ['All', 'Studio', '1', '2', '3', '4', '5', '6', '7+'];
@@ -50,6 +50,9 @@ export const PropertiesPage: React.FC = () => {
 
   // Determine initial purpose from route path or searchParams
   const getInitialPurpose = () => {
+    if (location.pathname.includes('/commercial-rent')) return 'COMMERCIAL_RENT';
+    if (location.pathname.includes('/commercial-buy')) return 'COMMERCIAL_BUY';
+    if (location.pathname.includes('/commercial')) return 'COMMERCIAL_RENT';
     if (location.pathname.includes('/rent')) return 'RENT';
     if (location.pathname.includes('/off-plan')) return 'OFF_PLAN';
     if (location.pathname.includes('/new-launches')) return 'OFF_PLAN';
@@ -85,14 +88,26 @@ export const PropertiesPage: React.FC = () => {
   });
 
   useEffect(() => {
+    const isCommercialRent = location.pathname.includes('/commercial-rent') || location.pathname.includes('/commercial');
+    const isCommercialBuy = location.pathname.includes('/commercial-buy');
     const isReady = location.pathname.includes('/ready');
     const isOffPlan = location.pathname.includes('/off-plan') || location.pathname.includes('/new-launches');
-    const isRent = location.pathname.includes('/rent');
-    const isBuy = location.pathname.includes('/buy');
+    const isRent = location.pathname.includes('/rent') && !isCommercialRent;
+    const isBuy = location.pathname.includes('/buy') && !isCommercialBuy;
 
     setFilters((prev: any) => ({
       ...prev,
-      purpose: isOffPlan ? 'OFF_PLAN' : isRent ? 'RENT' : isBuy ? 'BUY' : (searchParams.get('purpose') || prev.purpose || 'BUY'),
+      purpose: isCommercialRent
+        ? 'COMMERCIAL_RENT'
+        : isCommercialBuy
+        ? 'COMMERCIAL_BUY'
+        : isOffPlan
+        ? 'OFF_PLAN'
+        : isRent
+        ? 'RENT'
+        : isBuy
+        ? 'BUY'
+        : (searchParams.get('purpose') || prev.purpose || 'BUY'),
       completionStatus: isReady ? 'READY' : (searchParams.get('completionStatus') || (prev.completionStatus === 'READY' ? '' : prev.completionStatus) || '')
     }));
   }, [location.pathname]);

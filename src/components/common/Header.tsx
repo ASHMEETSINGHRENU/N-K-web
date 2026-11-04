@@ -55,13 +55,20 @@ const NAVIGATION_DATA: NavCategory[] = [
     id: 'buy',
     label: 'Buy',
     path: '/properties/buy',
-    columnsCount: 2,
+    columnsCount: 3,
     sections: [
       {
         title: 'Residential Properties for Sale',
         path: '/properties/buy',
         links: [
           { label: 'All Properties for Sale', path: '/properties/buy' }
+        ]
+      },
+      {
+        title: 'Commercial Properties for Sale',
+        path: '/properties?purpose=COMMERCIAL_BUY',
+        links: [
+          { label: 'All Properties for Sale', path: '/properties?purpose=COMMERCIAL_BUY' }
         ]
       },
       {

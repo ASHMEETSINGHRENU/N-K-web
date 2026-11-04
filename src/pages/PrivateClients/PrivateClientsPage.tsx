@@ -488,32 +488,7 @@ export const PrivateClientsPage: React.FC = () => {
         {activeTab === 'dashboard' && (
           <div className="space-y-10 animate-in fade-in">
             {/* Latest Advisory Update (Brief Item #8: "See the latest update") */}
-            <div className="bg-[#FFFDF8] border-l-4 border-l-[#B08D57] border border-[#E9E1D4] p-6 shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-[10px] uppercase tracking-wider text-[#B08D57] font-semibold">
-                  Latest Advisory Update
-                </span>
-                <span className="text-[10px] text-[#6B7280]">Today, 10:45 AM GST</span>
-              </div>
-              <h3 className="font-display text-xl text-[#102A43] mb-1">
-                Villa Aurum Handover Audit Progress
-              </h3>
-              <p className="text-xs text-[#3E4852] leading-relaxed">
-                Developer de-snagging inspection completed for Villa Aurum (Palm Jumeirah). 14 of 16 developer rectification items have been certified by our structural engineering partner. The 2 remaining MEP adjustments are scheduled for sign-off on October 14, followed by final title key handover.
-              </p>
-              <div className="mt-4 pt-3 border-t border-[#E9E1D4] flex flex-wrap items-center justify-between gap-3 text-xs">
-                <span className="text-[#6B7280]">Assigned Advisor: <strong className="text-[#102A43]">Tariq Al-Mansoor</strong></span>
-                <a
-                  href="https://wa.me/971501123456?text=Hello%20Tariq,%20regarding%20the%20latest%20Villa%20Aurum%20update."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#25D366] hover:underline font-semibold flex items-center gap-1.5"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  <span>Discuss on WhatsApp</span>
-                </a>
-              </div>
-            </div>
+
 
             {/* KPI Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -521,7 +496,7 @@ export const PrivateClientsPage: React.FC = () => {
                 <span className="text-[10px] uppercase tracking-wider text-[#6B7280] font-medium block mb-1">
                   Managed Properties
                 </span>
-                <div className="font-display text-3xl font-light text-[#102A43]">{properties.length} Estates</div>
+                <div className="font-display text-3xl font-light text-[#102A43]">{properties.length} projects</div>
                 <div className="text-[11px] text-[#6B7280] mt-2">Palm Jumeirah & Downtown</div>
               </div>
 

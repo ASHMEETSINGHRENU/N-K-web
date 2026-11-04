@@ -27,7 +27,7 @@ export const LUXURY_COLLECTIONS = [
   'Ultra-Luxury Mansions'
 ] as const;
 
-export const PROPERTY_PURPOSES = ['BUY', 'RENT', 'OFF_PLAN'] as const;
+export const PROPERTY_PURPOSES = ['BUY', 'RENT', 'OFF_PLAN', 'COMMERCIAL_RENT', 'COMMERCIAL_BUY'] as const;
 
 export const COMPLETION_STATUSES = ['READY', 'OFF_PLAN', 'UNDER_CONSTRUCTION'] as const;
 

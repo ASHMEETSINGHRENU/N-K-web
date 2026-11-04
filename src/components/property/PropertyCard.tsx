@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Bed, Bath, Maximize2, MapPin, ArrowUpRight, ShieldCheck, MessageCircle } from 'lucide-react';
+import { Heart, Bed, Bath, Maximize2, MapPin, ArrowUpRight, ShieldCheck, MessageCircle, Building, Check } from 'lucide-react';
 import { formatAED, formatSqFt } from '@nestandkey/utils';
 import { useFavorites } from '../../context/FavoritesContext';
 import { getBrokerDisplayInfo } from './brokerHelper';
@@ -15,6 +15,7 @@ interface PropertyCardProps {
     community: string;
     priceAED: number;
     rentalFrequency?: string;
+    furnishing?: string;
     bedrooms: number;
     bathrooms: number;
     builtUpAreaSqFt: number;
@@ -133,18 +134,37 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
         {/* Key Statistics - DM Sans, Muted Grey, Champagne Brass icons */}
         <div className="pt-4 mt-4 border-t border-[#E9E1D4] grid grid-cols-3 gap-2 text-xs text-[#6B7280] font-ui">
-          <div className="flex items-center gap-1.5">
-            <Bed className="w-4 h-4 text-[#B08D57]" />
-            <span>{property.bedrooms} Beds</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Bath className="w-4 h-4 text-[#B08D57]" />
-            <span>{property.bathrooms} Baths</span>
-          </div>
-          <div className="flex items-center gap-1.5 justify-end">
-            <Maximize2 className="w-4 h-4 text-[#B08D57]" />
-            <span>{formatSqFt(property.builtUpAreaSqFt)}</span>
-          </div>
+          {property.propertyType?.toLowerCase().includes('office') || property.purpose === 'COMMERCIAL_RENT' ? (
+            <>
+              <div className="flex items-center gap-1.5">
+                <Building className="w-4 h-4 text-[#B08D57]" />
+                <span>Commercial</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-[#B08D57]" />
+                <span>{property.furnishing === 'FURNISHED' ? 'Furnished' : 'Fitted'}</span>
+              </div>
+              <div className="flex items-center gap-1.5 justify-end">
+                <Maximize2 className="w-4 h-4 text-[#B08D57]" />
+                <span>{formatSqFt(property.builtUpAreaSqFt)}</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-1.5">
+                <Bed className="w-4 h-4 text-[#B08D57]" />
+                <span>{property.bedrooms} Beds</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Bath className="w-4 h-4 text-[#B08D57]" />
+                <span>{property.bathrooms} Baths</span>
+              </div>
+              <div className="flex items-center gap-1.5 justify-end">
+                <Maximize2 className="w-4 h-4 text-[#B08D57]" />
+                <span>{formatSqFt(property.builtUpAreaSqFt)}</span>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Dedicated Broker Profile Section */}
