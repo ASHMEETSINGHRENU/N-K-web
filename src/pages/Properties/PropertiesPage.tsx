@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { api } from '../../services/api';
 import { PropertyCard } from '../../components/property/PropertyCard';
@@ -21,6 +21,165 @@ import {
 import { formatAED } from '@nestandkey/utils';
 import { DUBAI_COMMUNITIES, PROPERTY_TYPES } from '@nestandkey/constants';
 import { getBrokerDisplayInfo } from '../../components/property/brokerHelper';
+
+const COMMON_PROPERTY_TYPES = [
+  'Apartment',
+  'Villa',
+  'Townhouse',
+  'Penthouse',
+  'Office',
+  'Plots'
+] as const;
+
+interface ToolbarDropdownOption {
+  value: string;
+  label: string;
+}
+
+const ToolbarSearchableDropdown: React.FC<{
+  value: string;
+  placeholder: string;
+  searchPlaceholder: string;
+  options: ToolbarDropdownOption[];
+  onChange: (val: string) => void;
+}> = ({ value, placeholder, searchPlaceholder, options, onChange }) => {
+  const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const selectedLabel = useMemo(() => {
+    if (!value) return placeholder;
+    const found = options.find((o) => o.value === value);
+    return found ? found.label : value;
+  }, [value, placeholder, options]);
+
+  const filteredOptions = useMemo(() => {
+    if (!searchTerm.trim()) return options;
+    const q = searchTerm.toLowerCase().trim();
+    return options.filter(
+      (opt) =>
+        opt.label.toLowerCase().includes(q) ||
+        opt.value.toLowerCase().includes(q)
+    );
+  }, [options, searchTerm]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (open) {
+      setSearchTerm('');
+      setTimeout(() => inputRef.current?.focus(), 40);
+    }
+  }, [open]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <div
+        onClick={() => setOpen((prev) => !prev)}
+        className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] hover:border-[#B08D57] transition-colors cursor-pointer flex items-center justify-between gap-2"
+      >
+        <span className={`truncate ${value ? 'text-[#102A43] font-medium' : 'text-[#3E4852]'}`}>
+          {selectedLabel}
+        </span>
+        <div className="flex items-center gap-1 shrink-0">
+          {value && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onChange('');
+                setOpen(false);
+              }}
+              className="text-[#9CA3AF] hover:text-[#102A43] p-0.5"
+              title="Clear"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          )}
+          <ChevronDown className={`w-3.5 h-3.5 text-[#6B7280] transition-transform ${open ? 'rotate-180' : ''}`} />
+        </div>
+      </div>
+
+      {open && (
+        <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 bg-[#FFFDF8] border border-[#E9E1D4] shadow-xl flex flex-col max-h-72 overflow-hidden">
+          <div className="p-2 border-b border-[#E9E1D4] bg-[#F7F3EA]/70">
+            <div className="relative flex items-center">
+              <Search className="w-3.5 h-3.5 text-[#B08D57] absolute left-2.5 pointer-events-none" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={searchPlaceholder}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (filteredOptions.length > 0) {
+                      onChange(filteredOptions[0].value);
+                      setOpen(false);
+                    }
+                  } else if (e.key === 'Escape') {
+                    setOpen(false);
+                  }
+                }}
+                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] pl-8 pr-6 py-1.5 text-xs text-[#102A43] placeholder-[#9CA3AF] focus:outline-none focus:border-[#B08D57]"
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSearchTerm('');
+                  }}
+                  className="absolute right-2 text-[#9CA3AF] hover:text-[#102A43]"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="overflow-y-auto max-h-56 py-1">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((opt) => {
+                const isSelected = opt.value === value;
+                return (
+                  <button
+                    key={opt.label}
+                    type="button"
+                    onClick={() => {
+                      onChange(opt.value);
+                      setOpen(false);
+                    }}
+                    className={`w-full px-3 py-2 text-left text-xs flex items-center justify-between transition-colors ${
+                      isSelected
+                        ? 'bg-[#102A43] text-[#F7F3EA] font-medium'
+                        : 'text-[#3E4852] hover:bg-[#F7F3EA] hover:text-[#102A43]'
+                    }`}
+                  >
+                    <span>{opt.label}</span>
+                    {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#B08D57]" />}
+                  </button>
+                );
+              })
+            ) : (
+              <div className="px-3 py-2.5 text-xs text-[#6B7280]">No matches found</div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CATEGORIES = [
   { id: 'BUY', label: 'Buy' },
@@ -374,50 +533,47 @@ export const PropertiesPage: React.FC = () => {
 
             {/* Location / Community Dropdown */}
             <div>
-              <select
+              <ToolbarSearchableDropdown
                 value={filters.community}
-                onChange={(e) => handleApplyFilterChange({ ...filters, community: e.target.value })}
-                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57] transition-colors cursor-pointer"
-              >
-                <option value="">All Communities</option>
-                {DUBAI_COMMUNITIES.map((comm) => (
-                  <option key={comm.slug} value={comm.name}>
-                    {comm.name}
-                  </option>
-                ))}
-              </select>
+                placeholder="All Communities"
+                searchPlaceholder="Search communities..."
+                options={[
+                  { value: '', label: 'All Communities' },
+                  ...DUBAI_COMMUNITIES.map((comm) => ({ value: comm.name, label: comm.name }))
+                ]}
+                onChange={(val) => handleApplyFilterChange({ ...filters, community: val })}
+              />
             </div>
 
             {/* Property Type Dropdown */}
             <div>
-              <select
+              <ToolbarSearchableDropdown
                 value={filters.propertyType}
-                onChange={(e) => handleApplyFilterChange({ ...filters, propertyType: e.target.value })}
-                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57] transition-colors cursor-pointer"
-              >
-                <option value="">All Property Types</option>
-                {PROPERTY_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
+                placeholder="All property types"
+                searchPlaceholder="Search property types..."
+                options={[
+                  { value: '', label: 'All property types' },
+                  ...COMMON_PROPERTY_TYPES.map((type) => ({ value: type, label: type }))
+                ]}
+                onChange={(val) => handleApplyFilterChange({ ...filters, propertyType: val })}
+              />
             </div>
 
             {/* Bedrooms Quick Dropdown */}
             <div>
-              <select
+              <ToolbarSearchableDropdown
                 value={filters.bedrooms}
-                onChange={(e) => handleApplyFilterChange({ ...filters, bedrooms: e.target.value === 'All' ? '' : e.target.value })}
-                className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#3E4852] focus:outline-none focus:border-[#B08D57] transition-colors cursor-pointer"
-              >
-                <option value="">Any Bedrooms</option>
-                {BEDROOM_OPTIONS.filter((b) => b !== 'All').map((bed) => (
-                  <option key={bed} value={bed}>
-                    {bed === 'Studio' ? 'Studio' : `${bed} Bedrooms`}
-                  </option>
-                ))}
-              </select>
+                placeholder="Any Bedrooms"
+                searchPlaceholder="Search bedrooms..."
+                options={[
+                  { value: '', label: 'Any Bedrooms' },
+                  ...BEDROOM_OPTIONS.filter((b) => b !== 'All').map((bed) => ({
+                    value: bed,
+                    label: bed === 'Studio' ? 'Studio' : `${bed} Bedrooms`
+                  }))
+                ]}
+                onChange={(val) => handleApplyFilterChange({ ...filters, bedrooms: val })}
+              />
             </div>
 
             {/* Open Filter Drawer button */}

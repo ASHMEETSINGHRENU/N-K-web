@@ -1,6 +1,6 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Search, X } from 'lucide-react';
 import { DUBAI_COMMUNITIES, PROPERTY_TYPES } from '@nestandkey/constants';
 
 interface SearchHeroProps {
@@ -9,7 +9,7 @@ interface SearchHeroProps {
 
 type MenuKey = 'community' | 'type' | 'price' | 'status';
 
-type Choice = {
+export type Choice = {
   value: string;
   label: string;
   min?: string;
@@ -18,6 +18,8 @@ type Choice = {
 
 const BUY_PRICES: Choice[] = [
   { value: '', label: 'Any consideration', min: '', max: '' },
+  { value: '500k-1m', label: 'AED 500K to 1M', min: '500000', max: '1000000' },
+  { value: '1.5m-5m', label: 'AED 1.5M to 5M', min: '1500000', max: '5000000' },
   { value: 'to-5', label: 'Up to AED 5 million', min: '', max: '5000000' },
   { value: '5-15', label: 'AED 5 to 15 million', min: '5000000', max: '15000000' },
   { value: '15-40', label: 'AED 15 to 40 million', min: '15000000', max: '40000000' },
@@ -49,64 +51,203 @@ const BEDROOMS = [
   { value: '7+', label: '7+' }
 ];
 
-function QuietMenu({
-  label,
-  value,
-  placeholder,
-  options,
-  open,
-  onToggle,
-  onChange
-}: {
+interface SearchableComboboxProps {
   label: string;
   value: string;
   placeholder: string;
   options: Choice[];
   open: boolean;
   onToggle: () => void;
+  onOpen: () => void;
+  onClose: () => void;
   onChange: (value: string) => void;
-}) {
+}
+
+function SearchableCombobox({
+  label,
+  value,
+  placeholder,
+  options,
+  open,
+  onToggle,
+  onOpen,
+  onClose,
+  onChange
+}: SearchableComboboxProps) {
   const listId = useId();
-  const current = options.find((option) => option.value === value)?.label ?? placeholder;
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Selected option label if any
+  const selectedOption = useMemo(
+    () => options.find((opt) => opt.value === value),
+    [options, value]
+  );
+
+  // Filter options based on typed search term
+  const filteredOptions = useMemo(() => {
+    if (!searchTerm.trim()) return options;
+    const q = searchTerm.toLowerCase().trim();
+    return options.filter(
+      (opt) =>
+        opt.label.toLowerCase().includes(q) ||
+        opt.value.toLowerCase().includes(q)
+    );
+  }, [options, searchTerm]);
+
+  // Focus search input when dropdown opens
+  useEffect(() => {
+    if (open) {
+      setSearchTerm('');
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 50);
+    }
+  }, [open]);
+
+  const handleSelect = (optionValue: string) => {
+    onChange(optionValue);
+    setSearchTerm('');
+    onClose();
+  };
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onChange('');
+    setSearchTerm('');
+  };
+
+  const displayTitle = selectedOption ? selectedOption.label : placeholder;
+  const isDefaultSelected = !value;
 
   return (
     <div className="relative min-w-0">
       <p className="text-[11px] uppercase tracking-[0.2em] text-[#6B7280]">{label}</p>
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        aria-controls={listId}
-        className="mt-3 flex w-full items-center justify-between gap-3 border-b border-[#E9E1D4] pb-3 text-left"
-      >
-        <span className="min-w-0 font-display text-[1.55rem] leading-tight text-[#102A43]">{current}</span>
-        <ChevronDown className={`h-4 w-4 shrink-0 text-[#B08D57] transition-transform ${open ? 'rotate-180' : ''}`} />
-      </button>
+      
+      {/* Combobox Trigger: Clickable & displays selected/placeholder with live clear */}
+      <div className="mt-3 flex w-full items-center justify-between gap-2 border-b border-[#E9E1D4] pb-3 text-left transition-colors focus-within:border-[#B08D57]">
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={open}
+          aria-controls={listId}
+          className="flex-1 truncate text-left focus:outline-none"
+        >
+          <span
+            className={`block truncate font-display text-[1.4rem] sm:text-[1.55rem] leading-tight transition-colors ${
+              isDefaultSelected ? 'text-[#102A43]/75' : 'text-[#102A43] font-medium'
+            }`}
+          >
+            {displayTitle}
+          </span>
+        </button>
+
+        <div className="flex items-center gap-1.5 shrink-0">
+          {!isDefaultSelected && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="p-1 text-[#9CA3AF] transition-colors hover:text-[#102A43]"
+              title={`Clear ${label.toLowerCase()}`}
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onToggle}
+            className="p-1 text-[#B08D57] transition-colors hover:text-[#9B7A49]"
+            aria-label={`Toggle ${label} options`}
+          >
+            <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+      </div>
+
+      {/* Dropdown with live search filter */}
       {open && (
-        <ul
+        <div
           id={listId}
           role="listbox"
-          className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-72 overflow-y-auto border border-[#E9E1D4] bg-[#FFFDF8] py-2 shadow-[0_24px_50px_-28px_rgba(16,42,67,0.55)]"
+          className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 flex max-h-80 flex-col overflow-hidden border border-[#E9E1D4] bg-[#FFFDF8] shadow-[0_24px_50px_-28px_rgba(16,42,67,0.55)]"
         >
-          {options.map((option) => {
-            const selected = option.value === value;
-            return (
-              <li key={option.label}>
+          {/* Search box inside dropdown */}
+          <div className="border-b border-[#E9E1D4] bg-[#F7F3EA]/70 p-2.5">
+            <div className="relative flex items-center">
+              <Search className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-[#B08D57]" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={`Search ${label.toLowerCase()}...`}
+                className="w-full border border-[#E9E1D4] bg-[#FFFDF8] py-1.5 pl-8 pr-7 text-xs text-[#102A43] placeholder-[#9CA3AF] focus:border-[#B08D57] focus:outline-none"
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (filteredOptions.length > 0) {
+                      handleSelect(filteredOptions[0].value);
+                    } else if (searchTerm.trim()) {
+                      handleSelect(searchTerm.trim());
+                    }
+                  } else if (e.key === 'Escape') {
+                    onClose();
+                  }
+                }}
+              />
+              {searchTerm && (
                 <button
                   type="button"
-                  role="option"
-                  aria-selected={selected}
-                  onClick={() => onChange(option.value)}
-                  className={`block w-full px-4 py-2.5 text-left text-sm transition-colors ${
-                    selected ? 'bg-[#F7F3EA] text-[#102A43]' : 'text-[#3E4852] hover:bg-[#F7F3EA] hover:text-[#102A43]'
-                  }`}
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-2 p-1 text-[#9CA3AF] hover:text-[#102A43]"
+                  title="Clear search"
                 >
-                  {option.label}
+                  <X className="h-3 w-3" />
                 </button>
-              </li>
-            );
-          })}
-        </ul>
+              )}
+            </div>
+          </div>
+
+          {/* Options list */}
+          <div className="max-h-60 overflow-y-auto py-1.5">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => {
+                const selected = option.value === value;
+                return (
+                  <button
+                    key={option.label || option.value}
+                    type="button"
+                    role="option"
+                    aria-selected={selected}
+                    onClick={() => handleSelect(option.value)}
+                    className={`flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors ${
+                      selected
+                        ? 'bg-[#F7F3EA] text-[#102A43] font-medium'
+                        : 'text-[#3E4852] hover:bg-[#F7F3EA] hover:text-[#102A43]'
+                    }`}
+                  >
+                    <span>{option.label}</span>
+                    {selected && <span className="h-1.5 w-1.5 rounded-full bg-[#B08D57]" />}
+                  </button>
+                );
+              })
+            ) : (
+              <div className="px-4 py-3 text-xs text-[#6B7280]">
+                <p>No matching {label.toLowerCase()}</p>
+                {searchTerm.trim() && (
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(searchTerm.trim())}
+                    className="mt-2 block w-full text-left text-xs font-medium text-[#B08D57] hover:underline"
+                  >
+                    Use &ldquo;{searchTerm.trim()}&rdquo; as custom filter &rarr;
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
@@ -116,6 +257,7 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ className = '' }) => {
   const navigate = useNavigate();
   const panelRef = useRef<HTMLDivElement>(null);
   const [purpose, setPurpose] = useState<'BUY' | 'RENT'>('BUY');
+  const [searchQuery, setSearchQuery] = useState('');
   const [community, setCommunity] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [bedrooms, setBedrooms] = useState('');
@@ -125,7 +267,15 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ className = '' }) => {
 
   const prices = purpose === 'RENT' ? RENT_PRICES : BUY_PRICES;
   const selectedPrice = prices.find((band) => band.value === priceBand) ?? prices[0];
-  const hasChoices = Boolean(community || propertyType || bedrooms || priceBand || completionStatus || purpose === 'RENT');
+  const hasChoices = Boolean(
+    searchQuery ||
+    community ||
+    propertyType ||
+    bedrooms ||
+    priceBand ||
+    completionStatus ||
+    purpose === 'RENT'
+  );
 
   useEffect(() => {
     const onPointer = (event: MouseEvent) => {
@@ -155,6 +305,7 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ className = '' }) => {
   };
 
   const handleReset = () => {
+    setSearchQuery('');
     setCommunity('');
     setPropertyType('');
     setBedrooms('');
@@ -168,6 +319,7 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ className = '' }) => {
     event.preventDefault();
     const params = new URLSearchParams();
     params.set('purpose', purpose);
+    if (searchQuery.trim()) params.set('search', searchQuery.trim());
     if (community) params.set('community', community);
     if (propertyType) params.set('type', propertyType);
     if (bedrooms) params.set('beds', bedrooms);
@@ -177,15 +329,34 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ className = '' }) => {
     navigate(`/properties?${params.toString()}`);
   };
 
+  const communityOptions: Choice[] = useMemo(
+    () => [
+      { value: '', label: 'All communities' },
+      ...DUBAI_COMMUNITIES.map((item) => ({ value: item.name, label: item.name }))
+    ],
+    []
+  );
+
+  const typeOptions: Choice[] = useMemo(
+    () => [
+      { value: '', label: 'All residences' },
+      ...PROPERTY_TYPES.map((item) => ({ value: item, label: item }))
+    ],
+    []
+  );
+
   return (
     <div
       ref={panelRef}
-      className={`w-full overflow-visible bg-[#FFFDF8] border border-[#E9E1D4] px-5 py-7 sm:px-8 sm:py-9 lg:px-10 lg:py-10 font-ui ${className}`}
+      className={`w-full overflow-visible border border-[#E9E1D4] bg-[#FFFDF8] px-5 py-7 font-ui sm:px-8 sm:py-9 lg:px-10 lg:py-10 ${className}`}
     >
+      {/* Header section with title and Buy/Lease tabs */}
       <div className="flex flex-col gap-8 border-b border-[#E9E1D4] pb-7 lg:flex-row lg:items-end lg:justify-between">
         <div className="min-w-0">
           <p className="crest-kicker text-[#B08D57]">A private search</p>
-          <h2 className="mt-3 font-display text-4xl leading-none text-[#102A43] sm:text-5xl">Begin with a residence</h2>
+          <h2 className="mt-3 font-display text-4xl leading-none text-[#102A43] sm:text-5xl">
+            Begin with a residence
+          </h2>
         </div>
         <div className="flex flex-wrap items-end gap-8">
           {([
@@ -211,63 +382,92 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ className = '' }) => {
       </div>
 
       <form onSubmit={handleSearch}>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-7 pt-8 md:grid-cols-2 xl:grid-cols-4">
-          <QuietMenu
+        {/* User Search Input (Keywords, Property Title, Developer, Ref Number) */}
+        <div className="border-b border-[#E9E1D4] py-6 transition-colors focus-within:border-[#B08D57]">
+          <div className="flex items-center justify-between">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#6B7280]">
+              Keyword, Project or Reference Search
+            </p>
+            {searchQuery && (
+              <span className="text-[11px] font-medium tracking-[0.14em] text-[#B08D57]">
+                Active Search Query
+              </span>
+            )}
+          </div>
+          <div className="mt-2.5 flex items-center">
+            <Search className="mr-3 h-5 w-5 shrink-0 text-[#B08D57]" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by community, residence name, reference ID (e.g. ADM262767), or developer..."
+              className="w-full bg-transparent font-display text-xl text-[#102A43] placeholder:font-ui placeholder:text-sm placeholder:text-[#9CA3AF] focus:outline-none sm:text-2xl sm:placeholder:text-base"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="p-1 text-[#9CA3AF] transition-colors hover:text-[#102A43]"
+                title="Clear keyword search"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* 4 Searchable Combobox Columns (Dropdown + Searching) */}
+        <div className="grid grid-cols-1 gap-x-8 gap-y-7 pt-7 md:grid-cols-2 xl:grid-cols-4">
+          <SearchableCombobox
             label="Community"
             value={community}
             placeholder="All communities"
-            options={[
-              { value: '', label: 'All communities' },
-              ...DUBAI_COMMUNITIES.map((item) => ({ value: item.name, label: item.name }))
-            ]}
+            options={communityOptions}
             open={openMenu === 'community'}
             onToggle={() => toggleMenu('community')}
-            onChange={(next) => {
-              setCommunity(next);
-              setOpenMenu(null);
-            }}
+            onOpen={() => setOpenMenu('community')}
+            onClose={() => setOpenMenu(null)}
+            onChange={(next) => setCommunity(next)}
           />
-          <QuietMenu
+
+          <SearchableCombobox
             label="Residence"
             value={propertyType}
             placeholder="All residences"
-            options={[
-              { value: '', label: 'All residences' },
-              ...PROPERTY_TYPES.map((item) => ({ value: item, label: item }))
-            ]}
+            options={typeOptions}
             open={openMenu === 'type'}
             onToggle={() => toggleMenu('type')}
-            onChange={(next) => {
-              setPropertyType(next);
-              setOpenMenu(null);
-            }}
+            onOpen={() => setOpenMenu('type')}
+            onClose={() => setOpenMenu(null)}
+            onChange={(next) => setPropertyType(next)}
           />
-          <QuietMenu
+
+          <SearchableCombobox
             label="Consideration"
             value={priceBand}
             placeholder="Any consideration"
             options={prices}
             open={openMenu === 'price'}
             onToggle={() => toggleMenu('price')}
-            onChange={(next) => {
-              setPriceBand(next);
-              setOpenMenu(null);
-            }}
+            onOpen={() => setOpenMenu('price')}
+            onClose={() => setOpenMenu(null)}
+            onChange={(next) => setPriceBand(next)}
           />
-          <QuietMenu
+
+          <SearchableCombobox
             label="Completion"
             value={completionStatus}
             placeholder="Any residence"
             options={STATUSES}
             open={openMenu === 'status'}
             onToggle={() => toggleMenu('status')}
-            onChange={(next) => {
-              setCompletionStatus(next);
-              setOpenMenu(null);
-            }}
+            onOpen={() => setOpenMenu('status')}
+            onClose={() => setOpenMenu(null)}
+            onChange={(next) => setCompletionStatus(next)}
           />
         </div>
 
+        {/* Bedrooms selector and Action buttons */}
         <div className="mt-8 flex flex-col gap-6 border-t border-[#E9E1D4] pt-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0">
             <p className="text-[11px] uppercase tracking-[0.2em] text-[#6B7280]">Bedrooms</p>
@@ -297,9 +497,9 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ className = '' }) => {
               <button
                 type="button"
                 onClick={handleReset}
-                className="text-[11px] uppercase tracking-[0.18em] text-[#6B7280] hover:text-[#102A43]"
+                className="text-[11px] uppercase tracking-[0.18em] text-[#6B7280] transition-colors hover:text-[#102A43]"
               >
-                Clear
+                Clear all filters
               </button>
             )}
             <button

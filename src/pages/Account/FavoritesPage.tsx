@@ -14,7 +14,7 @@ export const FavoritesPage: React.FC = () => {
     async function loadFavorites() {
       setIsLoading(true);
       try {
-        const res = await api.getProperties();
+        const res = await api.getProperties({ limit: 100 });
         const all = res.properties || [];
         const filtered = all.filter((p: any) => favorites.includes(p._id));
         setProperties(filtered);

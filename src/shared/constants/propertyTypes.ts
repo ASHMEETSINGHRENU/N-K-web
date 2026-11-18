@@ -3,19 +3,8 @@ export const PROPERTY_TYPES = [
   'Villa',
   'Townhouse',
   'Penthouse',
-  'Compound',
-  'Duplex',
-  'Full Floor',
-  'Half Floor',
-  'Whole Building',
-  'Bulk Rent Unit',
-  'Bungalow',
-  'Hotel & Hotel Apartment',
-  'Mansion',
-  'Branded Residence',
   'Office',
-  'Warehouse',
-  'Shop'
+  'Plots'
 ] as const;
 
 export const LUXURY_COLLECTIONS = [

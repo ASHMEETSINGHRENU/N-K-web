@@ -89,7 +89,7 @@ export const PropertyDetailsPage: React.FC = () => {
   }
 
   const allImages = property.images?.length > 0 ? property.images : [property.featuredImage];
-  const broker = property.assignedBroker;
+  const brokerInfo = getBrokerDisplayInfo(property);
   const favorited = isFavorite(property._id);
 
   return (
@@ -199,7 +199,7 @@ export const PropertyDetailsPage: React.FC = () => {
 
           {/* Key Statistics Grid - Warm White cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 bg-[#FFFDF8] border border-[#E9E1D4] shadow-sm">
-            {property.propertyType?.toLowerCase().includes('office') || property.purpose === 'COMMERCIAL_RENT' ? (
+            {property.propertyType?.toLowerCase().includes('office') || property.purpose === 'COMMERCIAL_RENT' || property.purpose === 'COMMERCIAL_BUY' ? (
               <>
                 <div className="space-y-1">
                   <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Category</span>
@@ -212,7 +212,13 @@ export const PropertyDetailsPage: React.FC = () => {
                   <span className="text-[10px] uppercase tracking-wider text-[#6B7280] block font-mono">Fit-Out</span>
                   <div className="flex items-center gap-2 text-xl font-display font-semibold text-[#102A43]">
                     <Check className="w-4 h-4 text-[#B08D57]" />
-                    <span className="text-base uppercase tracking-wider font-medium">{property.furnishing === 'FURNISHED' ? 'Fitted & Furnished' : 'Fitted'}</span>
+                    <span className="text-base uppercase tracking-wider font-medium">
+                      {property.furnishing === 'UNFURNISHED'
+                        ? 'Shell & Core'
+                        : property.furnishing === 'FURNISHED'
+                        ? 'Fitted & Furnished'
+                        : 'Fitted'}
+                    </span>
                   </div>
                 </div>
               </>
@@ -373,7 +379,7 @@ export const PropertyDetailsPage: React.FC = () => {
             <h3 className="font-display text-2xl font-normal text-[#102A43] mb-4 pb-2 border-b border-[#E9E1D4]">
               Mortgage & Financing Breakdown
             </h3>
-            <MortgageCalculatorWidget initialPriceAED={property.priceAED} />
+            <MortgageCalculatorWidget initialPriceAED={0} />
           </div>
         </div>
 
@@ -414,7 +420,7 @@ export const PropertyDetailsPage: React.FC = () => {
                   <span>Mortgage & Details Enquiry</span>
                 </button>
 
-                {broker?.whatsappNumber && (
+                {brokerInfo.whatsappNumber && (
                   <button
                     onClick={() => {
                       setEnquiryType('SPECIALIST_CALL');

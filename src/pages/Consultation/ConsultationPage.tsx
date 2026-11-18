@@ -12,23 +12,29 @@ export const ConsultationPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [leadRef, setLeadRef] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name || !email || !mobile) {
+      setErrorMessage('Please provide your name, email address, and contact number.');
+      return;
+    }
+    setErrorMessage('');
     setIsSubmitting(true);
     try {
       const response: any = await api.submitLead({
         name,
-        email,
-        mobile,
+        email: email.trim().toLowerCase(),
+        mobile: mobile.trim(),
         leadType: 'CONSULTATION',
         message: `[Intent: ${intent}] [Budget: AED ${Number(budget).toLocaleString()}] ${message}`,
         source: 'WEBSITE'
       });
       setLeadRef(response.leadReference || 'VIP-' + Math.floor(100000 + Math.random() * 900000));
       setIsSuccess(true);
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Unable to submit consultation request. Please try again or reach our private desk directly.');
     } finally {
       setIsSubmitting(false);
     }
@@ -62,6 +68,11 @@ export const ConsultationPage: React.FC = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 text-xs font-ui">
+              {errorMessage && (
+                <div className="p-3 bg-red-50 text-red-700 text-xs border border-red-200">
+                  {errorMessage}
+                </div>
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[11px] uppercase tracking-wider text-[#102A43] mb-1 font-semibold">

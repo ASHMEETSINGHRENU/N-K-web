@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculateDubaiMortgage, formatAED } from '@nestandkey/utils';
 import { Calculator } from 'lucide-react';
 
@@ -8,13 +8,21 @@ interface MortgageCalculatorWidgetProps {
 }
 
 export const MortgageCalculatorWidget: React.FC<MortgageCalculatorWidgetProps> = ({
-  initialPriceAED = 25000000,
+  initialPriceAED = 0,
   onEnquire
 }) => {
   const [propertyPrice, setPropertyPrice] = useState(initialPriceAED);
-  const [downPaymentPct, setDownPaymentPct] = useState(25);
+  const [downPaymentPct, setDownPaymentPct] = useState(20);
   const [interestRate, setInterestRate] = useState(4.25);
   const [loanTermYears, setLoanTermYears] = useState(25);
+
+  useEffect(() => {
+    if (initialPriceAED !== undefined) {
+      setPropertyPrice(initialPriceAED);
+    }
+  }, [initialPriceAED]);
+
+  const minPrice = 0;
 
   const calc = calculateDubaiMortgage({
     propertyPrice,
@@ -52,9 +60,9 @@ export const MortgageCalculatorWidget: React.FC<MortgageCalculatorWidgetProps> =
             </div>
             <input
               type="range"
-              min={2000000}
+              min={minPrice}
               max={150000000}
-              step={500000}
+              step={50000}
               value={propertyPrice}
               onChange={(e) => setPropertyPrice(Number(e.target.value))}
               className="w-full accent-[#B08D57] cursor-pointer"
@@ -73,7 +81,7 @@ export const MortgageCalculatorWidget: React.FC<MortgageCalculatorWidgetProps> =
             </div>
             <input
               type="range"
-              min={20}
+              min={0}
               max={70}
               step={5}
               value={downPaymentPct}
@@ -118,7 +126,6 @@ export const MortgageCalculatorWidget: React.FC<MortgageCalculatorWidgetProps> =
                 className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3 py-2 text-xs text-[#102A43] focus:outline-none focus:border-[#B08D57]"
               >
                 <option value={5}>5 Years</option>
-                <option value={10}>10 Years</option>
                 <option value={10}>10 Years</option>
                 <option value={15}>15 Years</option>
                 <option value={20}>20 Years</option>

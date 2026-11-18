@@ -216,9 +216,9 @@ const NAVIGATION_DATA: NavCategory[] = [
         path: '/locations',
         links: [
           { label: 'Palm Jumeirah', path: '/locations/palm-jumeirah' },
-          { label: 'Emirates Hills', path: '/locations' },
-          { label: 'Downtown Dubai', path: '/locations' },
-          { label: 'Jumeira Bay Island', path: '/locations' }
+          { label: 'Emirates Hills', path: '/locations/emirates-hills' },
+          { label: 'Downtown Dubai', path: '/locations/downtown-dubai' },
+          { label: 'Jumeira Bay Island', path: '/locations/jumeirah-bay-island' }
         ]
       }
     ]

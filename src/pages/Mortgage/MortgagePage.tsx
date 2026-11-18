@@ -33,7 +33,7 @@ export const MortgagePage: React.FC = () => {
 
         {/* Mortgage Calculator Widget */}
         <MortgageCalculatorWidget
-          initialPriceAED={28000000}
+          initialPriceAED={0}
           onEnquire={() => setIsAdvisorModalOpen(true)}
         />
 

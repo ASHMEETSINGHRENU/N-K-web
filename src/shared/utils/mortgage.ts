@@ -43,7 +43,7 @@ export function calculateDubaiMortgage(input: MortgageCalculationInput): Mortgag
 
   // Dubai purchasing costs
   const dldFeeAED = propertyPrice * 0.04;
-  const adminFeeAED = propertyPrice >= 500000 ? 4200 : 2100;
+  const adminFeeAED = propertyPrice <= 0 ? 0 : propertyPrice >= 500000 ? 4200 : 2100;
   const agencyFeeAED = propertyPrice * 0.02 * 1.05; // 2% + 5% VAT
   const totalUpfrontCashNeeded = downPaymentAmount + dldFeeAED + adminFeeAED + agencyFeeAED;
 

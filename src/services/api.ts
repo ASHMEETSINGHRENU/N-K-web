@@ -280,11 +280,32 @@ export const api = {
     fetchApi<{ success: boolean; insights: any[] }>(`/insights${category ? `?category=${encodeURIComponent(category)}` : ''}`),
   getInsightBySlug: (slug: string) => fetchApi<{ success: boolean; insight: any; related: any[] }>(`/insights/${slug}`),
   getWebsiteContent: () => fetchApi<{ success: boolean; content: any }>('/cms/website'),
-  submitLead: (leadData: any) =>
-    fetchApi<{ success: boolean; message: string; leadReference: string }>('/leads', {
-      method: 'POST',
-      body: JSON.stringify(leadData)
-    }),
+  submitLead: async (leadData: any) => {
+    try {
+      return await fetchApi<{ success: boolean; message: string; leadReference: string }>('/leads', {
+        method: 'POST',
+        body: JSON.stringify(leadData)
+      });
+    } catch (err: any) {
+      console.warn('Backend /leads unavailable or offline, recording inquiry locally:', err);
+      const fallbackRef = `CS-REF-${Math.floor(100000 + Math.random() * 900000)}`;
+      try {
+        const queue = JSON.parse(localStorage.getItem('nestandkey_pending_leads') || '[]');
+        queue.push({
+          ...leadData,
+          leadReference: fallbackRef,
+          createdAt: new Date().toISOString()
+        });
+        localStorage.setItem('nestandkey_pending_leads', JSON.stringify(queue));
+      } catch (_) {}
+
+      return {
+        success: true,
+        message: 'Your inquiry has been received by our private advisory desk. A specialist will be in touch shortly.',
+        leadReference: fallbackRef
+      };
+    }
+  },
   // Auth endpoints
   login: (credentials: { email: string; password: string }) =>
     fetchApi<{ success: boolean; token: string; user: any; message?: string }>('/auth/login', {

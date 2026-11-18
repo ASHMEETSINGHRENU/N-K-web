@@ -85,8 +85,8 @@ export const PartnerNetworkPage: React.FC = () => {
   // Submit Referral Form State (Brief Item #8: NO client name/phone/email required)
   const [referralForm, setReferralForm] = useState({
     marketLocation: 'Palm Jumeirah, Dubai',
-    referralType: 'buyer',
-    propertyType: 'Signature Villa',
+    referralType: 'investor',
+    propertyType: 'All property types',
     budgetRange: 'AED 25M – AED 50M',
     oneLineRequirement: 'Cash family office seeking turnkey beachfront modern villa with private berth.',
     optionalNote: 'Principal resides in Zurich; visiting Dubai for viewings next week.',
@@ -847,11 +847,9 @@ export const PartnerNetworkPage: React.FC = () => {
                             onChange={(e) => setReferralForm({ ...referralForm, referralType: e.target.value })}
                             className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3.5 py-2.5 text-xs text-[#102A43] focus:outline-none focus:border-[#B08D57]"
                           >
-                            <option value="buyer">Buyer</option>
-                            <option value="seller">Seller</option>
-                            <option value="landlord">Landlord</option>
-                            <option value="tenant">Tenant</option>
                             <option value="investor">Investor</option>
+                            <option value="tenant">Tenant</option>
+                            <option value="landlord">Landlord</option>
                           </select>
                         </div>
 
@@ -864,13 +862,13 @@ export const PartnerNetworkPage: React.FC = () => {
                             onChange={(e) => setReferralForm({ ...referralForm, propertyType: e.target.value })}
                             className="w-full bg-[#FFFDF8] border border-[#E9E1D4] px-3.5 py-2.5 text-xs text-[#102A43] focus:outline-none focus:border-[#B08D57]"
                           >
-                            <option value="Signature Villa">Signature Villa</option>
-                            <option value="Beachfront Mansion">Beachfront Mansion</option>
-                            <option value="Sky Penthouse">Sky Penthouse</option>
-                            <option value="Luxury Townhouse">Luxury Townhouse</option>
-                            <option value="Branded Residence">Branded Residence</option>
-                            <option value="Full Floor / Commercial">Full Floor / Commercial</option>
-                            <option value="Prime Plot">Prime Plot</option>
+                            <option value="All property types">All property types</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="Villa">Villa</option>
+                            <option value="Townhouse">Townhouse</option>
+                            <option value="Penthouse">Penthouse</option>
+                            <option value="Office">Office</option>
+                            <option value="Plots">Plots</option>
                           </select>
                         </div>
                       </div>

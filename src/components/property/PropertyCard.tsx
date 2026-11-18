@@ -134,7 +134,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
         {/* Key Statistics - DM Sans, Muted Grey, Champagne Brass icons */}
         <div className="pt-4 mt-4 border-t border-[#E9E1D4] grid grid-cols-3 gap-2 text-xs text-[#6B7280] font-ui">
-          {property.propertyType?.toLowerCase().includes('office') || property.purpose === 'COMMERCIAL_RENT' ? (
+          {property.propertyType?.toLowerCase().includes('office') || property.purpose === 'COMMERCIAL_RENT' || property.purpose === 'COMMERCIAL_BUY' ? (
             <>
               <div className="flex items-center gap-1.5">
                 <Building className="w-4 h-4 text-[#B08D57]" />
@@ -142,7 +142,13 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
               </div>
               <div className="flex items-center gap-1.5">
                 <Check className="w-4 h-4 text-[#B08D57]" />
-                <span>{property.furnishing === 'FURNISHED' ? 'Furnished' : 'Fitted'}</span>
+                <span>
+                  {property.furnishing === 'UNFURNISHED'
+                    ? 'Shell & Core'
+                    : property.furnishing === 'FURNISHED'
+                    ? 'Furnished'
+                    : 'Fitted'}
+                </span>
               </div>
               <div className="flex items-center gap-1.5 justify-end">
                 <Maximize2 className="w-4 h-4 text-[#B08D57]" />
